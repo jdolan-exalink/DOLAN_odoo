@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- DOLAN AI: pagina de conexion ChatGPT (device flow estilo opencode/pi) -->
+  <record id="action_dolan_ai_page" model="ir.actions.act_url">
+    <field name="name">DOLAN AI</field>
+    <field name="url">/dolan_ai</field>
+    <field name="target">self</field>
+  </record>
+  <record id="menu_dolan_ai" model="ir.ui.menu">
+    <field name="name">DOLAN AI</field>
+    <field name="parent_id" ref="base.menu_administration"/>
+    <field name="action" ref="action_dolan_ai_page"/>
+    <field name="sequence">90</field>
+  </record>
+</odoo>
