@@ -29,7 +29,7 @@ JWT_ACCOUNT_CLAIM = "https://api.openai.com/auth"
 DEVICE_TIMEOUT_SECONDS = 15 * 60
 HTTP_TIMEOUT = 20
 
-DEFAULT_MODEL = "gpt-5.4-mini"
+DEFAULT_MODEL = "gpt-6-luna"
 
 
 def _state_dir():
@@ -303,7 +303,7 @@ def disconnect():
 
 
 def ask(prompt, model=None, max_output_tokens=256):
-    """Llamada minima a backend-api/codex/responses con Bearer + ChatGPT-Account-Id."""
+    """Llamada minima a backend-api/codex/responses (SSE) con Bearer + ChatGPT-Account-Id."""
     tokens = get_valid_tokens()
     if not tokens:
         return {"ok": False, "error": "no_conectado"}
@@ -314,27 +314,48 @@ def ask(prompt, model=None, max_output_tokens=256):
         headers["ChatGPT-Account-Id"] = tokens["account_id"]
     body = {
         "model": model or os.environ.get("DOLAN_AI_MODEL") or DEFAULT_MODEL,
-        "input": prompt,
+        # Codex backend exige input como lista de mensajes (Responses API),
+        # stream obligatorio y store=false para cuentas ChatGPT.
+        "input": [{"role": "user", "content": [{"type": "input_text", "text": prompt}]}],
         "max_output_tokens": max_output_tokens,
+        "stream": True,
+        "store": False,
     }
     try:
-        resp = requests.post(CODEX_API_ENDPOINT, json=body, headers=headers, timeout=HTTP_TIMEOUT)
+        resp = requests.post(CODEX_API_ENDPOINT, json=body, headers=headers, timeout=(15, 300), stream=True)
     except requests.RequestException as exc:
         return {"ok": False, "error": f"http_{exc.__class__.__name__}"}
     if resp.status_code == 401:
-        return {"ok": False, "error": "unauthorized"}
+        return {"ok": False, "error": "unauthorized", "detalle": resp.text[:200]}
     if resp.status_code not in (200, 201):
-        return {"ok": False, "error": f"http_{resp.status_code}"}
+        return {"ok": False, "error": f"http_{resp.status_code}", "detalle": resp.text[:300]}
+    parts = []
+    stream_err = None
     try:
-        data = resp.json()
-    except ValueError:
-        return {"ok": False, "error": "json_invalido"}
-    text_parts = []
-    for item in data.get("output") or []:
-        if item.get("type") == "message":
-            for part in item.get("content") or []:
-                if part.get("type") == "output_text":
-                    text_parts.append(part.get("text", ""))
-    if not text_parts and isinstance(data.get("output_text"), str):
-        text_parts.append(data["output_text"])
-    return {"ok": True, "text": "\n".join(text_parts), "model": body["model"]}
+        for raw in resp.iter_lines():
+            if not raw:
+                continue
+            line = raw.decode("utf-8", "replace") if isinstance(raw, bytes) else raw
+            if not line.startswith("data:"):
+                continue
+            payload = line[5:].strip()
+            if not payload or payload == "[DONE]":
+                continue
+            try:
+                ev = json.loads(payload)
+            except ValueError:
+                continue
+            etype = ev.get("type", "")
+            if etype == "response.output_text.delta":
+                parts.append(ev.get("delta", ""))
+            elif etype == "response.output_text.done" and ev.get("text"):
+                parts = [ev["text"]]
+            elif etype in ("response.failed", "error"):
+                stream_err = json.dumps(ev)[:250]
+            elif etype == "response.incomplete" and ev.get("error"):
+                stream_err = json.dumps(ev.get("error"))[:250]
+    except (requests.RequestException, OSError) as exc:
+        return {"ok": False, "error": f"stream_{exc.__class__.__name__}"}
+    if stream_err:
+        return {"ok": False, "error": "stream_failed", "detalle": stream_err}
+    return {"ok": True, "text": "".join(parts) or "(sin texto)", "model": body["model"]}

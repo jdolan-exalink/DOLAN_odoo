@@ -8,5 +8,5 @@
     'depends': ['base', 'web'],
     'data': ['views/menu.xml'],
     'installable': True,
-    'application': False,
+    'application': True,
 }
