@@ -1,0 +1,2 @@
+move_type,name,partner_id,invoice_date,ref,l10n_latam_document_type_id,l10n_latam_document_number,journal_id,line_ids/product_id,line_ids/name,line_ids/quantity,line_ids/price_unit,line_ids/tax_ids,line_ids/account_id
+in_invoice,LI-A 01019-00057174,BANCO SANTANDER ARGENTINA SOCIEDAD ANONIMA,2026-08-31,SI2608-0004,LIQUIDACIONES A,01019-00057174,Compras,,Compra / Gasto según comprobante 63 01019-00057174 (IVA 21%),1.0,864.0,IVA 21%,Variación Mercaderia de reventa

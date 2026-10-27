@@ -1,0 +1,49 @@
+{
+ "counts": {
+  "societes": 2394,
+  "invoices": 189,
+  "invoice_lines": 226,
+  "products": 295,
+  "payments": 13
+ },
+ "societes_by_entity": {
+  "1": 807,
+  "2": 793,
+  "3": 794
+ },
+ "invoices_by_entity": {
+  "3": 87,
+  "1": 54,
+  "2": 48
+ },
+ "invoices_by_type_status": {
+  "t0_s2": 157,
+  "t1_s2": 9,
+  "t0_s1": 20,
+  "t2_s1": 3
+ },
+ "tva_tx_values": {
+  "21.0": 205,
+  "0.0": 16,
+  "10.5": 5
+ },
+ "entity_1": {
+  "invoices": 0,
+  "total_ttc": 0,
+  "total_tva": 0
+ },
+ "entity_2": {
+  "invoices": 0,
+  "total_ttc": 0,
+  "total_tva": 0
+ },
+ "entity_3": {
+  "invoices": 0,
+  "total_ttc": 0,
+  "total_tva": 0
+ },
+ "datef_range": [
+  "2025-05-06",
+  "2026-10-26"
+ ]
+}
