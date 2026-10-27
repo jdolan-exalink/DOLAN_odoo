@@ -1,0 +1,62 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>DOLAN_theme — Propuesta 3: Enterprise Compact</title>
+<style>
+:root{--pri:#0176b3;--pri-d:#014f86;--bg:#f4f6f9;--card:#fff;--tx:#1f2937;--mut:#6b7280;--bd:#e5e7eb;--ok:#16a34a;--warn:#d97706;--r:10px;--sh:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06)}
+*{box-sizing:border-box}body{margin:0;font:13px/1.45 "Inter",system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+.top{background:#111827;border-bottom:1px solid #1f2937;display:flex;gap:14px;align-items:center;padding:7px 16px;position:sticky;top:0;z-index:5;color:#e5e7eb}
+.brand{font-weight:800;color:#7dd3fc;letter-spacing:.4px}.pill{background:var(--pri);color:#fff;border-radius:999px;padding:4px 12px;font-weight:600}
+.nav{display:flex;gap:6px}.nav a{color:#d1d5db;text-decoration:none;padding:5px 10px;border-radius:6px}
+.nav a:hover{background:#1f2937;color:#fff}.nav a.on{background:#0176b3;color:#fff;font-weight:700}
+.wrap{display:grid;grid-template-columns:200px 1fr;gap:14px;padding:14px;max-width:1400px;margin:0 auto}
+.side{background:#1f2937;border:1px solid #374151;border-radius:8px;padding:8px;box-shadow:none;align-self:start;position:sticky;top:54px}
+.side h4{margin:4px 0 8px;font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em}
+.app{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:6px;text-decoration:none;color:#e5e7eb;font-size:12.5px}
+.app .ic{width:24px;height:24px;border-radius:5px;background:#374151;color:#93c5fd;display:grid;place-items:center;font-size:12px}
+.app.on{background:#0176b3;color:#fff;font-weight:700}.app:hover{background:#374151}
+h1{font-size:20px;margin:0 0 4px}.sub{color:var(--mut);margin-bottom:16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh)}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px}
+.t-ok{background:#dcfce7;color:#15803d}.t-wa{background:#fef3c7;color:#b45309}.t-nu{background:#e5e7eb;color:#374151}
+.num{font-size:22px;font-weight:800;color:var(--pri-d);margin-top:8px}
+.mut{color:var(--mut);font-size:12px}
+table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+th{background:#f3f4f6;text-align:left;font-size:11px;color:var(--mut);text-transform:uppercase;padding:6px 10px;border-bottom:1px solid var(--bd)}
+td{padding:5px 10px;border-bottom:1px solid #f1f3f5;font-size:12.5px}tr:last-child td{border-bottom:0}tr:hover td{background:#f8fbfe}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:8px;padding:8px 16px;font-weight:600;cursor:pointer}
+.btn.sec{background:#fff;color:var(--pri-d);border:1px solid var(--bd)}
+.form{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
+.fhead{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--bd);background:#f8fafc}
+.fbody{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}.fld label{display:block;font-size:12px;color:var(--mut);margin-bottom:4px}
+.fld input,.fld select{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;font:inherit;background:#fff}
+.fld input:focus{outline:2px solid #bfe3fa;border-color:var(--pri)}
+section{margin-bottom:26px;scroll-margin-top:70px}.sec-title{font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin:0 0 10px}
+.note{background:#eef6fc;border:1px solid #bfe3fa;border-radius:8px;padding:10px 14px;color:var(--pri-d);font-size:13px}
+</style></head><body>
+<header class="top"><span class="brand">DOLAN_theme</span>
+<nav class="nav"><a href="#home" class="on">Inicio</a><a href="#lista">Compras</a><a href="#form">Proveedor</a><a href="#docs">Docs</a></nav>
+<span style="flex:1"></span><span class="pill">Propuesta 3 · Enterprise Compact</span></header>
+<div class="wrap"><aside class="side"><h4>Aplicaciones</h4>
+<a class="app on" href="#home"><span class="ic">⌂</span>Inicio</a><a class="app" href="#lista"><span class="ic">🛒</span>Compras</a>
+<a class="app" href="#lista"><span class="ic">🧾</span>Ventas</a><a class="app" href="#lista"><span class="ic">📦</span>Inventario</a>
+<a class="app" href="#form"><span class="ic">👥</span>Contactos</a><a class="app" href="#home"><span class="ic">📊</span>Contabilidad</a></aside>
+<main>
+<section id="home"><h1>Inicio</h1><p class="sub">Dolan SS · Español (Argentina) · 27/10/2026 — widgets por permisos</p>
+<div class="kpis"><div class="card"><span class="tag t-wa">Compras por pagar</span><div class="num">6</div><div class="mut">$3.607.964,75 · 2 vencidas</div></div>
+<div class="card"><span class="tag t-ok">Facturas del mes</span><div class="num">6</div><div class="mut">$12.618.049,62 · 2 NC</div></div>
+<div class="card"><span class="tag t-nu">Recepciones</span><div class="num">3</div><div class="mut">pendientes de ingresar</div></div></div></section>
+<section id="lista"><h2 class="sec-title">Compras — por pagar (lista)</h2>
+<table><thead><tr><th>N.º</th><th>Proveedor</th><th>Fecha</th><th>Estado</th><th>Total</th><th></th></tr></thead><tbody>
+<tr><td>FA-A 00005-00000021</td><td>Prieto María Eugenia</td><td>03/08/2026</td><td><span class="tag t-wa">Por pagar</span></td><td>$47.000,01</td><td><button class="btn sec">Pagar</button></td></tr>
+<tr><td>FA-A 00005-00000033</td><td>Creativ SRL</td><td>07/08/2026</td><td><span class="tag t-wa">Parcial</span></td><td>$2.820.415,49</td><td><button class="btn sec">Pagar</button></td></tr>
+<tr><td>LI-A 01019-00057174</td><td>Banco Santander</td><td>31/08/2026</td><td><span class="tag t-ok">Pagada</span></td><td>$1.045,44</td><td><button class="btn sec">Ver</button></td></tr></tbody></table></section>
+<section id="form"><h2 class="sec-title">Formulario de proveedor</h2>
+<div class="form"><div class="fhead"><div><b>Creativ SRL</b> <span class="tag t-ok">Activo</span></div>
+<div style="display:flex;gap:8px"><button class="btn sec">Descartar</button><button class="btn">Guardar</button></div></div>
+<div class="fbody"><div class="fld"><label>Razón social</label><input value="Creativ SRL"></div>
+<div class="fld"><label>CUIT</label><input value="30-00000000-0"></div>
+<div class="fld"><label>Condición IVA</label><select><option>Responsable Inscripto</option></select></div>
+<div class="fld"><label>Email</label><input value="contacto@creativ.com.ar"></div>
+<div class="fld"><label>Dirección</label><input value="Av. Siempreviva 742"></div>
+<div class="fld"><label>Condición de pago</label><select><option>30 días</option></select></div></div></div>
+<p class="note">Dirección visual propuesta: densidad alta para uso intensivo — sidebar oscura, filas compactas (28px), tipografía 13px, topbar oscura. Incluye muestra de modo oscuro en la barra superior.</p>
+<section id="docs"><p class="mut">Prototipo estático Fase 2 · sin lógica real · ver docs/research.md</p></section></main></div></body></html>
