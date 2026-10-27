@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="action_dolan_contabilidad" model="ir.actions.act_url">
+    <field name="name">Tablero DOLAN</field>
+    <field name="url">/dolan_contabilidad</field>
+    <field name="target">self</field>
+  </record>
+  <record id="menu_dolan_contabilidad" model="ir.ui.menu">
+    <field name="name">Tablero DOLAN</field>
+    <field name="parent_id" ref="account.menu_finance"/>
+    <field name="action" ref="action_dolan_contabilidad"/>
+    <field name="sequence">5</field>
+  </record>
+</odoo>
