@@ -1,0 +1,209 @@
+/* =========================================================================
+   DOLAN_theme — views (Propuesta 1) + densidad + badges
+   Selectores confirmados contra form_controller.scss / list_renderer.scss.
+   Todos los colores via variables -> modo oscuro automatico por tokens.
+   ========================================================================= */
+
+/* ---------------- LISTAS ---------------- */
+.o_list_view {
+  .o_list_table {
+    thead th {
+      background: var(--o-dolan-surface2, #f8fafc);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--o-dolan-tx-mut, #6b7280);
+      font-weight: 700;
+      border-bottom: 1px solid var(--o-dolan-bd, #e5e7eb);
+      padding-top: 9px;
+      padding-bottom: 9px;
+    }
+
+    .o_data_row td {
+      border-bottom-color: var(--o-dolan-bd, #e5e7eb);
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .o_data_row:hover td {
+      background: var(--o-dolan-hover, #f8fbfe);
+    }
+
+    .o_data_row_selected td {
+      background: var(--o-dolan-soft, #eef6fc);
+      box-shadow: inset 3px 0 0 var(--o-dolan-pri, #0176b3);
+    }
+
+    .o_list_number, .o_number {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .o_group_header td {
+      background: var(--o-dolan-surface2, #f1f5f9) !important;
+      font-weight: 700;
+      color: var(--o-dolan-tx, #1f2937);
+    }
+
+    /* badges de estado (widget badge del core) con identidad DOLAN */
+    .badge {
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      letter-spacing: .02em;
+    }
+  }
+}
+
+/* ---------------- FORMULARIOS ---------------- */
+.o_form_view {
+  .o_form_sheet_bg {
+    background: var(--o-dolan-bg, #f4f6f9);
+  }
+
+  .o_form_sheet {
+    background: var(--o-dolan-surface, #fff);
+    border: 1px solid var(--o-dolan-bd, #e5e7eb);
+    border-radius: 12px;
+    box-shadow: var(--o-dolan-shadow, none);
+    padding: 24px 28px;
+  }
+
+  .o_form_label {
+    font-size: 12px;
+    color: var(--o-dolan-tx-mut, #6b7280);
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+
+  input.form-control,
+  .o_input,
+  textarea.form-control,
+  select.form-control {
+    background: var(--o-dolan-surface, #fff);
+    color: var(--o-dolan-tx, #1f2937);
+    border-color: var(--o-dolan-bd, #e5e7eb);
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  input.form-control:focus,
+  textarea.form-control:focus,
+  select.form-control:focus {
+    border-color: var(--o-dolan-pri, #0176b3);
+    box-shadow: 0 0 0 3px rgba(1, 118, 179, .15);
+  }
+  :root[data-dolan-theme="dark"] & input.form-control:focus {
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, .2);
+  }
+
+  .o_notebook .nav-tabs .nav-link {
+    border-radius: 8px 8px 0 0;
+    color: var(--o-dolan-tx-mut, #6b7280);
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .o_notebook .nav-tabs .nav-link.active {
+    color: var(--o-dolan-pri-dark, #014f86);
+    background: var(--o-dolan-surface, #fff);
+    box-shadow: inset 0 -2px 0 var(--o-dolan-pri, #0176b3);
+    border-bottom-color: transparent;
+  }
+
+  .o_form_button_save, .btn-primary {
+    background: var(--o-dolan-pri, #0176b3);
+    border-color: var(--o-dolan-pri, #0176b3);
+    border-radius: 8px;
+    font-weight: 600;
+    &:hover { background: var(--o-dolan-pri-dark, #014f86); border-color: var(--o-dolan-pri-dark, #014f86); }
+  }
+
+  .o_statusbar_status .o_arrow_button {
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .o_statusbar_status .btn-primary {
+    background: var(--o-dolan-pri, #0176b3);
+  }
+}
+
+/* ---------------- Control panel ---------------- */
+.o_control_panel {
+  border-bottom: 1px solid var(--o-dolan-bd, #e5e7eb);
+  background: var(--o-dolan-surface, #fff);
+}
+
+/* ---------------- Fondo general del backend ---------------- */
+.o_web_client, .o_action_manager {
+  background: transparent;
+}
+
+/* ---------------- Densidades ---------------- */
+:root[data-dolan-density="compact"] {
+  .o_list_view .o_data_row td { padding-top: 4px; padding-bottom: 4px; }
+  .o_list_view .o_list_table thead th { padding-top: 6px; padding-bottom: 6px; }
+  .o_form_view .o_form_sheet { padding: 14px 16px; }
+  .o_dolan_dash .dolan_card { padding: 10px 12px; }
+  .o_dolan_dash .dolan_table td { padding-top: 4px; padding-bottom: 4px; }
+}
+:root[data-dolan-density="cozy"] {
+  .o_list_view .o_data_row td { padding-top: 12px; padding-bottom: 12px; }
+  .o_form_view .o_form_sheet { padding: 30px 34px; }
+  .o_dolan_dash .dolan_card { padding: 20px 22px; }
+}
+
+/* =========================================================================
+   S5 — Estética Enterprise en dashboards de apps CE (2026-10-27)
+   Selectores confirmados en DOM: .o_purchase_dashboard .purchase-dashboard-card
+   (core agrega .bg-dark-subtle cuando el conteo es 0), .o_card_record
+   (tarjetas del Resumen de inventario / kanban card-records de Odoo 20),
+   badges/pills de kanban de estados.
+   ========================================================================= */
+.o_purchase_dashboard {
+  .purchase-dashboard-card {
+    background: var(--o-dolan-surface) !important;
+    border: 1px solid var(--o-dolan-bd);
+    border-radius: var(--o-dolan-radius);
+    box-shadow: 0 1px 2px rgba(15, 23, 84, .05);
+    color: var(--o-dolan-tx);
+    padding: 10px 12px !important;
+    text-align: left;
+    transition: border-color .12s ease, transform .12s ease, box-shadow .12s ease;
+
+    .fs-2 { font-weight: 800; color: var(--o-dolan-tx); line-height: 1.1; }
+
+    /* conteo en cero: neutral limpio (no gris apagado de bootstrap) */
+    &.bg-dark-subtle {
+      background: var(--o-dolan-hover, #f1f5f9) !important;
+      color: var(--o-dolan-tx-mut) !important;
+      .fs-2 { color: var(--o-dolan-tx-mut); font-weight: 700; }
+    }
+
+    &:hover {
+      border-color: var(--o-dolan-pri);
+      transform: translateY(-1px);
+      box-shadow: var(--o-dolan-shadow, 0 4px 12px rgba(15, 23, 84, .10));
+    }
+  }
+}
+
+/* Tarjetas card-record (Resumen de inventario, kanbans "card" de Odoo 20) */
+.o_card_record {
+  background: var(--o-dolan-surface) !important;
+  border: 1px solid var(--o-dolan-bd) !important;
+  border-radius: var(--o-dolan-radius) !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 84, .06);
+  padding: 14px;
+
+  a.oe_kanban_action { color: var(--o-dolan-tx); }
+  .fw-bold.fs-4 { color: var(--o-dolan-tx); letter-spacing: -.2px; }
+  .btn.btn-primary { border-radius: var(--o-dolan-radius-sm); }
+  .o_dashboard_graph { margin-top: 6px; }
+}
+
+/* Píldoras de estado / badges de kanban: acento DOLAN en vez de gris plano */
+.o_kanban_badge, .o_kanban_record .badge {
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}

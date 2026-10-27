@@ -1,0 +1,76 @@
+/* =========================================================================
+   DOLAN_theme — core/tokens (Direccion visual: Enterprise Modern)
+   Solo variables (custom properties): invisible hasta que los slices las usen.
+   Prefijo: --o-dolan-*. Alcance: html (backend), listo para modo oscuro (Fase 4).
+   ========================================================================= */
+:root {
+  /* Color primario (familia Odoo azul) */
+  --o-dolan-pri: #0176b3;
+  --o-dolan-pri-dark: #014f86;
+  --o-dolan-pri-soft: #e3f1fb;
+
+  /* Superficies y texto */
+  --o-dolan-bg: #f4f6f9;
+  --o-dolan-surface: #ffffff;
+  --o-dolan-surface2: #f8fafc;
+  --o-dolan-hover: #f8fbfe;
+  --o-dolan-soft: #eef6fc;
+  --o-dolan-tx: #1f2937;
+  --o-dolan-tx-mut: #6b7280;
+
+  /* Bordes, radios, sombras (discretas) */
+  --o-dolan-bd: #e5e7eb;
+  --o-dolan-radius: 10px;
+  --o-dolan-radius-sm: 8px;
+  --o-dolan-shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 8px 24px rgba(15, 23, 42, .06);
+
+  /* Espaciado (escala 4) */
+  --o-dolan-s1: 4px;
+  --o-dolan-s2: 8px;
+  --o-dolan-s3: 12px;
+  --o-dolan-s4: 16px;
+  --o-dolan-s5: 24px;
+
+  /* Tipografia */
+  --o-dolan-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --o-dolan-fs-base: 14px;
+  --o-dolan-fs-sm: 12px;
+
+  /* Estados semanticos */
+  --o-dolan-ok: #16a34a;
+  --o-dolan-warn: #d97706;
+  --o-dolan-danger: #dc2626;
+}
+
+/* Hook de densidad (Fase 4): [data-dolan-density="compact|normal|cozy"] */
+:root[data-dolan-density="compact"] { --o-dolan-fs-base: 13px; }
+
+
+/* ---------- Modo oscuro (data-dolan-theme="dark" via theme_apply.js;
+   el modo automatico lo resuelve JS con prefers-color-scheme) ---------- */
+:root[data-dolan-theme="dark"] {
+  --o-dolan-pri: #38bdf8;
+  --o-dolan-pri-dark: #7dd3fc;
+  --o-dolan-pri-soft: rgba(56, 189, 248, .14);
+
+  --o-dolan-bg: #0f172a;
+  --o-dolan-surface: #1e293b;
+  --o-dolan-surface2: #172033;
+  --o-dolan-hover: #233046;
+  --o-dolan-soft: rgba(56, 189, 248, .14);
+  --o-dolan-tx: #e5e7eb;
+  --o-dolan-tx-mut: #94a3b8;
+  --o-dolan-bd: #334155;
+
+  --o-dolan-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .35);
+  --o-dolan-ok: #4ade80;
+  --o-dolan-warn: #fbbf24;
+  --o-dolan-danger: #f87171;
+}
+
+/* lienzo completo en oscuro (el body de Odoo usa su propio color) */
+:root[data-dolan-theme="dark"] body,
+:root[data-dolan-theme="dark"] .o_web_client,
+:root[data-dolan-theme="dark"] .o_action_manager {
+  background-color: var(--o-dolan-bg) !important;
+}

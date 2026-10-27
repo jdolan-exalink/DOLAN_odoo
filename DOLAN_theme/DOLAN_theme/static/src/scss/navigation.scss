@@ -1,0 +1,228 @@
+/* =========================================================================
+   DOLAN_theme — navigation (Propuesta 1: Enterprise Modern)
+   Sobre clases CORE confirmadas en Odoo 20 (navbar.xml):
+     .o_main_navbar, .o_navbar_apps_menu, .o_app, .o_app.focus,
+     .o_app_menu_sidebar, .o_sidebar_topbar, .o_burger_menu_content,
+     .o_menu_brand, .o_navbar_breadcrumbs
+   Solo CSS: sin JS, sin parches OWL, fuera del bundle de POS
+   (registrado en web.assets_backend).
+   ========================================================================= */
+
+/* ---------- Topbar moderna ---------- */
+.o_main_navbar {
+  background: var(--o-dolan-surface) !important;
+  border-bottom: 1px solid var(--o-dolan-bd);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .05);
+  padding-top: 2px;
+  padding-bottom: 2px;
+
+  .o_menu_brand {
+    color: var(--o-dolan-pri);
+    font-weight: 800;
+    letter-spacing: .3px;
+    font-size: 15px;
+  }
+
+  .o_navbar_breadcrumbs .o_breadcrumb {
+    .active, .o_back_button, a { color: var(--o-dolan-tx); }
+    .o_back_button:hover, a:hover { color: var(--o-dolan-pri); }
+  }
+
+  /* entradas de menu (secciones / apps en topbar)
+     Core Odoo 20 las pinta violeta (rgb(113,99,158)) — S5: barra clara EE */
+  .o_nav_entry {
+    background: transparent !important;
+    color: var(--o-dolan-tx) !important;
+    font-weight: 600;
+    border-radius: var(--o-dolan-radius-sm);
+    margin: 2px 3px;
+    &:hover { background: var(--o-dolan-pri-soft) !important; color: var(--o-dolan-pri-dark) !important; }
+  }
+
+  /* botones Dropdown del topbar (secciones, company switcher, usuario):
+     core los pinta violeta solido — a plan clara tipo EE */
+  .o-dropdown.dropdown-toggle {
+    background: transparent !important;
+    color: var(--o-dolan-tx) !important;
+    font-weight: 600;
+    border-radius: var(--o-dolan-radius-sm);
+    &:hover, &[aria-expanded="true"] {
+      background: var(--o-dolan-pri-soft) !important;
+      color: var(--o-dolan-pri-dark) !important;
+    }
+  }
+}
+
+/* ---------- Dropdown de apps (launcher en topbar) ---------- */
+.o_navbar_apps_menu {
+  border: 1px solid var(--o-dolan-bd) !important;
+  border-radius: var(--o-dolan-radius) !important;
+  box-shadow: var(--o-dolan-shadow) !important;
+  background: var(--o-dolan-surface) !important;
+  padding: var(--o-dolan-s3) !important;
+  min-width: 460px;
+
+  .o_app {
+    border-radius: var(--o-dolan-radius-sm);
+    padding: 10px 12px !important;
+    transition: background .12s ease, transform .12s ease;
+
+    .o_app_icon {
+      border-radius: 10px;
+      padding: 6px;
+      background: var(--o-dolan-pri-soft);
+    }
+
+    &:hover {
+      background: var(--o-dolan-hover, #f1f5f9);
+      transform: translateY(-1px);
+    }
+
+    /* app activa (core: clase focus = app actual) */
+    &.focus {
+      background: var(--o-dolan-pri-soft) !important;
+      color: var(--o-dolan-pri-dark);
+      font-weight: 700;
+      box-shadow: inset 3px 0 0 var(--o-dolan-pri);
+    }
+  }
+}
+
+/* ---------- Sidebar de apps (panel lateral nativo) ---------- */
+.o_app_menu_sidebar {
+  background: var(--o-dolan-surface) !important;
+  border-right: 1px solid var(--o-dolan-bd);
+  box-shadow: -8px 0 24px rgba(15, 23, 42, .10);
+  width: 320px !important;
+  padding: 0 0 var(--o-dolan-s3);
+
+  .o_sidebar_topbar {
+    background: linear-gradient(180deg, var(--o-dolan-pri), var(--o-dolan-pri-dark));
+    color: #fff;
+    padding: 12px 14px !important;
+
+    .btn-primary { background: rgba(255, 255, 255, .18); border: 0; }
+    .o_sidebar_close, a { color: #fff !important; }
+  }
+
+  .o_burger_menu_content {
+    .o_app {
+      margin: 2px 10px !important;
+      padding: 9px 12px !important;
+      border-radius: var(--o-dolan-radius-sm);
+      transition: background .12s ease;
+
+      .o_app_icon { border-radius: 10px; }
+
+      &:hover { background: var(--o-dolan-hover, #f1f5f9); }
+
+      /* app activa (core: bg-primary-subtle) -> identidad DOLAN */
+      &.bg-primary-subtle {
+        background: var(--o-dolan-pri-soft) !important;
+        color: var(--o-dolan-pri-dark) !important;
+        font-weight: 700;
+        box-shadow: inset 3px 0 0 var(--o-dolan-pri);
+      }
+    }
+  }
+}
+
+/* ---------- Densidad (hook de tokens) ---------- */
+:root[data-dolan-density="compact"] {
+  .o_app_menu_sidebar .o_app { padding-top: 5px !important; padding-bottom: 5px !important; }
+  .o_main_navbar { padding-top: 0; padding-bottom: 0; }
+}
+
+/* =========================================================================
+   Slice 1b — Rail lateral de apps (desktop), extension de template core.
+   Offset del contenido: .o_action_manager (ActionContainer, confirmado en
+   action_container.js). Oculto <992px (el core conserva su burger).
+   ========================================================================= */
+.o_dolan_rail {
+  position: fixed;
+  top: var(--o-dolan-navbar-h, 48px);
+  left: 0;
+  bottom: 0;
+  width: 240px;
+  flex-direction: column;        /* d-lg-flex de Bootstrap es row por defecto */
+  align-items: stretch;
+  justify-content: flex-start;
+  background: var(--o-dolan-surface);
+  border-right: 1px solid var(--o-dolan-bd);
+  box-shadow: 4px 0 16px rgba(15, 23, 42, .06);
+  z-index: 30;               /* bajo la topbar (z mayor), sobre el contenido */
+  overflow-y: auto;
+  padding: var(--o-dolan-s3) 0 var(--o-dolan-s4);
+
+  .o_dolan_rail_title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--o-dolan-tx-mut);
+    font-weight: 700;
+    padding: 4px 16px 10px;
+  }
+
+  .o_dolan_rail_item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    margin: 1px 8px;
+    border-radius: var(--o-dolan-radius-sm);
+    color: var(--o-dolan-tx);
+    text-decoration: none;
+    transition: background .12s ease;
+
+    &:hover { background: var(--o-dolan-hover, #f1f5f9); color: var(--o-dolan-pri-dark); }
+
+    .o_dolan_rail_icon { width: 24px; height: 24px; border-radius: 6px; }
+    .o_dolan_rail_ico { font-size: 18px; color: var(--o-dolan-pri); width: 24px; text-align: center; }
+    .o_dolan_rail_label { font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    &.o_dolan_rail_active {
+      background: var(--o-dolan-pri-soft);
+      color: var(--o-dolan-pri-dark);
+      box-shadow: inset 3px 0 0 var(--o-dolan-pri);
+      .o_dolan_rail_label { font-weight: 800; }
+    }
+  }
+}
+
+/* desplazar el contenido a la derecha del rail (desktop, igual que el breakpoint d-lg) */
+@media (min-width: 992px) {
+  .o_action_manager { margin-left: 240px; }
+}
+
+/* ---------- Sidebar compacta (toggle con localStorage) ---------- */
+.o_dolan_rail_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 8px;
+}
+.o_dolan_rail_toggle {
+  border: 1px solid var(--o-dolan-bd);
+  background: var(--o-dolan-surface, #fff);
+  color: var(--o-dolan-tx-mut);
+  border-radius: 7px;
+  width: 26px;
+  height: 24px;
+  line-height: 1;
+  font-size: 13px;
+  cursor: pointer;
+  &:hover { background: var(--o-dolan-pri-soft); color: var(--o-dolan-pri-dark); }
+}
+.o_dolan_rail .tg-open { display: none; }
+
+.o_dolan_rail_compact {
+  width: 68px !important;
+  .o_dolan_rail_title, .o_dolan_rail_label { display: none; }
+  .o_dolan_rail_toggle .tg-close { display: none; }
+  .o_dolan_rail_toggle .tg-open { display: inline; }
+  .o_dolan_rail_item { justify-content: center; padding: 10px 0 !important; margin: 1px 6px; }
+  .o_dolan_rail_ico, .o_dolan_rail_icon { width: 26px; height: 26px; }
+}
+@media (min-width: 992px) {
+  body.dolan-compact .o_action_manager { margin-left: 68px; }
+}
