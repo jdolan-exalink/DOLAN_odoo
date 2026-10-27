@@ -131,3 +131,23 @@ verificación en browser, commit por unidad de trabajo).
 7. Delegación a `gentle-ai-worker` falló (2 veces: Required heading y error del asistente) → ejecución inline (fallback de la sesión).
 
 **Veredicto S5**: estética Enterprise aplicada y verificada en claro y oscuro (capturas `s5b-*`). Risk: none (solo SCSS propio, cambios pedidos en S5; verificación Playwright probe+capturas claro/oscuro+consola en 0).
+
+### L4 — Monorepo DOLAN_odoo (2026-10-27)
+
+- **L4a** (verbatim): "vamos a renombrar a DOLAN_odoo20 y adentro vamos a tenerr los distintos modulos dentro de ellos vamos a tener un DOLAN_theme, DOLAN_ai, DOLAN_XX, creemos el monorepo yo mientras voy a ir logeando y creando la carpeta de github"
+- **L4b** (verbatim): "te dejo el repo y ya estas logueado https://github.com/jdolan-exalink/DOLAN_odoo.git"
+- **Ejecutado**: rename `/root/odoo20` → `/root/DOLAN_odoo20` (+ symlink de resguardo `/root/odoo20`, compatibles todos los paths de docs/scripts); stack sano post-rename (UI200, containers Up, compose desde la nueva ruta OK). Monorepo: `DOLAN_theme/.git` absorbido (0 commits), fuentes `dolan_dash`/`dolan_ui` copiadas a la raíz (deploy en `odoo20-argentina/addons/` intacto), `.gitignore` (runtime/datos/backups/secrets/repos anidados ignorados; `compras_plantilla.csv` forzado a trackear), README con tabla de estructura + URL. Historial inicial `main` (7 commits, mensajes conventional EN): `fc722d4` scaffold → `7be3aa9` DOLAN_theme → `610346c` docs/qa → `27fa261` DOLAN_ai → `d18c0db` dolan_dash/dolan_ui → `fdea4e7` stack → `4cdf78a` odd. **Push a `origin/main` OK** (auth `gh` como jdolan-exalink). Ignorados con historia propia: `bak/.git` (commits WSFE previos) y `odoo20-argentina/addons/.git` (dubious ownership) — documentados, no absorbidos. Próximos módulos = carpetas `DOLAN_XX/` siguiendo la convención.
+
+### L19 — S5 cierre: estética completa de lo analizado hoy (2026-10-27)
+
+Los 6 gaps abiertos en L18 quedaron CERRADOS con verificación:
+
+1. **Rail 14→18 apps**: causa raíz = las raíces de `fleet`/`mrp`/`point_of_sale` tenían `group_ids` de app (Encargado de vehículos, mrp Usuario/Administrador, pos Usuario/Administrador) que `juan` no tenía → `_visible_menu_ids` las excluía del payload de `load_menus` (no era un bug de plantilla ni del rail). Fix = **grants** de esos grupos a juan (ORM, sin tocar datos core). Verificado: rail con `fleet.menu_root`, `mrp.menu_mrp_root`, `point_of_sale.menu_point_root` + `DOLAN_ai` (18 items, capturas s6-*).
+2. **Títulos EN del Resumen de inventario**: 14 `stock.picking.type` sin traducción `es_AR` → escritos términos oficiales (Recepciones / Órdenes de entrega / Fabricación / Pedidos de PdV). Verificado en browser: `["Recepciones","Órdenes de entrega","Fabricación","Pedidos de PdV"]`.
+3. **Caja negra oscura (navbar)**: `navigation.scss` estilizaba `.o_navbar_apps_menu` como panel dropdown (bg/border/min-width 460) pero en Odoo20 esa clase = contenedor del **botón** en la topbar → neutralizada el wrapper + el panel real (`o_dropdown_menu`) estilizado con tokens. Verificado: probe `boxBg=transparent` + `s6-navbar-dark.png` sin artefacto.
+4. **Filas fantasma**: son el *sample data* nativo de Odoo (`useSampleModel`) — SCSS propio `.o_view_sample_data` a `opacity .04` en filas de lista y kanban. Verificado: `n=10, op=0.04`.
+5. **Error `-u`: `DOLAN_theme:8: Undefined substitution "---"`**: origen = los `README.md`/`docs/*.md` del addon (copiados al stack) parseados como **RST** por el fallback docutils cuando `markdown2` no está instalado → eliminados `docs/` y `README.md` de las copias stack (la fuente vive en el monorepo). `-u` posterior **limpio** (0 apariciones).
+6. Consola 0 errores en todas las capturas; tema restaurado a `claro`.
+
+Evidence: `DOLAN_theme/qa/shots/s6-{inventario,compras,navbar-dark}.png`.
+Risk: none (grants = otorgar al propio admin grupos de apps instaladas; traducciones = datos es_AR añadidos; SCSS propio; verificación browser+probe en claro/oscuro).

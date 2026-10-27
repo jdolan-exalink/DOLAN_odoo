@@ -54,13 +54,23 @@
 }
 
 /* ---------- Dropdown de apps (launcher en topbar) ---------- */
-.o_navbar_apps_menu {
+/* Odoo20: .o_navbar_apps_menu = contenedor del BOTÓN en la topbar (no el panel).
+   El panel real = .o_dropdown_menu del dropdown de apps. */
+.o_main_navbar .o_navbar_apps_menu {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  border-radius: 0 !important;
+}
+
+.o_main_navbar .o_dropdown_menu.o_app_menu_content, .o_main_navbar .o_dropdown_menu {
   border: 1px solid var(--o-dolan-bd) !important;
   border-radius: var(--o-dolan-radius) !important;
   box-shadow: var(--o-dolan-shadow) !important;
   background: var(--o-dolan-surface) !important;
   padding: var(--o-dolan-s3) !important;
-  min-width: 460px;
 
   .o_app {
     border-radius: var(--o-dolan-radius-sm);

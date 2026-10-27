@@ -207,3 +207,11 @@
   font-weight: 700;
   letter-spacing: .02em;
 }
+
+/* S5 cierre: filas fantasma de sample data (vista vacía con datos de ejemplo
+   atenuados detrás del empty-state) — nativo de Odoo, sólo atenuación. */
+.o_view_sample_data {
+  .o_list_table .o_data_row, .o_kanban_record, .o_kanban_group .o_kanban_record {
+    opacity: 0.04;
+  }
+}
