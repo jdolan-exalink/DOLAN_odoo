@@ -1,0 +1,179 @@
+.o_dolan_dash {
+  color: var(--o-dolan-tx, #1f2937);
+    .dolan_kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+    }
+    .dolan_card {
+        background: var(--o-dolan-surface, #fff);
+        border: 1px solid var(--o-dolan-bd, #e5e7eb);
+        border-radius: 10px;
+        padding: 16px 18px;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, .05);
+        transition: box-shadow .15s ease, transform .15s ease;
+        &:hover { box-shadow: 0 6px 18px rgba(15, 23, 42, .10); transform: translateY(-2px); }
+    }
+    .dolan_icon {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 999px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: .03em;
+    }
+    .dolan_value {
+        font-size: 30px;
+        font-weight: 700;
+        color: #0176b3;
+        line-height: 1.1;
+    }
+    .dolan_hint { color: var(--o-dolan-tx-mut, #6b7280); font-size: 13px; margin-top: 4px; }
+}
+
+/* ---------- Detalles bajo los KPIs (tablas estilo Propuesta 1) ---------- */
+.o_dolan_dash {
+  .dolan_details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+  }
+  .dolan_detail_block {
+    background: var(--o-dolan-surface, #fff);
+    border: 1px solid var(--o-dolan-bd, #e5e7eb);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .05);
+  }
+  .dolan_detail_title {
+    color: var(--o-dolan-tx, #1f2937);
+    font-weight: 700;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--o-dolan-bd, #e5e7eb);
+    background: var(--o-dolan-surface2, #f8fafc);
+    font-size: 13px;
+  }
+  .dolan_table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .dolan_table th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--o-dolan-tx-mut, #6b7280);
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--o-dolan-bd, #e5e7eb);
+  }
+  .dolan_table td { padding: 8px 10px; border-bottom: 1px solid var(--o-dolan-bd, #e5e7eb); }
+  .dolan_table td:nth-child(1) { white-space: nowrap; }
+  .dolan_table td:nth-child(2) { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dolan_table tr:last-child td { border-bottom: 0; }
+  .dolan_table tbody tr:hover td { background: var(--o-dolan-hover, #f8fbfe); }
+  .dolan_table .mono { font-variant-numeric: tabular-nums; }
+  .dolan_table .ta-r { text-align: right; }
+  .dolan_tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 999px;
+  }
+  .dolan_tag_ok { background: #dcfce7; color: #15803d; }
+  .dolan_tag_warn { background: #fef3c7; color: #b45309; }
+  .dolan_tag_danger { background: #fee2e2; color: #b91c1c; }
+}
+
+/* ---------- Seccion activa: chart + highlight ---------- */
+.o_dolan_dash {
+  .dolan_card { cursor: pointer; }
+  .dolan_card:hover { border-color: var(--o-dolan-pri, #0176b3); }
+  .dolan_card.on {
+    border-color: var(--o-dolan-pri, #0176b3);
+    box-shadow: 0 0 0 2px rgba(1, 118, 179, .15), var(--o-dolan-shadow, none);
+  }
+
+  .dolan_section {
+    background: var(--o-dolan-surface, #fff);
+    border: 1px solid var(--o-dolan-bd, #e5e7eb);
+    border-radius: 10px;
+    padding: 14px 16px 10px;
+    margin-top: 16px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .05);
+  }
+  .dolan_section_head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .dolan_section_title { font-weight: 700; font-size: 14px; }
+  .dolan_section_sub { color: var(--o-dolan-tx-mut, #6b7280); font-size: 12px; }
+  .dolan_section_actions { display: flex; gap: 8px; }
+  .dolan_mini_btn {
+    border: 1px solid var(--o-dolan-bd, #e5e7eb);
+    background: var(--o-dolan-surface, #fff);
+    border-radius: 8px;
+    padding: 5px 11px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--o-dolan-tx, #1f2937);
+  }
+  .dolan_mini_btn:hover { background: #f3f4f6; }
+
+  .dolan_bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    height: 150px;
+    padding: 6px 4px 0;
+  }
+  .dolan_bar_col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 4px;
+  }
+  .dolan_bar {
+    width: 100%;
+    max-width: 56px;
+    min-height: 3px;
+    background: linear-gradient(180deg, #0176b3, #014f86);
+    border-radius: 6px 6px 2px 2px;
+    transition: height .3s ease;
+  }
+  .dolan_bar_val { font-size: 11px; color: var(--o-dolan-tx, #1f2937); font-variant-numeric: tabular-nums; }
+  .dolan_bar_lab { font-size: 11px; color: var(--o-dolan-tx-mut, #6b7280); }
+
+  .dolan_block_active {
+    border-color: var(--o-dolan-pri, #0176b3);
+    box-shadow: 0 0 0 2px rgba(1, 118, 179, .12);
+  }
+
+  .dolan_pay_btn {
+    display: inline-block;
+    margin-left: 10px;
+    border: 1px solid #cfe3f4;
+    background: var(--o-dolan-soft, #eef6fc);
+    color: var(--o-dolan-pri-dark, #014f86);
+    border-radius: 7px;
+    padding: 2px 9px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .dolan_pay_btn:hover { background: #0176b3; color: #fff; border-color: var(--o-dolan-pri, #0176b3); }
+}
+
+
+/* legibilidad en oscuro: text-muted de bootstrap es color fijo */
+:root[data-dolan-theme="dark"] .o_dolan_dash .text-muted,
+:root[data-dolan-theme="dark"] .o_dolan_dash .text-muted small {
+  color: var(--o-dolan-tx-mut, #94a3b8) !important;
+}

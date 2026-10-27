@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="dolan_dash.DolanDashboard">
+        <div class="o_dolan_dash p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <div>
+                    <h4 class="mb-0 fw-bold">Operaciones · <t t-out="this.state.kpis.company"/></h4>
+                    <span class="text-muted small">Mes <t t-out="this.state.kpis.mes"/></span>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline-primary btn-sm" t-on-click="() => this.open('dolan_dash.act_facturas')">Facturas</button>
+                    <button class="btn btn-outline-primary btn-sm" t-on-click="() => this.open('dolan_dash.act_nc')">Notas de crédito</button>
+                    <button class="btn btn-outline-primary btn-sm" t-on-click="() => this.open('dolan_dash.act_remitos')">Remitos</button>
+                    <button class="btn btn-outline-primary btn-sm" t-on-click="() => this.open('dolan_dash.act_compras')">Compras</button>
+                </div>
+            </div>
+            <div class="dolan_kpis">
+                <div class="dolan_card" t-foreach="this.state.kpis.widgets" t-as="w" t-key="w.key"
+                     t-on-click="() => this.setSeccion(w.key)"
+                     t-att-class="this.state.seccion === w.key ? 'dolan_card on' : 'dolan_card'">
+                    <div class="dolan_icon" t-att-class="w.tag" t-out="w.label"/>
+                    <div class="dolan_value" t-out="w.valor"/>
+                    <div class="dolan_hint" t-out="w.hint"/>
+                </div>
+            </div>
+            <div class="dolan_section" t-if="this.state.seccion and this.state.serie">
+                <div class="dolan_section_head">
+                    <div>
+                        <div class="dolan_section_title" t-out="this.state.serie.titulo"/>
+                        <div class="dolan_section_sub">Detalle bajo la tarjeta · click en la tarjeta para cambiar</div>
+                    </div>
+                    <div class="dolan_section_actions">
+                        <button class="dolan_mini_btn" t-on-click="() => this.refresh()">⟳ Actualizar</button>
+                        <button class="dolan_mini_btn" t-on-click="() => this.setSeccion(this.state.seccion)">✕ Cerrar</button>
+                    </div>
+                </div>
+                <div class="dolan_bars">
+                    <div class="dolan_bar_col" t-foreach="this.state.serie.cols" t-as="col" t-key="col.label">
+                        <div class="dolan_bar_val" t-out="col.valor"/>
+                        <div class="dolan_bar" t-att-style="'height:' + col.pct + '%'"/>
+                        <div class="dolan_bar_lab" t-out="col.label"/>
+                    </div>
+                </div>
+            </div>
+            <div class="dolan_details">
+                <div class="dolan_detail_block" t-att-class="this.state.seccion === 'compras' ? 'dolan_block_active' : ''">
+                    <div class="dolan_detail_title">Compras — por pagar</div>
+                    <table class="dolan_table">
+                        <thead><tr><th>N.º</th><th>Proveedor</th><th>Vencimiento</th><th>Estado</th><th class="ta-r">Total</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="this.state.detalle.por_pagar" t-as="row" t-key="row.num">
+                                <td class="mono" t-out="row.num"/>
+                                <td t-out="row.tercero"/>
+                                <td t-out="row.fecha"/>
+                                <td><span class="dolan_tag" t-att-class="row.estado === 'Vencida' ? 'dolan_tag_danger' : 'dolan_tag_warn'" t-out="row.estado"/></td>
+                                <td class="ta-r mono">
+                                    <span t-out="row.monto"/>
+                                    <button class="dolan_pay_btn" t-on-click="() => this.pagar(row.id)">Registrar pago</button>
+                                </td>
+                            </tr>
+                            <tr t-if="!this.state.detalle.por_pagar.length"><td colspan="5" class="text-muted">Sin comprobantes pendientes</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dolan_detail_block">
+                    <div class="dolan_detail_title">Compras — pagadas</div>
+                    <table class="dolan_table">
+                        <thead><tr><th>N.º</th><th>Proveedor</th><th>Fecha</th><th>Estado</th><th class="ta-r">Total</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="this.state.detalle.pagadas" t-as="row" t-key="row.num">
+                                <td class="mono" t-out="row.num"/>
+                                <td t-out="row.tercero"/>
+                                <td t-out="row.fecha"/>
+                                <td><span class="dolan_tag dolan_tag_ok" t-out="row.estado"/></td>
+                                <td class="ta-r mono" t-out="row.monto"/>
+                            </tr>
+                            <tr t-if="!this.state.detalle.pagadas.length"><td colspan="5" class="text-muted">Sin comprobantes pagados</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dolan_detail_block" t-att-class="this.state.seccion === 'facturas' ? 'dolan_block_active' : ''">
+                    <div class="dolan_detail_title">Facturas del mes</div>
+                    <table class="dolan_table">
+                        <thead><tr><th>N.º</th><th>Cliente</th><th>Fecha</th><th>Tipo</th><th class="ta-r">Total</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="this.state.detalle.facturas" t-as="row" t-key="row.num">
+                                <td class="mono" t-out="row.num"/>
+                                <td t-out="row.tercero"/>
+                                <td t-out="row.fecha"/>
+                                <td><span class="dolan_tag" t-att-class="row.estado === 'NC' ? 'dolan_tag_warn' : 'dolan_tag_ok'" t-out="row.estado"/></td>
+                                <td class="ta-r mono" t-out="row.monto"/>
+                            </tr>
+                            <tr t-if="!this.state.detalle.facturas.length"><td colspan="5" class="text-muted">Sin facturas este mes</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dolan_detail_block" t-att-class="this.state.seccion === 'nc' ? 'dolan_block_active' : ''">
+                    <div class="dolan_detail_title">Notas de crédito (mes)</div>
+                    <table class="dolan_table">
+                        <thead><tr><th>N.º</th><th>Cliente</th><th>Fecha</th><th class="ta-r">Total</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="this.state.detalle.nc" t-as="row" t-key="row.num">
+                                <td class="mono" t-out="row.num"/><td t-out="row.tercero"/>
+                                <td t-out="row.fecha"/><td class="ta-r mono" t-out="row.monto"/>
+                            </tr>
+                            <tr t-if="!this.state.detalle.nc.length"><td colspan="4" class="text-muted">Sin NC este mes</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dolan_detail_block" t-att-class="this.state.seccion === 'remitos' ? 'dolan_block_active' : ''">
+                    <div class="dolan_detail_title">Últimos remitos</div>
+                    <table class="dolan_table">
+                        <thead><tr><th>N.º</th><th>Destino</th><th>Fecha</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="this.state.detalle.remitos" t-as="row" t-key="row.num">
+                                <td class="mono" t-out="row.num"/><td t-out="row.tercero"/><td t-out="row.fecha"/>
+                            </tr>
+                            <tr t-if="!this.state.detalle.remitos.length"><td colspan="3" class="text-muted">Sin remitos</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="text-muted small mt-3">
+                Menú <b>Configuración Dolan</b> (Ajustes): orden de apps, app por defecto.
+            </div>
+        </div>
+    </t>
+</templates>

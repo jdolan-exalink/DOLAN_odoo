@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_kpis_dashboard" model="ir.actions.client">
+        <field name="name">Operaciones (resumen KPI)</field>
+        <field name="tag">dolan_dash.dashboard</field>
+    </record>
+    <!-- Menu Tablero = resumen KPI (estilo Propuesta 1) -->
+    <record id="menu_operaciones_board" model="ir.ui.menu">
+        <field name="action" ref="action_kpis_dashboard"/>
+        <field name="name">Tablero</field>
+    </record>
+    <!-- El tablero de listas queda como vista secundaria -->
+    <menuitem id="menu_operaciones_listados" name="Listados" parent="menu_operaciones_root"
+              action="action_operaciones_board" sequence="3" groups="base.group_user"/>
+</odoo>

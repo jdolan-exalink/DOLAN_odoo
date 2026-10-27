@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dolan_ui_settings_form" model="ir.ui.view">
+        <field name="name">dolan.ui.settings.form</field>
+        <field name="model">dolan.ui.settings</field>
+        <field name="arch" type="xml">
+            <form string="Configuración Dolan">
+                <group>
+                    <field name="apps_help" nolabel="1" colspan="2"/>
+                </group>
+                <group string="Orden de apps">
+                    <field name="app_order" nolabel="1" colspan="2"/>
+                </group>
+                <group string="Entrada">
+                    <field name="default_app"/>
+                </group>
+                <group string="Apariencia">
+                    <field name="tema"/>
+                    <field name="densidad"/>
+                </group>
+                <group string="Home (widgets del tablero)">
+                    <field name="widgets_order" nolabel="1" colspan="2"/>
+                </group>
+                <footer>
+                    <button name="action_apply" string="Aplicar" type="object"
+                            class="btn-primary" special="save" data-hotkey="q"/>
+                    <button string="Cerrar" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dolan_ui_settings" model="ir.actions.act_window">
+        <field name="name">Configuración Dolan (apps)</field>
+        <field name="res_model">dolan.ui.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_dolan_ui_settings" name="Configuración Dolan"
+              parent="base.menu_administration" action="action_dolan_ui_settings"
+              sequence="20" groups="base.group_system"/>
+</odoo>
