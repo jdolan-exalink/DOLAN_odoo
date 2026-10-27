@@ -1,0 +1,23 @@
+# --- Pi local runtime ---
+.atl/
+
+# --- Secrets / env ---
+secrets/
+.env
+
+# --- Stack runtime: datos, deploys, backups (sensibles o replicables) ---
+odoo20-argentina/addons/
+odoo20-argentina/db-data/
+odoo20-argentina/odoo-data/
+odoo20-argentina/backups/
+odoo20-argentina/migration/*.csv
+!odoo20-argentina/migration/compras_plantilla.csv
+backups/
+bak/
+addons/
+
+# --- Python / Node / logs ---
+__pycache__/
+*.pyc
+node_modules/
+*.log
