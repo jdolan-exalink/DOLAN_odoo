@@ -1,0 +1,256 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* DOLAN_calidad
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0-20261015\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-28 15:22+0000\n"
+"PO-Revision-Date: 2026-10-28 15:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields.selection,name:DOLAN_calidad.selection__dolan_calidad_no_conformidad__estado__abierta
+msgid "Abierta"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__activo
+msgid "Activo"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__ambito
+msgid "Ambito"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.ui.menu,name:DOLAN_calidad.menu_root
+msgid "Calidad"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields.selection,name:DOLAN_calidad.selection__dolan_calidad_no_conformidad__estado__cerrada
+msgid "Cerrada"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__partner_id
+msgid "Company"
+msgstr ""
+
+#. module: DOLAN_calidad
+#. odoo-python
+#: code:addons/DOLAN_calidad/models/calidad.py:0
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__control_id
+msgid "Control"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model,name:DOLAN_calidad.model_dolan_calidad_control
+msgid "Control de calidad ejecutado"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.actions.act_window,name:DOLAN_calidad.action_control
+#: model:ir.ui.menu,name:DOLAN_calidad.menu_controles
+msgid "Controles"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__create_uid
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__create_uid
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__create_date
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__create_date
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.module.module,shortdesc:base.module_DOLAN_calidad
+msgid "DOLAN Calidad"
+msgstr ""
+
+#. module: DOLAN_calidad
+#. odoo-python
+#: code:addons/DOLAN_calidad/models/calidad.py:0
+msgid "Defini la solucion antes de cerrar."
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__descripcion
+msgid "Descripcion"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__display_name
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__display_name
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: DOLAN_calidad
+#. odoo-python
+#: code:addons/DOLAN_calidad/models/calidad.py:0
+msgid "El control KO tiene no conformidades: gestionalas desde ahi."
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__estado
+msgid "Estado"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__fecha
+msgid "Fecha"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__id
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__id
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__id
+msgid "ID"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__instrucciones
+msgid "Instrucciones"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields.selection,name:DOLAN_calidad.selection__dolan_calidad_control__resultado__ko
+msgid "KO"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__write_uid
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__write_uid
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__write_date
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__write_date
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model_terms:ir.ui.view,arch_db:DOLAN_calidad.view_control_form
+msgid "Marcar KO"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model_terms:ir.ui.view,arch_db:DOLAN_calidad.view_control_form
+msgid "Marcar OK"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__name
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__name
+msgid "Name"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model,name:DOLAN_calidad.model_dolan_calidad_no_conformidad
+msgid "No conformidad de calidad"
+msgstr ""
+
+#. module: DOLAN_calidad
+#. odoo-python
+#: code:addons/DOLAN_calidad/models/calidad.py:0
+msgid "No conformidad detectada en %s"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.actions.act_window,name:DOLAN_calidad.action_nc
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__nc_ids
+#: model:ir.ui.menu,name:DOLAN_calidad.menu_nc
+#: model_terms:ir.ui.view,arch_db:DOLAN_calidad.view_control_form
+msgid "No conformidades"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields.selection,name:DOLAN_calidad.selection__dolan_calidad_control__resultado__ok
+msgid "OK"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__observaciones
+msgid "Observaciones"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields.selection,name:DOLAN_calidad.selection__dolan_calidad_punto_control__ambito__operacion
+msgid "Operacion"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,help:DOLAN_calidad.field_dolan_calidad_control__referencia
+msgid "Orden de produccion, remito o lote relacionado"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields.selection,name:DOLAN_calidad.selection__dolan_calidad_control__resultado__pendiente
+msgid "Pendiente"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__product_id
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_punto_control__product_id
+#: model:ir.model.fields.selection,name:DOLAN_calidad.selection__dolan_calidad_punto_control__ambito__producto
+msgid "Producto"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__punto_id
+msgid "Punto de control"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model,name:DOLAN_calidad.model_dolan_calidad_punto_control
+msgid "Punto de control de calidad"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.actions.act_window,name:DOLAN_calidad.action_punto
+#: model:ir.ui.menu,name:DOLAN_calidad.menu_puntos
+msgid "Puntos de control"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.module.module,summary:base.module_DOLAN_calidad
+msgid "Puntos de control, controles con resultado OK/KO y no conformidades"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__referencia
+msgid "Referencia (OP/remito)"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__responsable_id
+msgid "Responsable"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_control__resultado
+msgid "Resultado"
+msgstr ""
+
+#. module: DOLAN_calidad
+#: model:ir.model.fields,field_description:DOLAN_calidad.field_dolan_calidad_no_conformidad__solucion
+msgid "Solucion"
+msgstr ""

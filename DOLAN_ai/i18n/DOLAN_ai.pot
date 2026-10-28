@@ -1,0 +1,329 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* DOLAN_ai
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0-20261015\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-28 15:22+0000\n"
+"PO-Revision-Date: 2026-10-28 15:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activity_plans_ids
+msgid "Activity Plans"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activo
+msgid "Activo"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_conversacion__agente_id
+#: model:ir.model.fields.selection,name:DOLAN_ai.selection__dolan_ai_mensaje__rol__assistant
+msgid "Agente"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model,name:DOLAN_ai.model_dolan_ai_agente
+msgid "Agente DOLAN (IA)"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.ui.menu,name:DOLAN_ai.menu_dolan_ai
+msgid "ChatGPT"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.module.module,summary:base.module_DOLAN_ai
+msgid ""
+"Conexion ChatGPT via OAuth directo (device flow estilo opencode/pi), primer "
+"proveedor del modulo DOLAN_ai"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_mensaje__content
+msgid "Content"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_mensaje__conversacion_id
+msgid "Conversacion"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model,name:DOLAN_ai.model_dolan_ai_conversacion
+msgid "Conversacion de agente DOLAN (IA)"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__create_uid
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_conversacion__create_uid
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_mensaje__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__create_date
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_conversacion__create_date
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_mensaje__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: DOLAN_ai
+#. odoo-javascript
+#: code:addons/DOLAN_ai/static/src/systray/systray_button.xml:0
+#: model:ir.actions.act_url,name:DOLAN_ai.action_dolan_ai_page
+#: model:ir.module.module,shortdesc:base.module_DOLAN_ai
+#: model:ir.ui.menu,name:DOLAN_ai.menu_dolan_ai_root
+msgid "DOLAN AI"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__display_name
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_conversacion__display_name
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_mensaje__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields.selection,name:DOLAN_ai.selection__dolan_ai_mensaje__rol__tool
+msgid "Herramienta"
+msgstr ""
+
+#. module: DOLAN_ai
+#. odoo-javascript
+#: code:addons/DOLAN_ai/static/src/systray/systray_button.xml:0
+msgid "IA"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__id
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_conversacion__id
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_mensaje__id
+msgid "ID"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,help:DOLAN_ai.field_dolan_ai_agente__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,help:DOLAN_ai.field_dolan_ai_agente__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,help:DOLAN_ai.field_dolan_ai_agente__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__proposito
+msgid "Instrucciones"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__write_uid
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_conversacion__write_uid
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_mensaje__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__write_date
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_conversacion__write_date
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_mensaje__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,help:DOLAN_ai.field_dolan_ai_agente__activity_type_icon
+msgid "Material Symbols icon e.g. checklist"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model,name:DOLAN_ai.model_dolan_ai_mensaje
+msgid "Mensaje de conversacion DOLAN (IA)"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_conversacion__mensaje_ids
+msgid "Mensajes"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__modelos_ids
+msgid "Modelos autorizados"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__name
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_conversacion__name
+msgid "Name"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: DOLAN_ai
+#. odoo-python
+#: code:addons/DOLAN_ai/models/agentes.py:0
+msgid "Nueva conversacion"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,help:DOLAN_ai.field_dolan_ai_agente__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,help:DOLAN_ai.field_dolan_ai_agente__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_mensaje__rol
+msgid "Rol"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,help:DOLAN_ai.field_dolan_ai_agente__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_agente__sugerencias
+msgid "Sugerencias (una por línea)"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,help:DOLAN_ai.field_dolan_ai_agente__proposito
+msgid ""
+"System-style prompt del agente (estilo EE: instrucciones + estilo de "
+"trabajo)"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,help:DOLAN_ai.field_dolan_ai_agente__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields,field_description:DOLAN_ai.field_dolan_ai_conversacion__user_id
+msgid "User"
+msgstr ""
+
+#. module: DOLAN_ai
+#: model:ir.model.fields.selection,name:DOLAN_ai.selection__dolan_ai_mensaje__rol__user
+msgid "Usuario"
+msgstr ""

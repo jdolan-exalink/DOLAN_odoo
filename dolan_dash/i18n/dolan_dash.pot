@@ -1,0 +1,346 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dolan_dash
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0-20261015\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-28 15:23+0000\n"
+"PO-Revision-Date: 2026-10-28 15:23+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "(Ajustes): orden de apps, app por defecto."
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Cliente"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Compras"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.actions.act_window,name:dolan_dash.act_compras_pagadas
+#: model_terms:ir.ui.view,arch_db:dolan_dash.view_operaciones_board
+msgid "Compras - pagadas"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.actions.act_window,name:dolan_dash.act_compras_pendientes
+#: model_terms:ir.ui.view,arch_db:dolan_dash.view_operaciones_board
+msgid "Compras - por pagar"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Compras — pagadas"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Compras — por pagar"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.actions.act_window,name:dolan_dash.act_compras
+msgid "Comprobantes de compra (por pagar)"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Configuración Dolan"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.model.fields,field_description:dolan_dash.field_dolan_dash__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.model.fields,field_description:dolan_dash.field_dolan_dash__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Destino"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Detalle bajo la tarjeta · click en la tarjeta para cambiar"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.model.fields,field_description:dolan_dash.field_account_move__display_name
+#: model:ir.model.fields,field_description:dolan_dash.field_dolan_dash__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.module.module,shortdesc:base.module_dolan_dash
+msgid "Dolan - Dashboard Operativo"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.actions.act_url,name:dolan_dash.action_dolan_ocr
+#: model:ir.ui.menu,name:dolan_dash.menu_dolan_ocr_compras
+#: model:ir.ui.menu,name:dolan_dash.menu_dolan_ocr_facturas
+msgid "Escanear compra (IA)"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+#: model_terms:ir.ui.view,arch_db:dolan_dash.view_move_tree_dolan_badge
+msgid "Estado"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Facturas"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.actions.act_window,name:dolan_dash.act_facturas
+#: model_terms:ir.ui.view,arch_db:dolan_dash.view_operaciones_board
+msgid "Facturas de venta"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Facturas del mes"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Fecha"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.model.fields,field_description:dolan_dash.field_account_move__id
+#: model:ir.model.fields,field_description:dolan_dash.field_dolan_dash__id
+msgid "ID"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.model,name:dolan_dash.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.model,name:dolan_dash.model_dolan_dash
+msgid "KPIs del dashboard operativo"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.model.fields,field_description:dolan_dash.field_dolan_dash__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.model.fields,field_description:dolan_dash.field_dolan_dash__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.ui.menu,name:dolan_dash.menu_operaciones_listados
+msgid "Listados"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Menú"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Mes"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "N.º"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.actions.act_window,name:dolan_dash.act_nc
+#: model_terms:ir.ui.view,arch_db:dolan_dash.view_operaciones_board
+msgid "Notas de credito"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Notas de crédito"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Notas de crédito (mes)"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.actions.act_window,name:dolan_dash.action_operaciones_board
+#: model:ir.ui.menu,name:dolan_dash.menu_operaciones_root
+#: model_terms:ir.ui.view,arch_db:dolan_dash.view_operaciones_board
+msgid "Operaciones"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.actions.client,name:dolan_dash.action_kpis_dashboard
+msgid "Operaciones (resumen KPI)"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Operaciones ·"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Proveedor"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Registrar pago"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+#: model_terms:ir.ui.view,arch_db:dolan_dash.view_operaciones_board
+msgid "Remitos"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.actions.act_window,name:dolan_dash.act_remitos
+msgid "Remitos entregados"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Sin NC este mes"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Sin comprobantes pagados"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Sin comprobantes pendientes"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Sin facturas este mes"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Sin remitos"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.ui.menu,name:dolan_dash.menu_operaciones_board
+msgid "Tablero"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.module.module,summary:base.module_dolan_dash
+msgid "Tablero de operaciones: facturas, NC, remitos y compras"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Tipo"
+msgstr ""
+
+#. module: dolan_dash
+#: model_terms:ir.ui.view,arch_db:dolan_dash.view_operaciones_board
+msgid "Todas las compras"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Total"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Vencimiento"
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.model.fields,help:dolan_dash.field_account_bank_statement_line__dolan_last_reconcile
+#: model:ir.model.fields,help:dolan_dash.field_account_move__dolan_last_reconcile
+msgid ""
+"Última fecha de pago conciliado o reconciliación completa (columna estilo "
+"Enterprise, calculada sin modificar el core)."
+msgstr ""
+
+#. module: dolan_dash
+#: model:ir.model.fields,field_description:dolan_dash.field_account_bank_statement_line__dolan_last_reconcile
+#: model:ir.model.fields,field_description:dolan_dash.field_account_move__dolan_last_reconcile
+#: model_terms:ir.ui.view,arch_db:dolan_dash.view_invoice_list_dolan_recobro
+#: model_terms:ir.ui.view,arch_db:dolan_dash.view_move_tree_dolan_badge
+msgid "Último recobro"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "Últimos remitos"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "✕ Cerrar"
+msgstr ""
+
+#. module: dolan_dash
+#. odoo-javascript
+#: code:addons/dolan_dash/static/src/dashboard/dashboard.xml:0
+msgid "⟳ Actualizar"
+msgstr ""

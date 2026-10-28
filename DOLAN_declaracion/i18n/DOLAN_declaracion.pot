@@ -1,0 +1,337 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* DOLAN_declaracion
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0-20261015\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-28 15:22+0000\n"
+"PO-Revision-Date: 2026-10-28 15:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields.selection,name:DOLAN_declaracion.selection__dolan_fiscal_periodo__state__abierto
+msgid "Abierto"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_plans_ids
+msgid "Activity Plans"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields.selection,name:DOLAN_declaracion.selection__dolan_fiscal_periodo__state__cerrado
+msgid "Cerrado"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model_terms:ir.ui.view,arch_db:DOLAN_declaracion.view_periodo_form
+msgid "Cerrar periodo"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__item_ids
+#: model_terms:ir.ui.view,arch_db:DOLAN_declaracion.view_periodo_form
+msgid "Checklist"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__clave
+msgid "Clave"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__company_id
+msgid "Company"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__create_uid
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__create_date
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.module.module,shortdesc:base.module_DOLAN_declaracion
+msgid "DOLAN Declaracion Fiscal"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.ui.menu,name:DOLAN_declaracion.menu_root
+msgid "Declaración Fiscal"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__display_name
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__fecha_desde
+msgid "Fecha Desde"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__fecha_hasta
+msgid "Fecha Hasta"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__done
+msgid "Hecho"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__id
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__id
+msgid "ID"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,help:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,help:DOLAN_declaracion.field_dolan_fiscal_periodo__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,help:DOLAN_declaracion.field_dolan_fiscal_periodo__message_has_error
+#: model:ir.model.fields,help:DOLAN_declaracion.field_dolan_fiscal_periodo__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__name
+msgid "Item"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model,name:DOLAN_declaracion.model_dolan_fiscal_item
+msgid "Item del checklist fiscal"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#. odoo-python
+#: code:addons/DOLAN_declaracion/models/periodo.py:0
+msgid "Items sin marcar: %s"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__write_uid
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__write_date
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,help:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_type_icon
+msgid "Material Symbols icon e.g. checklist"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__name
+msgid "Name"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__notas
+msgid "Notas"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,help:DOLAN_declaracion.field_dolan_fiscal_periodo__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,help:DOLAN_declaracion.field_dolan_fiscal_periodo__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_item__periodo_id
+msgid "Periodo"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model,name:DOLAN_declaracion.model_dolan_fiscal_periodo
+msgid "Periodo fiscal de cierre"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.module.module,summary:base.module_DOLAN_declaracion
+msgid ""
+"Periodos fiscales AR: checklist de cierre de mes (IVA, CAE pendientes, "
+"libros)"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.actions.act_window,name:DOLAN_declaracion.action_periodo
+#: model:ir.ui.menu,name:DOLAN_declaracion.menu_periodos
+msgid "Períodos de cierre"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__progreso
+msgid "Progreso"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__rating_ids
+msgid "Ratings"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model_terms:ir.ui.view,arch_db:DOLAN_declaracion.view_periodo_form
+msgid "Reabrir"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,field_description:DOLAN_declaracion.field_dolan_fiscal_periodo__state
+msgid "State"
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,help:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: DOLAN_declaracion
+#: model:ir.model.fields,help:DOLAN_declaracion.field_dolan_fiscal_periodo__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
