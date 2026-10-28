@@ -151,3 +151,40 @@ Los 6 gaps abiertos en L18 quedaron CERRADOS con verificación:
 
 Evidence: `DOLAN_theme/qa/shots/s6-{inventario,compras,navbar-dark}.png`.
 Risk: none (grants = otorgar al propio admin grupos de apps instaladas; traducciones = datos es_AR añadidos; SCSS propio; verificación browser+probe en claro/oscuro).
+
+### L20 — Aprobación F2 + F3 (2026-10-27)
+
+- **L20** (verbatim): "vamos con F2 y F3"
+- Alcance = tabla de estrategia del plan (S2): F2 enhancers `DOLAN_mantenimiento`, `DOLAN_flotilla`, `DOLAN_contabilidad`; F3 completos `DOLAN_codigo_barras`, `DOLAN_alquileres`, `DOLAN_suscripciones`, `DOLAN_calidad`. Patrón: addon propio en el monorepo + deploy a `odoo20-argentina/addons/`, página/kpi por controller (patrón DOLAN_ai), tests TransactionCase, un commit por módulo, sin core modificado.
+
+### L21 — F2 + F3 ejecutadas (2026-10-28)
+
+Veredicto: **7 módulos entregados**, todos instalados en `dolan` con tests GREEN y verificación browser (consola 0 errores), un commit por módulo (pushed a origin/main).
+
+**F2 enhancers (A)** — páginas KPI con controller propio (patrón DOLAN_ai) + menú dentro de la app existente:
+| Módulo | Alcance v1 | Tests | Evidencia browser |
+|---|---|---|---|
+| `DOLAN_mantenimiento` | OT abiertas/críticas/atrasadas/próximas 7d + equipos | 3 ✓ (schedule_date) | `/dolan_mantenimiento` 200, cards |
+| `DOLAN_flotilla` | contratos 30d/vencidos + costos mes (services/contracts) | 3 ✓ | `/dolan_flotilla` 200, cards |
+| `DOLAN_contabilidad` | emitidas/recibidas + IVA débito/crédito/liquidado del mes | 4 ✓ (datos reales: IVA déb 1.95M / créd 1.04M) | `/dolan_contabilidad` 200 |
+
+**F3 completos (B)** — apps con raíz+icono:
+| Módulo | Alcance v1 | Tests | Verificación |
+|---|---|---|---|
+| `DOLAN_codigo_barras` | escaneo SKU/barras → producto + existencias por ubicación (página con autofocus) | 2 ✓ | scan real `PRD-001` → card "Articulo Demo General 21%" |
+| `DOLAN_alquileres` | contratos por día: importes, estados, botón Facturar → `account.move` draft | 5 ✓ | rail + app instalada |
+| `DOLAN_suscripciones` | planes + suscripciones + **cron diario** que genera facturas draft y avanza períodos | 5 ✓ | rail + cron registrado |
+| `DOLAN_calidad` | puntos de control, controles OK/KO (KO crea no conformidad), cierre con solución | 5 ✓ | rail + app instalada |
+
+**Rail**: 18 → **21 apps** (Alquileres, Suscripciones, Calidad con iconos propios PIL).
+
+**Odoo 20 rename-gauntlet de esta tanda** (todos verificados empíricamente):
+`ir.model.access` → **`ir.access`** con CSV `security/ir.access.csv` y columnas **`model_id/id,group_id/id,operation,domain`** (sin perm_read/write/...); **ACL importan para menús**: un menú hijo cuyo modelo sin `ir.model.access` desaparece del `load_menus` (raíces nuevas invisibles); `Environment` v20 **no tiene `.sudo()`/`.with_context()`** (sudo en recordsets); `product.template.type='product'` → **`consu` + `is_storable`**; `ir.cron.numbercall/doall` eliminados; `maintenance.request.date_planned_finished` → **`schedule_date`**; `fleet.vehicle.log.contract`: `start_date`/`expiration_date`/`amount` y **no existen `log.fuel` ni `log.odometer`**; `account.move.parent_state` → `state` (aml: `move_id.state`); `product.template.default_code` con variante archivada → `active_test=False`.
+
+Risk: item 3 (contratos de datos: modelos/menús propios; ACL otorgadas a group_user/system) — verificación: 22 tests verdes + browser rail/scan/páginas; item 1 sin cambios (facturas/cron solo crean borradores; ninguna acción postear).
+
+### L22 — Activación total + análisis con REA + demo EE abierta (2026-10-28)
+
+- **L22a** (verbatim): "vamoos con RAE y quiero que actives y analices todos los modulos"
+- **L22b** (verbatim): "te active todos los modulos enterprise en la demo para que los veas"
+- Ejecutado: REA R1 (CDP propio :9222, inspect ev_996edf…, sesión 40s/10 apps ev_fd320c… timeline88 drops0); activación **38/38 apps CE** en4 lotes (UI200 c/u); barrido Playwright **38/38** (200 OK, 2 errores consola hr/hr_recruitment TypeError 'type', capturas en qa/shots/analysis/); remedios: grants de10 grupos de raíz + fix hr_holidays (acción derivable + ACL) → **rail 38/38**; demo EE: grilla26 tiles +8 capturas EE-only/en-paridad (suscripciones, alquiler, IA/agentes, taller, código-de-barras, manufactura, ventas, contabilidad) en docs/evidence/ee-demo/full/. Doc completo: `DOLAN_theme/docs/modulos-analisis.md`. Nuevos gaps: **Taller (field service) sin equivalente CE**; EE IA=Agentes vs nuestro DOLAN_ai ChatGPT-only. Risk: none (activación en DB test con backups; grants = permisos al propio admin; datos propios; verificación por lote + barrido completo).
