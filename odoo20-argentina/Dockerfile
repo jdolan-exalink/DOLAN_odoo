@@ -4,7 +4,7 @@ USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends     git     build-essential     libssl-dev     swig     python3-dev     libxml2-dev     libxslt1-dev     zlib1g-dev     libsasl2-dev     libldap2-dev     libjpeg-dev     libtiff-dev     libopenjp2-7-dev     libwebp-dev     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install --break-system-packages     git+https://github.com/reingart/pyafipws.git     m2crypto     python-barcode     pdf417gen     qrcode     Pillow     dbf     future
+RUN pip3 install --break-system-packages     git+https://github.com/reingart/pyafipws.git     m2crypto     python-barcode     pdf417gen     qrcode     Pillow     dbf     future     pypdfium2
 
 RUN python3 - <<'PY2'
 import glob, os

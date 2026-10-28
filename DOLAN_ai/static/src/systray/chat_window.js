@@ -123,7 +123,7 @@ import { rpc } from "@web/core/network/rpc";
                 agente_id: agenteActual, text: text, conversacion_id: convActual,
             });
             status.remove();
-            if (res.error) { addMsg("assistant", "⚠ " + res.error); }
+            if (res.error) { addMsg("assistant", "⚠ " + (res.detalle || res.error)); }
             else {
                 if (res.conversacion_id) convActual = res.conversacion_id;
                 addMsg("assistant", res.reply || "(sin respuesta)");
