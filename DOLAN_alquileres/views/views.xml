@@ -12,7 +12,14 @@
         <field name="fecha_fin"/>
         <field name="dias" sum="Total días"/>
         <field name="tarifa_dia"/>
+              <field name="fecha_pickup"/>
+              <field name="fecha_return"/>
+              <field name="estado_ops"/>
         <field name="total" sum="Total"/>
+        <field name="fecha_pickup" optional="show"/>
+        <field name="fecha_return" optional="show"/>
+        <field name="estado_ops" widget="badge" decoration-warning="estado_ops=='pendiente'" decoration-info="estado_ops=='recolectada'" decoration-success="estado_ops=='devuelta'"/>
+        <field name="estado_factura" widget="badge" optional="show"/>
         <field name="state" widget="badge" decoration-success="state=='activo'" decoration-info="state=='borrador'" decoration-muted="state in ('finalizado','cancelado')"/>
         <field name="move_id" optional="show"/>
       </list>
@@ -41,6 +48,9 @@
               <field name="fecha_inicio"/>
               <field name="fecha_fin"/>
               <field name="tarifa_dia"/>
+              <field name="fecha_pickup"/>
+              <field name="fecha_return"/>
+              <field name="estado_ops"/>
               <field name="dias"/>
               <field name="total"/>
             </group>
@@ -67,5 +77,16 @@
     <field name="parent_id" ref="menu_dolan_alquiler_root"/>
     <field name="action" ref="action_dolan_alquiler"/>
     <field name="sequence">10</field>
+  </record>
+  <record id="action_dolan_alquiler_tablero" model="ir.actions.act_url">
+    <field name="name">Tablero DOLAN</field>
+    <field name="url">/dolan_alquileres</field>
+    <field name="target">self</field>
+  </record>
+  <record id="menu_dolan_alquiler_tablero" model="ir.ui.menu">
+    <field name="name">Tablero</field>
+    <field name="parent_id" ref="menu_dolan_alquiler_root"/>
+    <field name="action" ref="action_dolan_alquiler_tablero"/>
+    <field name="sequence">5</field>
   </record>
 </odoo>

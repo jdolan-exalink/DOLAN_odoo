@@ -26,6 +26,28 @@ class DolanAlquilerContrato(models.Model):
     dias = fields.Integer(compute="_compute_importes")
     total = fields.Float(compute="_compute_importes")
     move_id = fields.Many2one("account.move", string="Factura", readonly=True)
+    fecha_pickup = fields.Datetime(string="Recoleccion")
+    fecha_return = fields.Datetime(string="Devolucion")
+    estado_ops = fields.Selection([
+        ("pendiente", "Por retirar"),
+        ("recolectada", "Recolectada"),
+        ("devuelta", "Devuelta"),
+    ], default="pendiente", required=True)
+    estado_factura = fields.Selection([
+        ("sin_factura", "Sin facturar"),
+        ("por_facturar", "Por facturar"),
+        ("facturado", "Facturado"),
+    ], compute="_compute_estado_factura")
+
+    @api.depends("move_id", "move_id.state")
+    def _compute_estado_factura(self):
+        for c in self:
+            if not c.move_id:
+                c.estado_factura = "sin_factura"
+            elif c.move_id.state == "draft":
+                c.estado_factura = "por_facturar"
+            else:
+                c.estado_factura = "facturado"
 
     @api.depends("fecha_inicio", "fecha_fin", "tarifa_dia")
     def _compute_importes(self):
