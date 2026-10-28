@@ -45,3 +45,16 @@ Verbatims: "cuando entramos a DOLAN AI perdemos la sidebar", "en agentes no tene
 4. **Entrada visible en Compras**: menú **"Escanear compra (IA)"** en Facturación y en Compras (dolan_dash), ancla `#ocr` que abre el selector de archivo.
 
 **Verificación**: 32 tests DOLAN_ai (0 fallos); run en vivo del agente como juan → reply con nombres de contactos; OCR en vivo → borrador 808 (limpiado); menús visibles en secciones de Facturación; consola 0 errores.
+
+### L30 — Selector de agentes + OCR con PDF (2026-10-28)
+
+Verbatims: "el selector de agentes esta vacio y sigue sin funcionar", "las facturas para el OCR tienen que soportar PDF porque viene en pdf generalmente".
+
+- **Selector vacío**: en el servidor el seed ya funcionaba (ruta `/dolan_ai/agentes` devolvía el agente; probe confirmado opts=1) — el browser del usuario tenía **JS cacheado viejo** (page.js/ocr.js sin el bloque de agentes) → **cache-bust `?v=30`** en ambos scripts + `no-store` ya presente. Verificado browser: select con "Asistente de contactos".
+- **OCR con PDF** (dual-path en `ocr.py`):
+  - PDF con imágenes/escaneado → **pypdfium2** (instalado en el contenedor, raster 2x, máx 3 páginas) → página 1 → visión (input_image).
+  - PDF digital (texto embebido, típico ARCA) → **pdfminer extract_text** (≥60 chars) → modo texto (`input_text`, mismo prompt JSON) — más barato y sin visión.
+  - Controller acepta `data:application/pdf;base64,` (hasta 8MB), UI `accept=".pdf,image/*"`.
+  - Fallback con error claro `pdf_sin_soporte` si no rasteriza ni tiene texto.
+- **Verificación**: PDF de prueba (imagen→PDF) en vivo → **borrador 810** creado con proveedor/líneas y limpiado; 36/36 tests; browser final selector+accept+0 errores (captura l30-ocr-pdf.png).
+- Nota de infra: `pypdfium2` se instaló con `pip --break-system-packages` **dentro del contenedor** (se pierde si se recrea el contenedor) → pendiente: bake en Dockerfile (task técnica para próxima pasada de stack).

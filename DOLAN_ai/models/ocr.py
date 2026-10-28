@@ -19,6 +19,59 @@ OCR_PROMPT = (
 )
 
 MAX_IMAGE_BYTES = 8 * 1024 * 1024
+MAX_PDF_PAGES = 3
+PDF_TEXT_MIN = 60  # chars mínimos para considerar un PDF "digital"
+
+
+def pdf_to_images(pdf_bytes):
+    """PDF -> lista de data-URL PNG (raster, para PDFs escaneados).
+
+    Requiere pypdfium2 (instalado en el contenedor). Devuelve [] si no
+    está disponible o el PDF no se puede abrir.
+    """
+    try:
+        import pypdfium2 as pdfium
+    except ImportError:
+        return []
+    try:
+        doc = pdfium.PdfDocument(pdf_bytes)
+        out = []
+        for i, page in enumerate(doc):
+            if i >= MAX_PDF_PAGES:
+                break
+            bitmap = page.render(scale=2.0)
+            pil = bitmap.to_pil()
+            import io
+            buf = io.BytesIO()
+            pil.save(buf, format="PNG")
+            out.append("data:image/png;base64," + base64.b64encode(buf.getvalue()).decode())
+        doc.close()
+        return out
+    except Exception:  # noqa: BLE001 — PDF corrupto o protegido
+        return []
+
+
+def pdf_to_text(pdf_bytes):
+    """Texto embebido del PDF (PDFs digitales de ARCA/facturadores)."""
+    try:
+        from pdfminer.high_level import extract_text
+        import io
+        return (extract_text(io.BytesIO(pdf_bytes)) or "").strip()
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def build_ocr_text_body(text, prompt=OCR_PROMPT):
+    """Body para PDFs digitales: el texto va como input_text (sin imagen)."""
+    return {
+        "model": "gpt-6-luna",
+        "input": [{"role": "user", "content": [
+            {"type": "input_text", "text": prompt + "\n\nTEXTO DEL COMPROBANTE:\n" + text[:12000]},
+        ]}],
+        "max_output_tokens": 1500,
+        "stream": True,
+        "store": False,
+    }
 
 
 def build_ocr_body(data_url, prompt=OCR_PROMPT):
@@ -53,8 +106,12 @@ def parse_ocr_text(text):
     return data
 
 
-def extract_from_image(env, data_url):
-    """Llama a ChatGPT (Responses API no-stream) y devuelve dict parseado."""
+def extract_from_source(env, source):
+    """source: {"kind": "image", "data": data_url} o {"kind": "pdf", "bytes": b"}.
+
+    PDF: intenta raster (pypdfium2) → vision; si no rasteriza pero hay
+    texto embebido → modo texto (input_text). Devuelve dict parseado.
+    """
     from . import chatgpt_oauth as cgo
     tokens = cgo.get_valid_tokens()
     if not tokens:
@@ -64,10 +121,24 @@ def extract_from_image(env, data_url):
     headers = {"Authorization": f"Bearer {tokens['access_token']}"}
     if tokens.get("account_id"):
         headers["ChatGPT-Account-Id"] = tokens["account_id"]
+    body = None
+    if source["kind"] == "pdf":
+        pages = pdf_to_images(source["bytes"])
+        if pages:
+            body = build_ocr_body(pages[0])
+        else:
+            text = pdf_to_text(source["bytes"])
+            if len(text) >= PDF_TEXT_MIN:
+                body = build_ocr_text_body(text)
+            else:
+                return {"ok": False, "error": "pdf_sin_soporte",
+                        "detalle": "PDF escaneado sin rasterizador y sin texto embebido"}
+    else:
+        body = build_ocr_body(source["data"])
     import requests
     try:
         resp = requests.post(
-            cgo.CODEX_API_ENDPOINT, json=build_ocr_body(data_url),
+            cgo.CODEX_API_ENDPOINT, json=body,
             headers=headers, timeout=(15, 180), stream=True)
     except requests.RequestException:
         return {"ok": False, "error": "http_request_exception"}
@@ -166,3 +237,8 @@ def create_draft(env, datos):
         }) for ln in vals["lineas"]],
     })
     return {"ok": True, "move_id": move.id, "move_name": move.name or ""}
+
+
+def extract_from_image(env, data_url):
+    """Compat: extracción desde imagen (data URL)."""
+    return extract_from_source(env, {"kind": "image", "data": data_url})

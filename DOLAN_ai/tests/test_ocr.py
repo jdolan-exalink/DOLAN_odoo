@@ -87,3 +87,23 @@ class TestOcr(TransactionCase):
         self.assertEqual(parts[0]["type"], "input_text")
         self.assertEqual(parts[1]["type"], "input_image")
         self.assertFalse(b["store"])
+
+
+@tagged("post_install", "-at_install")
+class TestOcrPdf(TransactionCase):
+
+    def test_pdf_imagen_rasteriza(self):
+        import io
+        from PIL import Image, ImageDraw
+        img = Image.new("RGB", (400, 300), "white")
+        ImageDraw.Draw(img).text((20, 20), "TOTAL: 1210.00", fill="black")
+        buf = io.BytesIO()
+        img.save(buf, format="PDF")
+        pages = ocr.pdf_to_images(buf.getvalue())
+        self.assertTrue(pages)
+        self.assertTrue(pages[0].startswith("data:image/png;base64,"))
+
+    def test_build_text_body(self):
+        b = ocr.build_ocr_text_body("CUIT 30-... TOTAL 1210")
+        self.assertTrue(b["stream"])
+        self.assertIn("input_text", b["input"][0]["content"][0]["type"])

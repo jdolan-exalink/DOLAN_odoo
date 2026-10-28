@@ -28,7 +28,7 @@ PAGE_HTML = """<!DOCTYPE html>
         <button id="dolan-ai-test" type="button">Probar</button>
         <button id="dolan-ai-logout" type="button">Desconectar</button>
         <button id="dolan-ai-ocr" type="button">Escanear compra (IA)</button>
-        <input id="dolan-ai-file" type="file" accept="image/*" style="display:none"/>
+        <input id="dolan-ai-file" type="file" accept="image/*,.pdf,application/pdf" style="display:none"/>
       </div>
     </div>
     <div id="dolan-ai-device" style="display: none; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px;">
@@ -73,8 +73,8 @@ PAGE_HTML = """<!DOCTYPE html>
     #dolan-ai-connect { background: #714b67; border-color: #714b67; color: #fff; }
     #dolan-ai-connect:hover { background: #5d3d56; }
   </style>
-  <script type="text/javascript" src="/DOLAN_ai/static/src/js/page.js"></script>
-  <script type="text/javascript" src="/DOLAN_ai/static/src/js/ocr.js"></script>
+  <script type="text/javascript" src="/DOLAN_ai/static/src/js/page.js?v=30"></script>
+  <script type="text/javascript" src="/DOLAN_ai/static/src/js/ocr.js?v=30"></script>
   <script>
   (function(){
     fetch("/web/dataset/call_kw",{method:"POST",headers:{"Content-Type":"application/json"},
@@ -167,12 +167,23 @@ class DolanAiController(http.Controller):
             return {"ok": False, "error": "no_autorizado"}
         data_url = str(kwargs.get("image") or "")
         commit = bool(kwargs.get("commit"))
-        if not data_url.startswith("data:image/"):
-            return {"ok": False, "error": "imagen_invalida"}
-        if len(data_url) > ai_ocr.MAX_IMAGE_BYTES * 2:  # base64 ~4/3
-            return {"ok": False, "error": "imagen_muy_grande"}
+        import base64 as _b64
+        if data_url.startswith("data:application/pdf;base64,"):
+            try:
+                pdf_bytes = _b64.b64decode(data_url.split(",", 1)[1])
+            except Exception:  # noqa: BLE001
+                return {"ok": False, "error": "pdf_invalido"}
+            if len(pdf_bytes) > ai_ocr.MAX_IMAGE_BYTES:
+                return {"ok": False, "error": "pdf_muy_grande"}
+            source = {"kind": "pdf", "bytes": pdf_bytes}
+        elif data_url.startswith("data:image/"):
+            if len(data_url) > ai_ocr.MAX_IMAGE_BYTES * 2:
+                return {"ok": False, "error": "imagen_muy_grande"}
+            source = {"kind": "image", "data": data_url}
+        else:
+            return {"ok": False, "error": "archivo_invalido"}
         try:
-            res = ai_ocr.extract_from_image(request.env, data_url)
+            res = ai_ocr.extract_from_source(request.env, source)
         except Exception as exc:  # noqa: BLE001
             return {"ok": False, "error": exc.__class__.__name__}
         if not res.get("ok"):
