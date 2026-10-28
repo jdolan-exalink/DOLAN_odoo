@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="action_dolan_bancos" model="ir.actions.act_url">
+    <field name="name">Conciliación de bancos</field>
+    <field name="url">/dolan_bancos</field>
+    <field name="target">self</field>
+  </record>
+  <record id="menu_dolan_bancos" model="ir.ui.menu">
+    <field name="name">Conciliación de bancos (IA)</field>
+    <field name="parent_id" ref="account.menu_finance"/>
+    <field name="action" ref="action_dolan_bancos"/>
+    <field name="sequence">9</field>
+  </record>
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,operation,domain
+dolan_bancos_user_account_bank_statement,access statement user,account.model_account_bank_statement,base.group_user,r,
+dolan_bancos_user_account_bank_statement_line,access statement line user,account.model_account_bank_statement_line,base.group_user,r,

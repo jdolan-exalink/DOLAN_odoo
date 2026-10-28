@@ -239,3 +239,7 @@ Orden de construcción: OCR (usa infra existente) → Declaración fiscal → DO
 - **Matriz final** en `ce-coverage-matrix.md` §Estado F5 hito 2: sin filas NE ni P sin prueba; único pendiente no-propio = bug CORE hr_recruitment Ajustes (upstream).
 - Evidencia: `qa/shots/f5h2/*.png` (dual por app), `rea/f5h2.json`, usuario `operador@dolan.com.ar` (id8) creado para verificación no-admin permanente.
 - Risk: none (solo grants de lectura/uso al usuario de prueba propio + pruebas; cero cambios de código en este hito).
+
+### L37a — Specs F1 restantes: no habilitables en la demo (2026-10-28)
+- La demo EE (exalink) **no expone** Ayuda/Planificación/Aprobaciones/Calidad: no están en la grilla (26 tiles) ni en la búsqueda de Aplicaciones (no aparecen como instalables; el trial no los incluye). Intento de activación vía Playwright: `NO_CARD` para las 4.
+- **Resolución**: quedan como pendientes documentados hasta que la cuenta EE tenga esos módulos habilitados (requiere suscripción/upgrade en odoo.com) — no se pueden spec-ear por observación.
