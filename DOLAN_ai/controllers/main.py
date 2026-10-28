@@ -44,6 +44,14 @@ PAGE_HTML = """<!DOCTYPE html>
       borrador en Facturas de compra (previsualizá antes de confirmar).
     </p>
     <div id="dolan-ai-ocr-out" style="margin-top:12px"></div>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0"/>
+  <h4 style="margin:0 0 8px">Agentes</h4>
+  <div style="display:flex;gap:8px;align-items:center">
+    <select id="dolan-ai-agente" style="padding:8px;border:1px solid #d1d5db;border-radius:8px"></select>
+    <input id="dolan-ai-agente-text" placeholder="Pedí algo al agente…" style="flex:1;padding:9px;border:1px solid #d1d5db;border-radius:8px"/>
+    <button id="dolan-ai-agente-run" type="button">Enviar</button>
+  </div>
+  <div id="dolan-ai-agente-out" style="margin-top:10px;font-size:14px"></div>
   </div>
   <style>
     .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #e5e7eb; }
@@ -151,3 +159,27 @@ class DolanAiController(http.Controller):
         except Exception as exc:  # noqa: BLE001
             return {"ok": False, "error": exc.__class__.__name__}
         return created
+
+    @http.route("/dolan_ai/agente/run", type="jsonrpc", auth="user", methods=["POST"], csrf=False, sitemap=False)
+    def agente_run(self, **kwargs):
+        if not _is_admin():
+            return {"ok": False, "error": "no_autorizado"}
+        aid = kwargs.get("agente_id")
+        text = str(kwargs.get("text") or "")[:500]
+        if not text:
+            return {"ok": False, "error": "texto_vacio"}
+        try:
+            agente = request.env["dolan.ai.agente"].browse(int(aid))
+            if not agente.exists():
+                return {"ok": False, "error": "agente_inexistente"}
+            res = agente.run(text)
+        except Exception as exc:  # noqa: BLE001
+            return {"ok": False, "error": exc.__class__.__name__}
+        return res
+
+    @http.route("/dolan_ai/agentes", type="jsonrpc", auth="user", methods=["POST"], csrf=False, sitemap=False)
+    def agentes_list(self, **kwargs):
+        if not _is_admin():
+            return {"error": "no_autorizado"}
+        recs = request.env["dolan.ai.agente"].sudo().search_read([], ["name", "id"], limit=20)
+        return {"agentes": recs}

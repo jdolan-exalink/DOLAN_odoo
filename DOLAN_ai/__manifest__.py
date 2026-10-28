@@ -5,7 +5,7 @@
     'category': 'Productivity/AI',
     'author': 'Dolan',
     'license': 'LGPL-3',
-    'depends': ['base', 'web'],
+    'depends': ['base', 'web', 'mail'],
     'data': ['views/menu.xml'],
     'installable': True,
     'application': True,

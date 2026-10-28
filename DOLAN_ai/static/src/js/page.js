@@ -79,3 +79,39 @@
     });
   });
 })();
+
+/* ===== Agentes (v1 tool-loop) ===== */
+(function () {
+  "use strict";
+  function rpcA(path, params) {
+    return fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", method: "call", params: params }),
+      credentials: "same-origin",
+    }).then(function (r) { return r.json(); }).then(function (j) { return j.result || j.error || { error: "rpc" }; });
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    var sel = document.getElementById("dolan-ai-agente");
+    var input = document.getElementById("dolan-ai-agente-text");
+    var btn = document.getElementById("dolan-ai-agente-run");
+    var out = document.getElementById("dolan-ai-agente-out");
+    if (!sel) return;
+    rpcA("/dolan_ai/agentes").then(function (res) {
+      (res.agentes || []).forEach(function (a) {
+        var o = document.createElement("option");
+        o.value = a.id; o.textContent = a.name;
+        sel.appendChild(o);
+      });
+    });
+    if (btn) btn.addEventListener("click", function () {
+      var text = (input.value || "").trim();
+      if (!text) return;
+      out.innerHTML = "<i>Pensando…</i>";
+      rpcA("/dolan_ai/agente/run", { agente_id: sel.value, text: text }).then(function (res) {
+        if (res.error) { out.innerHTML = '<span style="color:#dc2626">Error: ' + res.error + "</span>"; return; }
+        out.innerHTML = "<b>Agente:</b> " + (res.reply || JSON.stringify(res.tool_result || {}).slice(0, 300));
+      });
+    });
+  });
+})();
