@@ -15,6 +15,10 @@
     var out = document.getElementById("dolan-ai-ocr-out");
     if (!btn || !file) return;
     btn.addEventListener("click", function () { file.click(); });
+    if (location.hash === "#ocr") {
+      try { btn.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (e) {}
+      setTimeout(function () { try { file.click(); } catch (e) {} }, 600);
+    }
     file.addEventListener("change", function () {
       var f = file.files && file.files[0];
       if (!f) return;

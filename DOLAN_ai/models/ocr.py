@@ -30,7 +30,7 @@ def build_ocr_body(data_url, prompt=OCR_PROMPT):
             {"type": "input_image", "image_url": data_url},
         ]}],
         "max_output_tokens": 1500,
-        "stream": False,
+        "stream": True,
         "store": False,
     }
 
@@ -68,22 +68,36 @@ def extract_from_image(env, data_url):
     try:
         resp = requests.post(
             cgo.CODEX_API_ENDPOINT, json=build_ocr_body(data_url),
-            headers=headers, timeout=(15, 120))
+            headers=headers, timeout=(15, 180), stream=True)
     except requests.RequestException:
         return {"ok": False, "error": "http_request_exception"}
     if resp.status_code not in (200, 201):
         return {"ok": False, "error": f"http_{resp.status_code}", "detalle": resp.text[:200]}
-    try:
-        data = resp.json()
-    except ValueError:
-        return {"ok": False, "error": "json_invalido"}
     parts = []
-    for item in data.get("output") or []:
-        if item.get("type") == "message":
-            for part in item.get("content") or []:
-                if part.get("type") == "output_text":
-                    parts.append(part.get("text", ""))
-    parsed = parse_ocr_text("\n".join(parts))
+    try:
+        for raw in resp.iter_lines():
+            if not raw:
+                continue
+            line = raw.decode("utf-8", "replace") if isinstance(raw, bytes) else raw
+            if not line.startswith("data:"):
+                continue
+            payload = line[5:].strip()
+            if not payload or payload == "[DONE]":
+                continue
+            try:
+                ev = json.loads(payload)
+            except ValueError:
+                continue
+            etype = ev.get("type", "")
+            if etype == "response.output_text.delta":
+                parts.append(ev.get("delta", ""))
+            elif etype == "response.output_text.done" and ev.get("text"):
+                parts = [ev["text"]]
+            elif etype in ("response.failed", "response.incomplete"):
+                return {"ok": False, "error": "ocr_stream_failed"}
+    except (requests.RequestException, OSError):
+        return {"ok": False, "error": "ocr_stream_error"}
+    parsed = parse_ocr_text("".join(parts))
     if not parsed:
         return {"ok": False, "error": "ocr_json_invalido", "texto": ("\n".join(parts))[:300]}
     return {"ok": True, "datos": parsed}
@@ -99,7 +113,7 @@ def map_to_draft(env, datos, default_partner_name=None, default_tax_xmlid="l10n_
             qty, price = float(qty), float(price)
         except (TypeError, ValueError):
             continue
-        if qty <= 0 and price <= 0:
+        if qty <= 0 or price <= 0:
             continue
         lineas.append({"name": (ln.get("descripcion") or "Item")[:140],
                        "quantity": qty, "price_unit": price})

@@ -6,7 +6,7 @@
     'author': 'Dolan',
     'license': 'LGPL-3',
     'depends': ['base', 'web', 'mail'],
-    'data': ['views/menu.xml'],
+    'data': ['security/ir.access.csv', 'views/menu.xml'],
     'installable': True,
     'application': True,
 }

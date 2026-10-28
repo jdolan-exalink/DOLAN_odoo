@@ -61,3 +61,24 @@ class TestAgentes(TransactionCase):
             step.return_value = {"done": False, "tool_result": {"result": []}, "reply": None}
             res = ag.loop_run(self.env, self.ag, "hola", max_iter=3)
         self.assertEqual(res.get("error"), "max_iteraciones")
+
+    def test_step_body_stream_true(self):
+        import odoo.addons.DOLAN_ai.models.agentes as ag_mod
+        body_captured = {}
+        class FakeResp:
+            status_code = 200
+            def iter_lines(self):
+                sse = ('data: ' + json.dumps({"type": "response.output_text.done",
+                                              "text": json.dumps({"reply": "hola!"})}) + "\n\n").encode()
+                yield sse
+        with mock.patch("odoo.addons.DOLAN_ai.models.chatgpt_oauth.get_valid_tokens") as gt, \
+             mock.patch("requests.post", return_value=FakeResp()) as post:
+            gt.return_value = {"access_token": "t", "refresh_token": "r",
+                               "expires_at": 9_999_999_999_999, "account_id": "acc"}
+            loop = ag.AgenteLoop(self.env, self.ag)
+            res = loop.step("hola")
+        self.assertTrue(res["done"])
+        self.assertEqual(res["reply"], "hola!")
+        b = post.call_args.kwargs.get("json") or {}
+        self.assertTrue(b.get("stream"))
+        self.assertFalse(b.get("store"))

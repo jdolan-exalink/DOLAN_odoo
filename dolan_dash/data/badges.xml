@@ -31,4 +31,23 @@
       </xpath>
     </field>
   </record>
+
+  <!-- Entradas OCR: menú "Escanear compra (IA)" bajo Facturación y Compras -->
+  <record id="action_dolan_ocr" model="ir.actions.act_url">
+    <field name="name">Escanear compra (IA)</field>
+    <field name="url">/dolan_ai#ocr</field>
+    <field name="target">self</field>
+  </record>
+  <record id="menu_dolan_ocr_facturas" model="ir.ui.menu">
+    <field name="name">Escanear compra (IA)</field>
+    <field name="parent_id" ref="account.menu_finance"/>
+    <field name="action" ref="action_dolan_ocr"/>
+    <field name="sequence">8</field>
+  </record>
+  <record id="menu_dolan_ocr_compras" model="ir.ui.menu">
+    <field name="name">Escanear compra (IA)</field>
+    <field name="parent_id" ref="purchase.menu_purchase_root"/>
+    <field name="action" ref="action_dolan_ocr"/>
+    <field name="sequence">8</field>
+  </record>
 </odoo>

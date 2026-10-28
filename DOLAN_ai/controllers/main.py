@@ -54,6 +54,14 @@ PAGE_HTML = """<!DOCTYPE html>
   <div id="dolan-ai-agente-out" style="margin-top:10px;font-size:14px"></div>
   </div>
   <style>
+    .o_dolan_rail{position:fixed;top:0;left:0;bottom:0;width:240px;background:#fff;border-right:1px solid #e5e7eb;box-shadow:4px 0 16px rgba(15,23,42,.06);overflow-y:auto;padding:12px 0;z-index:30;display:flex;flex-direction:column}
+    .o_dolan_rail_title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;font-weight:700;padding:6px 16px 10px}
+    .o_dolan_rail_item{display:flex;align-items:center;gap:10px;padding:9px 14px;margin:1px 8px;border-radius:8px;color:#1f2937;text-decoration:none}
+    .o_dolan_rail_item:hover{background:#eef2ff;color:#4338ca}
+    .o_dolan_rail_item img{width:24px;height:24px;border-radius:6px}
+    .o_dolan_rail_item span{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    body{padding-left:240px !important}
+    @media (max-width:992px){.o_dolan_rail{display:none}body{padding-left:0 !important}}
     .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #e5e7eb; }
     .bg-success { background: #16a34a !important; color: #fff; }
     .bg-danger { background: #dc2626 !important; color: #fff; }
@@ -66,6 +74,24 @@ PAGE_HTML = """<!DOCTYPE html>
     #dolan-ai-connect:hover { background: #5d3d56; }
   </style>
   <script type="text/javascript" src="/DOLAN_ai/static/src/js/page.js"></script>
+  <script type="text/javascript" src="/DOLAN_ai/static/src/js/ocr.js"></script>
+  <script>
+  (function(){
+    fetch("/web/dataset/call_kw",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({jsonrpc:"2.0",method:"call",params:{model:"ir.ui.menu",method:"load_menus",args:[false],kwargs:{}}}),
+      credentials:"same-origin"}).then(r=>r.json()).then(function(j){
+      var tree=j.result||{}; var rail=document.createElement("div"); rail.className="o_dolan_rail";
+      var t=document.createElement("div"); t.className="o_dolan_rail_title"; t.textContent="APLICACIONES"; rail.appendChild(t);
+      var ids=Object.keys(tree).filter(function(k){return !isNaN(k);});
+      ids.sort(function(a,b){return (tree[a].sequence||0)-(tree[b].sequence||0);});
+      ids.forEach(function(k){ var m=tree[k];
+        var a=document.createElement("a"); a.className="o_dolan_rail_item"; a.href="/odoo/action-"+(m.actionID||m.id);
+        if(m.webIconData){var img=document.createElement("img"); img.src=m.webIconData; a.appendChild(img);}
+        var sp=document.createElement("span"); sp.textContent=m.name; a.appendChild(sp);
+        rail.appendChild(a);});
+      document.body.appendChild(rail);});
+  })();
+  </script>
 </body>
 </html>"""
 
@@ -181,5 +207,14 @@ class DolanAiController(http.Controller):
     def agentes_list(self, **kwargs):
         if not _is_admin():
             return {"error": "no_autorizado"}
-        recs = request.env["dolan.ai.agente"].sudo().search_read([], ["name", "id"], limit=20)
+        Agent = request.env["dolan.ai.agente"].sudo()
+        if not Agent.search_count([]):
+            # seed: agente de contactos listo para usar
+            partner_m = request.env["ir.model"].sudo().search([("model", "=", "res.partner")], limit=1)
+            Agent.create({
+                "name": "Asistente de contactos",
+                "proposito": "Busca y crea contactos (res.partner) cuando se lo pedís.",
+                "modelos_ids": [(6, 0, partner_m.ids)],
+            })
+        recs = Agent.search_read([], ["name", "id", "proposito"], limit=20)
         return {"agentes": recs}

@@ -38,9 +38,12 @@ class TestOcr(TransactionCase):
         body_captured = {}
         def fake_post(url, **kw):
             body_captured.update(kw.get("json") or {})
-            return _fake_resp(200, {"output": [
-                {"type": "message", "content": [{"type": "output_text", "text": json.dumps(DATOS)}]},
-            ]})
+            r = mock.Mock()
+            r.status_code = 200
+            sse = ('data: ' + json.dumps({"type": "response.output_text.done",
+                                          "text": json.dumps(DATOS)}) + "\n\n").encode()
+            r.iter_lines.return_value = [sse]
+            return r
         with mock.patch("odoo.addons.DOLAN_ai.models.chatgpt_oauth.get_valid_tokens") as gt, \
              mock.patch("requests.post", side_effect=fake_post):
             gt.return_value = {"access_token": "t", "refresh_token": "r",
@@ -49,7 +52,7 @@ class TestOcr(TransactionCase):
         self.assertTrue(res["ok"])
         self.assertEqual(res["datos"]["proveedor"], "Proveedor OCR SA")
         self.assertEqual(body_captured["input"][0]["content"][1]["type"], "input_image")
-        self.assertFalse(body_captured["stream"])
+        self.assertTrue(body_captured["stream"])
 
     def test_map_sin_lineas_usa_total(self):
         d = {"proveedor": "P", "total": 500.0, "lineas": []}

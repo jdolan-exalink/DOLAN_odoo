@@ -33,7 +33,7 @@ class DolanAiAgente(models.Model):
         from . import agentes
         return agentes.loop_run(self.env, self, user_text)
 
-MAX_ITER = 5
+MAX_ITER = 3
 MAX_LIMIT = 20
 ALLOWED_TOOLS = ("search_read", "create")
 WRITE_MODELS_LIMIT = {"res.partner", "crm.lead", "project.project"}
@@ -87,7 +87,9 @@ class AgenteLoop:
             return {"error": exc.__class__.__name__}
 
     def step(self, user_text):
-        """Una pasada del loop: pide JSON de acción al modelo; ejecuta 1 tool."""
+        """Una pasada del loop: pide JSON de acción al modelo; ejecuta 1 tool.
+        Los resultados de herramientas previas se adjuntan al prompt para que
+        el modelo pueda cerrar con reply."""
         from . import chatgpt_oauth as cgo
         tokens = cgo.get_valid_tokens()
         if not tokens:
@@ -97,11 +99,14 @@ class AgenteLoop:
         import requests
         spec = json.dumps(self.tool_spec(), ensure_ascii=False)
         modelos = ", ".join(self.agente.modelos_ids.mapped("model"))
+        previo = ""
+        if self.history:
+            previo = " Resultados de herramientas anteriores: " + json.dumps(self.history[-2:], ensure_ascii=False)[:800] + " Usá esos resultados y respondé con {\"reply\": ...} si ya tenés la respuesta."
         prompt = (
             f"Sos el agente '{self.agente.name}'. Herramientas: {spec}. "
             f"Modelos autorizados: {modelos}. "
             "Respondé SOLO JSON: {\"tool\": \"search_read|create\", \"args\": {...}} "
-            "o {\"reply\": \"respuesta final\"}. Pregunta: " + user_text[:400]
+            "o {\"reply\": \"respuesta final\"}." + previo + " Pregunta: " + user_text[:400]
         )
         headers = {"Authorization": f"Bearer {tokens['access_token']}"}
         if tokens.get("account_id"):
@@ -110,27 +115,41 @@ class AgenteLoop:
             "model": "gpt-6-luna",
             "input": [{"role": "user", "content": [{"type": "input_text", "text": prompt}]}],
             "max_output_tokens": 500,
-            "stream": False,
+            "stream": True,
             "store": False,
         }
         try:
             resp = requests.post(cgo.CODEX_API_ENDPOINT, json=body,
-                                 headers=headers, timeout=(15, 120))
+                                 headers=headers, timeout=(15, 180), stream=True)
         except requests.RequestException:
             return {"done": False, "reply": None, "error": "http_request_exception"}
         if resp.status_code not in (200, 201):
             return {"done": False, "reply": None, "error": f"http_{resp.status_code}"}
-        try:
-            data = resp.json()
-        except ValueError:
-            return {"done": False, "reply": None, "error": "json_invalido"}
         parts = []
-        for item in data.get("output") or []:
-            if item.get("type") == "message":
-                for part in item.get("content") or []:
-                    if part.get("type") == "output_text":
-                        parts.append(part.get("text", ""))
-        text = "\n".join(parts)
+        try:
+            for raw in resp.iter_lines():
+                if not raw:
+                    continue
+                line = raw.decode("utf-8", "replace") if isinstance(raw, bytes) else raw
+                if not line.startswith("data:"):
+                    continue
+                payload = line[5:].strip()
+                if not payload or payload == "[DONE]":
+                    continue
+                try:
+                    ev = json.loads(payload)
+                except ValueError:
+                    continue
+                etype = ev.get("type", "")
+                if etype == "response.output_text.delta":
+                    parts.append(ev.get("delta", ""))
+                elif etype == "response.output_text.done" and ev.get("text"):
+                    parts = [ev["text"]]
+                elif etype in ("response.failed", "response.incomplete"):
+                    return {"done": False, "reply": None, "error": "stream_failed"}
+        except (requests.RequestException, OSError):
+            return {"done": False, "reply": None, "error": "stream_error"}
+        text = "".join(parts)
         try:
             m = json.loads(text[text.index("{"): text.rindex("}") + 1])
         except (ValueError, AttributeError):
