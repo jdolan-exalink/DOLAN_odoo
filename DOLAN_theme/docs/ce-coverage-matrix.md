@@ -24,3 +24,19 @@ Reglas de la matriz:
 3. Cubrir el lote = poder declarar ese lote; **la cobertura total solo se declara con todas las filas fuera de `NE`**.
 4. POS: además de la matriz, suite táctil dedicada.
 5. Evidencia: capturas en `docs/evidence/<fecha>/<modulo>/` (se creará en Fase 5).
+
+## F1 — Paridad EE por dominio (2026-10-28)
+
+Evidencia EE: `evidence/ee-demo/full/*.png` · Specs: `ee-parity/*.md`.
+
+| Dominio | Spec | Veredicto | Gaps principales (orden) |
+|---|---|---|---|
+| Suscripciones | `ee-parity/suscripciones.md` | Parcial | estados comerciales, vendedor/actividades, vistas calendario/gráfico, MRR |
+| Alquileres | `ee-parity/alquileres.md` | Parcial | pickup/return+estados ops, KPI strip, estado de factura en lista, gantt disponibilidad |
+| Código de barras | `ee-parity/codigo-barras.md` | Parcial | escaneo de picking/contacto/tipo operación, modos Operaciones/Conteo, layout escáner |
+| Contabilidad | `ee-parity/contabilidad.md` | Parcial-alto | Declaración fiscal (períodos AR); banco 26k = brecha EE/IAP conocida; cheques cerrados por datos |
+| IA (Agentes) | `ee-parity/ia.md` | Gap grande | registro de agentes + loop de herramientas (sobre nuestro ChatGPT OAuth) |
+| Taller | `ee-parity/taller.md` | Gap (EE-only) | `mrp_workorder`/`mrp_plm` **uninstallable** en CE → `DOLAN_taller` post-F5 |
+| Ventas / Manufactura | (capturas en full/) | Sin módulo propio | apps CE nativas; estilo ya cubierto por DOLAN_theme (filas NE→C pendientes de F5) |
+
+Regla F5: ninguna fila vuelve a `NE` sin prueba en navegador (claro/oscuro, rol no-admin).

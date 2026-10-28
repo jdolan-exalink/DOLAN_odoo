@@ -188,3 +188,11 @@ Risk: item 3 (contratos de datos: modelos/menús propios; ACL otorgadas a group_
 - **L22a** (verbatim): "vamoos con RAE y quiero que actives y analices todos los modulos"
 - **L22b** (verbatim): "te active todos los modulos enterprise en la demo para que los veas"
 - Ejecutado: REA R1 (CDP propio :9222, inspect ev_996edf…, sesión 40s/10 apps ev_fd320c… timeline88 drops0); activación **38/38 apps CE** en4 lotes (UI200 c/u); barrido Playwright **38/38** (200 OK, 2 errores consola hr/hr_recruitment TypeError 'type', capturas en qa/shots/analysis/); remedios: grants de10 grupos de raíz + fix hr_holidays (acción derivable + ACL) → **rail 38/38**; demo EE: grilla26 tiles +8 capturas EE-only/en-paridad (suscripciones, alquiler, IA/agentes, taller, código-de-barras, manufactura, ventas, contabilidad) en docs/evidence/ee-demo/full/. Doc completo: `DOLAN_theme/docs/modulos-analisis.md`. Nuevos gaps: **Taller (field service) sin equivalente CE**; EE IA=Agentes vs nuestro DOLAN_ai ChatGPT-only. Risk: none (activación en DB test con backups; grants = permisos al propio admin; datos propios; verificación por lote + barrido completo).
+
+### L23 — F1: specs de parity EE→nuestros (2026-10-28)
+
+- **L23** (verbatim): "vamos con F1 primero una vez terminados todos los modulos podes arrancar el F5 y luego desarrollar todo lo que falta"
+- Orden comprometido: **F1 → (módulos a paridad) → F5 → resto de gaps (DOLAN_taller, v2 de subs/alquiler/barras, Declaración fiscal, IA-agentes)**.
+- Entregado: 6 specs en `DOLAN_theme/docs/ee-parity/` (suscripciones, alquileres, codigo-barras, contabilidad, ia, taller) a partir de las capturas EE de L22 + tabla F1 en `ce-coverage-matrix.md`.
+- Hallazgo clave: **`mrp_workorder`, `mrp_plm`, `stock_barcode` = uninstallable** en esta build CE → "Taller" EE no tiene equivalente nativo → confirmado gap `DOLAN_taller` (post-F5); `DOLAN_calidad` queda como capa de control de calidad sobre operaciones.
+- Risk: none (sólo docs/evidencia; sin cambios de código ni datos).
