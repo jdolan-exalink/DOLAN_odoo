@@ -7,9 +7,9 @@ import { rpc } from "@web/core/network/rpc";
     window.__dolanAiChat = true;
     let win = null, open = false, convActual = null, agenteActual = null;
     const CSS = `
-    .o_dolan_ai_win{position:fixed;right:16px;bottom:16px;width:380px;max-width:calc(100vw-32px);height:560px;max-height:calc(100vh-90px);background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 12px 40px rgba(15,23,42,.22);display:flex;flex-direction:column;z-index:1100;overflow:hidden;font-family:system-ui,sans-serif}
+    .o_dolan_ai_win{position:fixed;right:16px;bottom:16px;width:380px;font-size:13.5px;animation:dolanIn .18s ease-out;max-width:calc(100vw-32px);height:560px;max-height:calc(100vh-90px);background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 12px 40px rgba(15,23,42,.22);display:flex;flex-direction:column;z-index:1100;overflow:hidden;font-family:system-ui,sans-serif}
     .o_dolan_ai_win[data-theme="dark"]{background:#1e293b;border-color:#334155;color:#e2e8f0}
-    .o_dolan_ai_head{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid #e5e7eb;background:#714b67;color:#fff}
+    .o_dolan_ai_head{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid #5d3d56;background:linear-gradient(135deg,#714b67,#8d6b80);color:#fff}
     .o_dolan_ai_head .t{font-weight:800;font-size:14px;flex:1}
     .o_dolan_ai_head button{background:transparent;border:0;color:#fff;cursor:pointer;font-size:14px;padding:2px 6px;border-radius:6px}
     .o_dolan_ai_head button:hover{background:rgba(255,255,255,.15)}
@@ -26,6 +26,7 @@ import { rpc } from "@web/core/network/rpc";
     .o_dolan_ai_win[data-theme="dark"] .o_dolan_ai_chip{background:#334155;border-color:#475569;color:#c7d2fe}
     .o_dolan_ai_foot{border-top:1px solid #e5e7eb;padding:10px;display:flex;gap:8px}
     .o_dolan_ai_foot input{flex:1;border:1px solid #d1d5db;border-radius:999px;padding:9px 14px;font-size:13.5px;outline:none}
+    @keyframes dolanIn{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
     .o_dolan_ai_foot input:focus{border-color:#714b67}
     .o_dolan_ai_foot button{background:#714b67;color:#fff;border:0;border-radius:999px;padding:0 16px;cursor:pointer;font-weight:700}
     .o_dolan_ai_min .o_dolan_ai_body,.o_dolan_ai_min .o_dolan_ai_foot{display:none}
@@ -50,22 +51,32 @@ import { rpc } from "@web/core/network/rpc";
         body.scrollTop = body.scrollHeight;
         return div;
     }
-    function chips(agent) {
+    function chips(pairs) {
         const body = win.querySelector(".o_dolan_ai_body");
-        if (!body || !agent) return;
+        if (!body || !pairs || !pairs.length) return;
         body.querySelectorAll(".o_dolan_ai_chips").forEach(e => e.remove());
-        const list = (agent.sugerencias || "").split("\n").map(x => x.trim()).filter(Boolean).slice(0, 3);
-        if (!list.length) return;
         const box = document.createElement("div");
         box.className = "o_dolan_ai_chips";
-        list.forEach(s => {
+        pairs.slice(0, 3).forEach(p => {
             const c = document.createElement("div");
-            c.className = "o_dolan_ai_chip"; c.textContent = s.trim();
-            c.addEventListener("click", () => { send(s.trim()); });
+            c.className = "o_dolan_ai_chip";
+            c.textContent = p.name;
+            c.title = p.prompt;
+            c.addEventListener("click", () => { send(p.prompt || p.name); });
             box.appendChild(c);
         });
         const welcome = body.querySelector(".o_dolan_ai_welcome");
         if (welcome) body.insertBefore(box, welcome.nextSibling); else body.appendChild(box);
+    }
+    async function chipsFor(agenteId) {
+        const res = await rpc2("/dolan_ai/prompts", { agente_id: agenteId });
+        let pairs = (res.prompts || []).map(p => ({ name: p.name, prompt: p.prompt }));
+        if (!pairs.length) {
+            const ags = await rpc2("/dolan_ai/agentes");
+            const ag = (ags.agentes || []).find(a => String(a.id) === String(agenteId)) || (ags.agentes || [])[0];
+            pairs = (ag && ag.sugerencias ? ag.sugerencias.split("\n") : []).filter(x => x.trim()).map(x => ({ name: x.trim(), prompt: x.trim() }));
+        }
+        chips(pairs);
     }
     async function loadThread(cid) {
         const body = win.querySelector(".o_dolan_ai_body");
@@ -105,9 +116,7 @@ import { rpc } from "@web/core/network/rpc";
         w.className = "o_dolan_ai_welcome";
         w.innerHTML = "<b>DOLAN AI</b><br>Tu asistente dentro de Odoo.<br>Probá una sugerencia de abajo 👇";
         body.appendChild(w);
-        const ags = await rpc2("/dolan_ai/agentes");
-        const ag = (ags.agentes || []).find(a => String(a.id) === String(agenteActual)) || (ags.agentes || [])[0];
-        chips(ag);
+        await chipsFor(agenteActual);
     }
     let sending = false;
     async function send(text) {
@@ -163,6 +172,9 @@ import { rpc } from "@web/core/network/rpc";
         win.querySelector('[data-a="send"]').addEventListener("click", () => send(win.querySelector("input").value));
         win.querySelector("input").addEventListener("keydown", (e) => { if (e.key === "Enter") send(e.target.value); });
         win.querySelector(".o_dolan_ai_sel").addEventListener("change", (e) => {
+            agenteActual = parseInt(e.target.value); convActual = null; loadConvs();
+        });
+        win.querySelector(".o_dolan_ai_sel").addEventListener("click", (e) => {
             agenteActual = parseInt(e.target.value); convActual = null; loadConvs();
         });
         loadAgents().then(loadConvs);

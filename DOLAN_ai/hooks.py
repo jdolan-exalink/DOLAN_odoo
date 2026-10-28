@@ -45,3 +45,55 @@ def post_init_hook(env):
                                 mid("dolan.alquiler.contrato"), mid("dolan.suscripcion.suscripcion")])],
     })
     env.cr.commit() if hasattr(env.cr, "commit") else None
+
+
+def post_init_prompts(env):
+    """Biblioteca de prompts funcionales (resúmenes periódicos)."""
+    Agent = env["dolan.ai.agente"].sudo()
+    Prompt = env["dolan.ai.prompt"].sudo()
+    if Prompt.search_count([]):
+        return
+    def mid(model):
+        return env["ir.model"].sudo().search([("model", "=", model)], limit=1).id
+    ag_cont = Agent.search([("name", "=", "Asistente contable")], limit=1)
+    if ag_cont:
+        Prompt.create({
+            "agente_id": ag_cont.id, "sequence": 10,
+            "name": "Resumen de facturación por empresa (semana)",
+            "prompt": "Generá un resumen de facturación de la SEMANA en curso por cada compañía: "
+                      "total emitido, cantidad de facturas, total de notas de crédito. "
+                      "Usá account.move (out_invoice, out_refund) posted de los últimos 7 días. "
+                      "Formato: una línea por empresa con montos en $ argentino y una conclusión de 1 línea.",
+        })
+        Prompt.create({
+            "agente_id": ag_cont.id, "sequence": 20,
+            "name": "Resumen de facturación por empresa (mes)",
+            "prompt": "Generá un resumen de facturación del MES en curso por compañía: total emitido, "
+                      "NC emitidas, facturas sin CAE (l10n_ar_fiscal_auth_code vacío) y top 3 clientes por monto. "
+                      "Formato tabla markdown + conclusión breve.",
+        })
+        Prompt.create({
+            "agente_id": ag_cont.id, "sequence": 30,
+            "name": "Facturas vencidas por cobrar",
+            "prompt": "Listá las facturas de venta posted con importe por cobrar > 0 (amount_residual > 0), "
+                      "ordenadas por fecha de vencimiento ascendente, con cliente, monto y días de atraso. "
+                      "Cerrá con el total a cobrar.",
+        })
+    ag_ops = Agent.search([("name", "=", "Asistente de operaciones")], limit=1)
+    if ag_ops:
+        Prompt.create({
+            "agente_id": ag_ops.id, "sequence": 10,
+            "name": "Transferencias pendientes de la semana",
+            "prompt": "Listá las transferencias (stock.picking) no done/cancel con fecha prevista de los "
+                      "próximos 7 días, agrupadas por tipo de operación, con cantidad de bultos y partner. "
+                      "Cerrá con recomendación de prioridades.",
+        })
+    ag_comp = Agent.search([("name", "=", "Asistente de compras")], limit=1)
+    if ag_comp:
+        Prompt.create({
+            "agente_id": ag_comp.id, "sequence": 10,
+            "name": "Órdenes de compra por confirmar",
+            "prompt": "Listá las órdenes de compra en estado borrador/enviada con total, proveedor y fecha "
+                      "límite. Cerrá con las 3 más urgentes y por qué.",
+        })
+    env.cr.commit()
