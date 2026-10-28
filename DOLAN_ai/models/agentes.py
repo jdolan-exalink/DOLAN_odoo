@@ -191,6 +191,10 @@ class AgenteLoop:
             headers["ChatGPT-Account-Id"] = tokens["account_id"]
         # multi-turno: instrucciones + turnos previos de la conversación + turno actual
         instrucciones = (self.agente.proposito or "").strip()
+        arts = self.agente.articulos_ids.filtered(lambda a: a.activo)[:5]
+        if arts:
+            instrucciones += "\n\nContexto adicional:\n" + "\n".join(
+                f"- {a.titulo}: {a.contenido[:300]}" for a in arts)[:2000]
         msgs = []
         if instrucciones:
             msgs.append({"role": "system", "content": [{"type": "input_text", "text": instrucciones[:2000]}]})

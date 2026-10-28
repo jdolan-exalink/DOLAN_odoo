@@ -108,7 +108,7 @@ def conciliar(env, dias=90, journal_id=None):
         [("is_reconciled", "=", False), ("date", ">=", desde)]
         + ([("journal_id", "=", journal_id)] if journal_id else []),
         order="date")
-    res = {"lineas": len(lines), "conciliadas": 0, "ambiguas": 0, "sin_candidato": 0}
+    res = {"lineas": len(lines), "conciliadas": 0, "ambiguas": 0, "sin_candidato": 0, "sugerencias": []}
     for line in lines:
         partner = line.partner_id
         if not partner:
@@ -121,11 +121,22 @@ def conciliar(env, dias=90, journal_id=None):
         cands = _candidatos(env, _cuenta_partner(env, partner, line.amount,
                                                  line.journal_id.company_id),
                             partner, line.amount)
+        if not cands and partner is False:
+            # segunda pasada sin filtro de partner (deuda de otro rótulo)
+            cands = _candidatos(env, _cuenta_partner(env, None, line.amount,
+                                                     line.journal_id.company_id),
+                                None, line.amount)
         if not cands:
             res["sin_candidato"] += 1
             continue
         if len(cands) > 1:
             res["ambiguas"] += 1
+            res["sugerencias"].append({
+                "linea": line.id, "fecha": line.date and line.date.isoformat(),
+                "importe": line.amount, "ref": line.payment_ref,
+                "candidatos": [{"move": c.move_id.name, "partner": c.partner_id.name or "",
+                                "residual": c.amount_residual} for c in cands[:3]],
+            })
             continue
         try:
             # único candidato: reasignar la counterpart del asiento del banco a la

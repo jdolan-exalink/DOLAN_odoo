@@ -78,8 +78,9 @@
     <field name="model">dolan.suscripcion.suscripcion</field>
     <field name="arch" type="xml">
       <graph string="Suscripciones">
-        <field name="state" type="row"/>
+        <field name="plan_id" type="row"/>
         <field name="fase" type="row"/>
+        <field name="state" type="col"/>
       </graph>
     </field>
   </record>

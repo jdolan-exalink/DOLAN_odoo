@@ -1,0 +1,11 @@
+import { chromium } from "playwright";
+const USER = process.env.EE_USER, PASS = process.env.EE_PASS;
+const browser = await chromium.launch({ args: ["--remote-debugging-port=9223"] });
+const page = await browser.newPage({ viewport: { width: 1440, height: 950 } });
+await page.goto("https://exalink.odoo.com/web/login", { waitUntil: "domcontentloaded", timeout: 60000 });
+await page.fill('#login, input[name="login"]', USER);
+await page.fill('#password, input[name="password"]', PASS);
+await Promise.all([page.waitForNavigation({ timeout: 60000 }).catch(() => {}), page.click('button[type="submit"], .oe_login_button')]);
+await page.waitForTimeout(7000);
+console.log("EE_CDP_READY", page.url());
+setInterval(() => {}, 1 << 30);

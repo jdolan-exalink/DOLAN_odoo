@@ -62,6 +62,18 @@
       </form>
     </field>
   </record>
+  <record id="view_alquiler_calendar" model="ir.ui.view">
+    <field name="name">dolan.alquiler.contrato.calendar</field>
+    <field name="model">dolan.alquiler.contrato</field>
+    <field name="arch" type="xml">
+      <calendar date_start="fecha_inicio" date_stop="fecha_fin" mode="month" event_limit="4">
+        <field name="partner_id"/>
+        <field name="product_id"/>
+        <field name="total"/>
+        <field name="estado_ops"/>
+      </calendar>
+    </field>
+  </record>
   <record id="action_dolan_alquiler" model="ir.actions.act_window">
     <field name="name">Contratos de alquiler</field>
     <field name="res_model">dolan.alquiler.contrato</field>
