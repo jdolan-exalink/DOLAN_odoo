@@ -20,38 +20,91 @@ class DolanAiAgente(models.Model):
     _order = "name"
 
     name = fields.Char(required=True)
-    proposito = fields.Text(string="Proposito")
+    proposito = fields.Text(string="Instrucciones", help="System-style prompt del agente (estilo EE: instrucciones + estilo de trabajo)")
     modelos_ids = fields.Many2many("ir.model", string="Modelos autorizados",
                                    domain=[("transient", "=", False)])
     activo = fields.Boolean(default=True)
 
-    def run(self, user_text):
-        """Ejecuta el loop del agente con el texto del usuario."""
+    def run(self, user_text, conversacion=None):
+        """Ejecuta el loop del agente; con conversación => historial multi-turno."""
         self.ensure_one()
         if not self.activo:
             return {"done": True, "reply": None, "error": "agente_inactivo"}
         from . import agentes
-        return agentes.loop_run(self.env, self, user_text)
+        return agentes.loop_run(self.env, self, user_text, conversacion=conversacion)
+
+
+class DolanAiConversacion(models.Model):
+    _name = "dolan.ai.conversacion"
+    _description = "Conversacion de agente DOLAN (IA)"
+    _order = "write_date desc, id desc"
+
+    name = fields.Char(required=True)
+    agente_id = fields.Many2one("dolan.ai.agente", required=True, ondelete="cascade")
+    user_id = fields.Many2one("res.users", default=lambda s: s.env.uid, required=True)
+    mensaje_ids = fields.One2many("dolan.ai.mensaje", "conversacion_id", string="Mensajes")
+
+    def name_get(self):
+        return [(c.id, c.name or _("Nueva conversacion")) for c in self]
+
+
+class DolanAiMensaje(models.Model):
+    _name = "dolan.ai.mensaje"
+    _description = "Mensaje de conversacion DOLAN (IA)"
+    _order = "id"
+
+    conversacion_id = fields.Many2one("dolan.ai.conversacion", required=True, ondelete="cascade")
+    rol = fields.Selection([("user", "Usuario"), ("assistant", "Agente"), ("tool", "Herramienta")],
+                           required=True, default="user")
+    content = fields.Text(required=True)
 
 MAX_ITER = 3
 MAX_LIMIT = 20
-ALLOWED_TOOLS = ("search_read", "create")
+ALLOWED_TOOLS = ("search_read", "search_count", "read", "create", "write")
 WRITE_MODELS_LIMIT = {"res.partner", "crm.lead", "project.project"}
 
 
 class AgenteLoop:
-    def __init__(self, env, agente):
+    def __init__(self, env, agente, conversacion=None):
         self.env = env
         self.agente = agente
+        self.conversacion = conversacion
         self.history = []
+        self.turns = []  # [{role, content}] para multi-turno
+        if conversacion:
+            for m in conversacion.mensaje_ids[-12:]:
+                if m.rol in ("user", "assistant"):
+                    self.turns.append({"role": m.rol, "content": m.content})
 
     def tool_spec(self):
         return [
             {"name": "search_read", "desc": "Buscar registros: model, domain(list), fields(list), limit<=20",
              "args": ["model", "domain", "fields", "limit"]},
-            {"name": "create", "desc": "Crear registro: model en lista blanca, vals dict",
+            {"name": "search_count", "desc": "Contar registros: model, domain(list)",
+             "args": ["model", "domain"]},
+            {"name": "read", "desc": "Leer por ids: model, ids(list), fields(list)",
+             "args": ["model", "ids", "fields"]},
+            {"name": "create", "desc": "Crear registro: model en lista de escritura, vals dict",
              "args": ["model", "vals"]},
+            {"name": "write", "desc": "Escribir campos permitidos: model, ids(list), vals dict (solo campos blancos)",
+             "args": ["model", "ids", "vals"]},
         ]
+
+    WRITE_FIELDS_LIMIT = {
+        "res.partner": {"name", "email", "phone", "mobile", "street", "city", "comment", "ref"},
+        "crm.lead": {"name", "description", "probability", "priority"},
+        "project.project": {"name", "description"},
+    }
+
+    def _filter_write_fields(self, model, vals):
+        """Solo campos de la allowlist del modelo; nunca unlink ni campos sensibles."""
+        if not isinstance(vals, dict):
+            raise ValueError("vals_invalidos")
+        allowed = self.WRITE_FIELDS_LIMIT.get(model, set())
+        bad = set(vals) - allowed
+        if bad:
+            raise ValueError("campos_no_permitidos: " + ",".join(sorted(bad))[:120])
+        return {k: v for k, v in vals.items() if k in allowed}
 
     def _check_model(self, model, write=False):
         if not isinstance(model, str) or "." not in model:
@@ -74,13 +127,33 @@ class AgenteLoop:
                 fields = [f for f in (args.get("fields") or []) if isinstance(f, str)][:15]
                 recs = self.env[args.get("model")].sudo().search_read(domain, fields, limit=limit)
                 return {"result": recs}
+            if name == "search_count":
+                self._check_model(args.get("model"))
+                domain = args.get("domain") or []
+                if not isinstance(domain, list):
+                    raise ValueError("dominio_invalido")
+                return {"result": {"count": self.env[args.get("model")].sudo().search_count(domain)}}
+            if name == "read":
+                self._check_model(args.get("model"))
+                ids = args.get("ids") or []
+                if not isinstance(ids, list) or not all(isinstance(i, int) for i in ids) or len(ids) > MAX_LIMIT:
+                    raise ValueError("ids_invalidos")
+                fields = [f for f in (args.get("fields") or []) if isinstance(f, str)][:15]
+                recs = self.env[args.get("model")].sudo().browse(ids).read(fields)
+                return {"result": recs}
             if name == "create":
                 self._check_model(args.get("model"), write=True)
-                vals = args.get("vals") or {}
-                if not isinstance(vals, dict):
-                    raise ValueError("vals_invalidos")
+                vals = self._filter_write_fields(args.get("model"), args.get("vals") or {})
                 rec = self.env[args.get("model")].sudo().create(vals)
                 return {"result": {"id": rec.id}}
+            if name == "write":
+                self._check_model(args.get("model"), write=True)
+                ids = args.get("ids") or []
+                if not isinstance(ids, list) or not all(isinstance(i, int) for i in ids) or len(ids) > MAX_LIMIT:
+                    raise ValueError("ids_invalidos")
+                vals = self._filter_write_fields(args.get("model"), args.get("vals") or {})
+                self.env[args.get("model")].sudo().browse(ids).write(vals)
+                return {"result": {"written": len(ids)}}
         except ValueError as exc:
             return {"error": str(exc)}
         except Exception as exc:  # noqa: BLE001
@@ -111,9 +184,22 @@ class AgenteLoop:
         headers = {"Authorization": f"Bearer {tokens['access_token']}"}
         if tokens.get("account_id"):
             headers["ChatGPT-Account-Id"] = tokens["account_id"]
+        # multi-turno: instrucciones + turnos previos de la conversación + turno actual
+        instrucciones = (self.agente.proposito or "").strip()
+        msgs = []
+        if instrucciones:
+            msgs.append({"role": "system", "content": [{"type": "input_text", "text": instrucciones[:2000]}]})
+        # los turnos assistant usan output_text (contrato Responses API);
+        # user/system usan input_text
+        for t in self.turns:
+            if t.get("role") not in ("user", "assistant"):
+                continue
+            ctype = "output_text" if t["role"] == "assistant" else "input_text"
+            msgs.append({"role": t["role"], "content": [{"type": ctype, "text": t["content"][:1500]}]})
+        msgs.append({"role": "user", "content": [{"type": "input_text", "text": prompt}]})
         body = {
             "model": "gpt-6-luna",
-            "input": [{"role": "user", "content": [{"type": "input_text", "text": prompt}]}],
+            "input": msgs,
             "max_output_tokens": 500,
             "stream": True,
             "store": False,
@@ -163,12 +249,26 @@ class AgenteLoop:
         return {"done": False, "tool_result": result, "reply": None}
 
 
-def loop_run(env, agente, user_text, max_iter=MAX_ITER):
-    loop = AgenteLoop(env, agente)
+def loop_run(env, agente, user_text, max_iter=MAX_ITER, conversacion=None):
+    loop = AgenteLoop(env, agente, conversacion=conversacion)
+    if conversacion:
+        env["dolan.ai.mensaje"].sudo().create({"conversacion_id": conversacion.id, "rol": "user", "content": user_text[:2000]})
+    final = None
     for _ in range(max_iter):
         step = loop.step(user_text)
         if step.get("error"):
+            if conversacion:
+                env["dolan.ai.mensaje"].sudo().create({"conversacion_id": conversacion.id, "rol": "assistant", "content": f"error: {step['error']}"})
             return step
+        if step.get("tool_result"):
+            loop.turns.append({"role": "assistant", "content": f"tool_result: {json.dumps(step['tool_result'], ensure_ascii=False)[:1000]}"})
+            if conversacion:
+                env["dolan.ai.mensaje"].sudo().create({"conversacion_id": conversacion.id, "rol": "tool", "content": json.dumps(step["tool_result"], ensure_ascii=False)[:1000]})
         if step.get("done"):
-            return step
-    return {"done": True, "reply": None, "error": "max_iteraciones"}
+            final = step
+            break
+    if final is None:
+        final = {"done": True, "reply": None, "error": "max_iteraciones"}
+    if conversacion and final.get("reply"):
+        env["dolan.ai.mensaje"].sudo().create({"conversacion_id": conversacion.id, "rol": "assistant", "content": final["reply"]})
+    return final

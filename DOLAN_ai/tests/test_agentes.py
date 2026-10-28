@@ -82,3 +82,80 @@ class TestAgentes(TransactionCase):
         b = post.call_args.kwargs.get("json") or {}
         self.assertTrue(b.get("stream"))
         self.assertFalse(b.get("store"))
+
+
+@tagged("post_install", "-at_install")
+class TestConversaciones(TransactionCase):
+
+    def setUp(self):
+        super().setUp()
+        self.ag = self.env["dolan.ai.agente"].create({
+            "name": "Chat probe",
+            "proposito": "Eres un asistente de contactos. Sé breve.",
+            "modelos_ids": [(6, 0, [self.env["ir.model"].search([("model", "=", "res.partner")], limit=1).id])],
+        })
+
+    def test_conversacion_guarda_turnos(self):
+        conv = self.env["dolan.ai.conversacion"].create({
+            "name": "Conv probe", "agente_id": self.ag.id,
+        })
+        with mock.patch.object(ag.AgenteLoop, "step") as step:
+            step.return_value = {"done": True, "reply": "acá va la respuesta", "tool": None}
+            res = self.ag.run("cuántos contactos hay", conversacion=conv)
+        self.assertTrue(res["done"])
+        roles = conv.mensaje_ids.mapped("rol")
+        self.assertIn("user", roles)
+        self.assertIn("assistant", roles)
+        self.assertEqual(conv.mensaje_ids[-1].rol, "assistant")
+
+    def test_historial_entra_al_contexto(self):
+        conv = self.env["dolan.ai.conversacion"].create({"name": "Hist", "agente_id": self.ag.id})
+        self.env["dolan.ai.mensaje"].create({"conversacion_id": conv.id, "rol": "user", "content": "hola"})
+        self.env["dolan.ai.mensaje"].create({"conversacion_id": conv.id, "rol": "assistant", "content": "chau"})
+        body_captured = {}
+        class FakeResp:
+            status_code = 200
+            def iter_lines(self):
+                yield ('data: ' + json.dumps({"type": "response.output_text.done", "text": json.dumps({"reply": "x"})}) + "\n\n").encode()
+        with mock.patch("odoo.addons.DOLAN_ai.models.chatgpt_oauth.get_valid_tokens") as gt, \
+             mock.patch("requests.post", return_value=FakeResp()) as post:
+            gt.return_value = {"access_token": "t", "refresh_token": "r", "expires_at": 9_999_999_999_999}
+            loop = ag.AgenteLoop(self.env, self.ag, conversacion=conv)
+            loop.step("seguimos")
+        b = post.call_args.kwargs.get("json") or {}
+        roles = [(m["role"], m["content"][0]["type"]) for m in b["input"]]
+        self.assertIn(("system", "input_text"), roles)          # instrucciones
+        self.assertIn(("user", "input_text"), roles)             # hola + seguimos
+        self.assertIn(("assistant", "output_text"), roles)       # chau (contrato Responses)
+
+    def test_write_fields_allowlist(self):
+        loop = ag.AgenteLoop(self.env, self.ag)
+        p = self.env["res.partner"].create({"name": "Write probe"})
+        res = loop.run_tool("write", {"model": "res.partner", "ids": [p.id], "vals": {"phone": "123"}})
+        self.assertIn("written", res["result"])
+        self.assertEqual(p.phone, "123")
+        res2 = loop.run_tool("write", {"model": "res.partner", "ids": [p.id], "vals": {"vat": "20-x"}})
+        self.assertIn("campos_no_permitidos", res2["error"])
+        p.unlink()
+
+    def test_search_count_y_read(self):
+        loop = ag.AgenteLoop(self.env, self.ag)
+        r1 = loop.run_tool("search_count", {"model": "res.partner", "domain": []})
+        self.assertIn("count", r1["result"])
+        pid = self.env["res.partner"].create({"name": "Read probe"}).id
+        r2 = loop.run_tool("read", {"model": "res.partner", "ids": [pid], "fields": ["name"]})
+        self.assertEqual(r2["result"][0]["name"], "Read probe")
+        self.env["res.partner"].browse(pid).unlink()
+
+    def test_instrucciones_en_body(self):
+        class FakeResp:
+            status_code = 200
+            def iter_lines(self):
+                yield ('data: ' + json.dumps({"type": "response.output_text.done", "text": json.dumps({"reply": "ok"})}) + "\n\n").encode()
+        with mock.patch("odoo.addons.DOLAN_ai.models.chatgpt_oauth.get_valid_tokens") as gt, \
+             mock.patch("requests.post", return_value=FakeResp()) as post:
+            gt.return_value = {"access_token": "t", "refresh_token": "r", "expires_at": 9_999_999_999_999}
+            loop = ag.AgenteLoop(self.env, self.ag)
+            loop.step("hola")
+        b = post.call_args.kwargs.get("json") or {}
+        self.assertIn("asistente de contactos", b["input"][0]["content"][0]["text"].lower())
