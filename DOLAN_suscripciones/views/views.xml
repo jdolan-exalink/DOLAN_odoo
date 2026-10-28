@@ -26,6 +26,7 @@
         <field name="proxima"/>
         <field name="user_id" widget="many2one_avatar_user" optional="show"/>
         <field name="fase" optional="show"/>
+        <field name="activity_state" optional="show" widget="activity"/>
         <field name="state" widget="badge" decoration-success="state=='activa'" decoration-warning="state=='pausada'" decoration-muted="state=='cancelada'"/>
       </list>
     </field>
@@ -54,6 +55,11 @@
             </group>
           </group>
         </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids"/>
+          <field name="activity_ids"/>
+          <field name="message_ids"/>
+        </div>
       </form>
     </field>
   </record>

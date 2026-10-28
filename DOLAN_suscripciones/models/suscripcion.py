@@ -16,6 +16,7 @@ class DolanSuscripcionPlan(models.Model):
 
 class DolanSuscripcionSuscripcion(models.Model):
     _name = "dolan.suscripcion.suscripcion"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Suscripcion de cliente"
     _order = "fecha_inicio desc, id desc"
 

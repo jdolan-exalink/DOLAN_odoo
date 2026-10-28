@@ -43,3 +43,21 @@ class TestSuscripcionesKpis(TransactionCase):
         action = self.env.ref("DOLAN_suscripciones.action_sub")
         self.assertIn("calendar", action.view_mode)
         self.assertIn("graph", action.view_mode)
+
+
+@tagged("post_install", "-at_install")
+class TestSuscripcionChatter(TransactionCase):
+
+    def test_thread_y_actividad(self):
+        plan = self.env["dolan.suscripcion.plan"].create({"name": "P-th", "precio": 10.0, "ciclo_dias": 30})
+        sub = self.env["dolan.suscripcion.suscripcion"].create({
+            "name": "TH-1", "partner_id": self.env["res.partner"].create({"name": "Cliente th"}).id,
+            "plan_id": plan.id,
+        })
+        self.assertTrue(hasattr(sub, "message_post"))
+        base = len(sub.message_ids)
+        sub.message_post(body="nota e2e")
+        self.assertEqual(len(sub.message_ids), base + 1)
+        act = sub.activity_schedule("mail.mail_activity_data_todo", summary="llamar")
+        self.assertEqual(act.res_id, sub.id)
+        self.assertIn(sub.activity_state, ("planned", "today"))
