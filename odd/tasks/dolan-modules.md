@@ -196,3 +196,21 @@ Risk: item 3 (contratos de datos: modelos/menús propios; ACL otorgadas a group_
 - Entregado: 6 specs en `DOLAN_theme/docs/ee-parity/` (suscripciones, alquileres, codigo-barras, contabilidad, ia, taller) a partir de las capturas EE de L22 + tabla F1 en `ce-coverage-matrix.md`.
 - Hallazgo clave: **`mrp_workorder`, `mrp_plm`, `stock_barcode` = uninstallable** en esta build CE → "Taller" EE no tiene equivalente nativo → confirmado gap `DOLAN_taller` (post-F5); `DOLAN_calidad` queda como capa de control de calidad sobre operaciones.
 - Risk: none (sólo docs/evidencia; sin cambios de código ni datos).
+
+### L24 — v2 de los tres módulos a parity F1 (2026-10-28)
+
+Orden comprometido en L23 ejecutado para Suscripciones/Alquileres/Código de barras:
+
+- **DOLAN_alquileres v2**: `fecha_pickup`/`fecha_return` (datetime), `estado_ops` (Por retirar/Recolectada/Devuelta) con badge en lista, `estado_factura` (Sin facturar/Por facturar/Facturado) con `@api.depends(move_id.state)`, **página KPI tipo EE** `/dolan_alquileres` (Hoy·Pickups·Returns·Tarde·Por confirmar·Por facturar) + menú Tablero. Tests deltas (9 ✓).
+- **DOLAN_suscripciones v2**: `user_id` (Vendedor, avatar en lista), `fase` (Cotización/Renovado/Venta adicional), `proxima` **stored** → vistas **calendar + graph** en la acción, **página MRR** `/dolan_suscripciones` (MRR normalizado30d, activas, próx.7d, por facturar, planes) + menú Tablero MRR. Tests deltas (10 ✓).
+- **DOLAN_codigo_barras v2**: resolución en cadena **producto → recolección (picking name/origin) → contacto (ref/name) → tipo de operación (code/name)** con `action_id` para botón "Abrir"; **modos** Operaciones/Contar inventario (`/modes` → action-410/396); layout con tips y jerarquía tipo EE. Tests (7 ✓) con picking rename determinista.
+- **Verificación**: 16/16 tests verdes en la tanda; browser: ALQ200 6 cards, SUBS200 MRR, BARRAS200 modos→acciones reales + scan `PRD-001` card, **consola 0 errores**; capturas `qa/shots/v2-{alq,subs,barras}.png`.
+- Gotchas de la tanda: `Environment` sin `.sudo()` otra vez (v2 lo reintrodujo); type de acción real = `'ir.actions.act_window'` (usar ilike); dominios OR v20 = leaf tuple + `"|"` plano (el valor de `in` va DENTRO del leaf); compute sin `@api.depends` cachea stale → depends obligatorio; `controllers/__init__` con import erróneo = registry CRITICAL (todas las rutas 404).
+- Risk: item 3 (modelos/menús/contratos propios) — verificado tests+browser; item 1 sin cambios (facturas siguen en borrador). F5 queda como siguiente paso global tras "todos los módulos terminados".
+
+### L25 — F5 hito 1: smoke POS, e2e sin residuo, diagnóstico de consola (2026-10-28)
+
+- **L25** (verbatim): "vamos con 1 y 2" (F5 + gaps de producto).
+- Evidencia F5 (tabla en `ce-coverage-matrix.md` §Estado F5): POS+Restaurante smoke ✓ (0 consola, capturas f5-pos*); e2e **suscripción→cron→2 facturas draft→limpieza total** ✓; e2e **alquiler→factura AR draft $302,50→limpieza** ✓; **CAE:177 posted con CAE** ✓; compra CSV ya probado (L17); `hr` sin repro (transitorio L22); **`hr_recruitment` = bug CORE** (`SettingsPage.SidePanel` reading 'key', repro 100%, no nuestro) → matriz actualizada con leyenda B/C/P/CORE.
+- Siguiente inmediato dentro de "2": specs Ventas/Manufactura + actividades en suscripciones (lote pequeño); luego gaps grandes (Taller/Declaración/OCR/IA-agentes) según tu prioridad.
+- Risk: none (e2e con residuo cero y rollback; smoke y diagnósticos sólo lectura).

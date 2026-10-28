@@ -40,3 +40,22 @@ Evidencia EE: `evidence/ee-demo/full/*.png` · Specs: `ee-parity/*.md`.
 | Ventas / Manufactura | (capturas en full/) | Sin módulo propio | apps CE nativas; estilo ya cubierto por DOLAN_theme (filas NE→C pendientes de F5) |
 
 Regla F5: ninguna fila vuelve a `NE` sin prueba en navegador (claro/oscuro, rol no-admin).
+
+## Estado F5 (hito 1 — 2026-10-28)
+
+Leyenda nueva: **B** = barrido L22 (app abre, render OK, consola 0, claro/admin) ·
+**C** = cubierto con prueba extra (oscuro y/o e2e y/o rol) · **P** = pendiente ·
+**CORE** = defecto del core Odoo, fuera de este repo.
+
+| Verificación F5 | Resultado |
+|---|---|
+| Smoke POS + Restaurante | **C** — dashboards OK, 0 consola, `qa/shots/f5-pos*.png` |
+| E2E suscripción→cron→factura | **C** — 2 drafts creados, residuo 0 tras unlink |
+| E2E alquiler→factura | **C** — factura draft AR $302,50 (250+21%), residuo 0 |
+| Integridad CAE | **C** — **177** facturas posted con CAE ≠ vacío (SQL) + spot FA-C 00008-00000043/42 |
+| Compra CSV | **C** (L17: dry-run limpio, import 6→7, rollback a 6) |
+| Consola `hr` | **C** — sin repro (0 errs ×2); error de L22 = transitorio de navegación |
+| Consola `hr_recruitment` | **CORE** — `TypeError reading 'key'` en `SettingsPage.template_web_SettingsPage_SidePanel_Regular` (web), 100% repro → reportar upstream; no es código DOLAN |
+| Apps CE (38) | **B** (barrido L22) — elevar a C familia por familia en F5-b |
+
+Resto de filas: **P** (prueba por vista en claro/oscuro/no-admin pendiente) — ninguna vuelve a `NE` sin esa prueba (regla 3).
