@@ -1,0 +1,389 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* DOLAN_suscripciones
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0-20261015\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-28 15:22+0000\n"
+"PO-Revision-Date: 2026-10-28 15:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields.selection,name:DOLAN_suscripciones.selection__dolan_suscripcion_suscripcion__state__activa
+msgid "Activa"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_plans_ids
+msgid "Activity Plans"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__activo
+msgid "Activo"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields.selection,name:DOLAN_suscripciones.selection__dolan_suscripcion_suscripcion__state__cancelada
+msgid "Cancelada"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__partner_id
+msgid "Cliente"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields.selection,name:DOLAN_suscripciones.selection__dolan_suscripcion_suscripcion__fase__cotizacion
+msgid "Cotizacion"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__create_uid
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__create_date
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.module.module,shortdesc:base.module_DOLAN_suscripciones
+msgid "DOLAN Suscripciones"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.actions.server,name:DOLAN_suscripciones.cron_dolan_suscripciones_ir_actions_server
+msgid "DOLAN: facturar suscripciones vencidas"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,help:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__fecha_ultima
+msgid ""
+"Dia (>= inicio) desde el que se emite el ultimo periodo facturado; avanza el"
+" ciclo al facturar."
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__ciclo_dias
+msgid "Dias por periodo"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__display_name
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__fase
+msgid "Fase"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__fecha_inicio
+msgid "Fecha Inicio"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__id
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__id
+msgid "ID"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,help:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,help:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,help:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_has_error
+#: model:ir.model.fields,help:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__fecha_ultima
+msgid "Inicio del periodo vigente"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__write_uid
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__write_date
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,help:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_type_icon
+msgid "Material Symbols icon e.g. checklist"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__name
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__name
+msgid "Name"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#. odoo-python
+#: code:addons/DOLAN_suscripciones/models/suscripcion.py:0
+msgid "Nueva suscripcion"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,help:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,help:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields.selection,name:DOLAN_suscripciones.selection__dolan_suscripcion_suscripcion__state__pausada
+msgid "Pausada"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model_terms:ir.ui.view,arch_db:DOLAN_suscripciones.view_sub_form
+msgid "Pausar"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__plan_id
+msgid "Plan"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model,name:DOLAN_suscripciones.model_dolan_suscripcion_plan
+msgid "Plan de suscripcion"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.actions.act_window,name:DOLAN_suscripciones.action_plan
+#: model:ir.ui.menu,name:DOLAN_suscripciones.menu_planes
+msgid "Planes"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.module.module,summary:base.module_DOLAN_suscripciones
+msgid ""
+"Planes y suscripciones recurrentes: cron diario que genera facturas en "
+"borrador"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__precio
+msgid "Precio por periodo"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_plan__product_id
+msgid "Producto de facturacion"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__proxima
+msgid "Proxima"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__rating_ids
+msgid "Ratings"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model_terms:ir.ui.view,arch_db:DOLAN_suscripciones.view_sub_form
+msgid "Reactivar"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields.selection,name:DOLAN_suscripciones.selection__dolan_suscripcion_suscripcion__fase__renovado
+msgid "Renovado"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__state
+msgid "State"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,help:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#. odoo-python
+#: code:addons/DOLAN_suscripciones/models/suscripcion.py:0
+msgid "Suscripcion %s — periodo %s a %s"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model,name:DOLAN_suscripciones.model_dolan_suscripcion_suscripcion
+msgid "Suscripcion de cliente"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.actions.act_window,name:DOLAN_suscripciones.action_sub
+#: model:ir.ui.menu,name:DOLAN_suscripciones.menu_root
+#: model:ir.ui.menu,name:DOLAN_suscripciones.menu_subs
+#: model_terms:ir.ui.view,arch_db:DOLAN_suscripciones.view_sub_graph
+msgid "Suscripciones"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.actions.act_url,name:DOLAN_suscripciones.action_sub_tablero
+#: model:ir.ui.menu,name:DOLAN_suscripciones.menu_sub_tablero
+msgid "Tablero MRR"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,help:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields,field_description:DOLAN_suscripciones.field_dolan_suscripcion_suscripcion__user_id
+msgid "Vendedor"
+msgstr ""
+
+#. module: DOLAN_suscripciones
+#: model:ir.model.fields.selection,name:DOLAN_suscripciones.selection__dolan_suscripcion_suscripcion__fase__venta_adicional
+msgid "Venta adicional"
+msgstr ""

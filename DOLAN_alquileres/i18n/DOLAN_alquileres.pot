@@ -1,0 +1,268 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* DOLAN_alquileres
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0-20261015\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-28 15:22+0000\n"
+"PO-Revision-Date: 2026-10-28 15:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields.selection,name:DOLAN_alquileres.selection__dolan_alquiler_contrato__state__activo
+msgid "Activo"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#. odoo-python
+#: code:addons/DOLAN_alquileres/models/contrato.py:0
+msgid "Alquiler %s (%s a %s) — %s dias"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.ui.menu,name:DOLAN_alquileres.menu_dolan_alquiler_root
+msgid "Alquileres"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__product_id
+msgid "Bien"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields.selection,name:DOLAN_alquileres.selection__dolan_alquiler_contrato__state__borrador
+msgid "Borrador"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields.selection,name:DOLAN_alquileres.selection__dolan_alquiler_contrato__state__cancelado
+msgid "Cancelado"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model_terms:ir.ui.view,arch_db:DOLAN_alquileres.view_dolan_alquiler_form
+msgid "Cancelar"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__partner_id
+msgid "Cliente"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model,name:DOLAN_alquileres.model_dolan_alquiler_contrato
+msgid "Contrato de alquiler por dia"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.ui.menu,name:DOLAN_alquileres.menu_dolan_alquileres
+msgid "Contratos"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.actions.act_window,name:DOLAN_alquileres.action_dolan_alquiler
+msgid "Contratos de alquiler"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.module.module,summary:base.module_DOLAN_alquileres
+msgid ""
+"Contratos de alquiler por dia: periodos, totales y facturacion en borrador"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__currency_id
+msgid "Currency"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.module.module,shortdesc:base.module_DOLAN_alquileres
+msgid "DOLAN Alquileres"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__fecha_return
+msgid "Devolucion"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields.selection,name:DOLAN_alquileres.selection__dolan_alquiler_contrato__estado_ops__devuelta
+msgid "Devuelta"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__dias
+msgid "Dias"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__estado_factura
+msgid "Estado Factura"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__estado_ops
+msgid "Estado Ops"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__move_id
+msgid "Factura"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields.selection,name:DOLAN_alquileres.selection__dolan_alquiler_contrato__estado_factura__facturado
+msgid "Facturado"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model_terms:ir.ui.view,arch_db:DOLAN_alquileres.view_dolan_alquiler_form
+msgid "Facturar"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__fecha_fin
+msgid "Fecha Fin"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__fecha_inicio
+msgid "Fecha Inicio"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#. odoo-python
+#: code:addons/DOLAN_alquileres/models/contrato.py:0
+msgid "Fechas invalidas: fin >= inicio."
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields.selection,name:DOLAN_alquileres.selection__dolan_alquiler_contrato__state__finalizado
+msgid "Finalizado"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model_terms:ir.ui.view,arch_db:DOLAN_alquileres.view_dolan_alquiler_form
+msgid "Finalizar"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__id
+msgid "ID"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model_terms:ir.ui.view,arch_db:DOLAN_alquileres.view_dolan_alquiler_form
+msgid "Iniciar"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__name
+msgid "Name"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#. odoo-python
+#: code:addons/DOLAN_alquileres/models/contrato.py:0
+msgid "No hay dias facturables."
+msgstr ""
+
+#. module: DOLAN_alquileres
+#. odoo-python
+#: code:addons/DOLAN_alquileres/models/contrato.py:0
+msgid "Nuevo contrato"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields.selection,name:DOLAN_alquileres.selection__dolan_alquiler_contrato__estado_factura__por_facturar
+msgid "Por facturar"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields.selection,name:DOLAN_alquileres.selection__dolan_alquiler_contrato__estado_ops__pendiente
+msgid "Por retirar"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__fecha_pickup
+msgid "Recoleccion"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields.selection,name:DOLAN_alquileres.selection__dolan_alquiler_contrato__estado_ops__recolectada
+msgid "Recolectada"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields.selection,name:DOLAN_alquileres.selection__dolan_alquiler_contrato__estado_factura__sin_factura
+msgid "Sin facturar"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__state
+msgid "State"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.ui.menu,name:DOLAN_alquileres.menu_dolan_alquiler_tablero
+msgid "Tablero"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.actions.act_url,name:DOLAN_alquileres.action_dolan_alquiler_tablero
+msgid "Tablero DOLAN"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__tarifa_dia
+msgid "Tarifa por dia"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model:ir.model.fields,field_description:DOLAN_alquileres.field_dolan_alquiler_contrato__total
+#: model_terms:ir.ui.view,arch_db:DOLAN_alquileres.view_dolan_alquiler_list
+msgid "Total"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#: model_terms:ir.ui.view,arch_db:DOLAN_alquileres.view_dolan_alquiler_list
+msgid "Total días"
+msgstr ""
+
+#. module: DOLAN_alquileres
+#. odoo-python
+#: code:addons/DOLAN_alquileres/models/contrato.py:0
+msgid "Ya existe factura para este contrato."
+msgstr ""
