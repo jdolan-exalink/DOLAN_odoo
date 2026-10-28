@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_punto_list" model="ir.ui.view">
+    <field name="name">dolan.calidad.punto_control.list</field>
+    <field name="model">dolan.calidad.punto_control</field>
+    <field name="arch" type="xml">
+      <list editable="bottom">
+        <field name="name"/>
+        <field name="ambito"/>
+        <field name="product_id" optional="show"/>
+        <field name="activo"/>
+      </list>
+    </field>
+  </record>
+  <record id="view_control_list" model="ir.ui.view">
+    <field name="name">dolan.calidad.control.list</field>
+    <field name="model">dolan.calidad.control</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="punto_id"/>
+        <field name="referencia" optional="show"/>
+        <field name="fecha"/>
+        <field name="responsable_id"/>
+        <field name="resultado" widget="badge" decoration-success="resultado=='ok'" decoration-danger="resultado=='ko'" decoration-warning="resultado=='pendiente'"/>
+        <field name="nc_ids" optional="hide"/>
+      </list>
+    </field>
+  </record>
+  <record id="view_control_form" model="ir.ui.view">
+    <field name="name">dolan.calidad.control.form</field>
+    <field name="model">dolan.calidad.control</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="action_marcar_ok" type="object" string="Marcar OK" class="btn-primary" invisible="resultado != 'pendiente'"/>
+          <button name="action_marcar_ko" type="object" string="Marcar KO" invisible="resultado != 'pendiente'"/>
+          <field name="resultado" widget="statusbar" statusbar_visible="pendiente,ok,ko"/>
+        </header>
+        <sheet>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="punto_id"/>
+              <field name="referencia"/>
+            </group>
+            <group>
+              <field name="fecha"/>
+              <field name="responsable_id"/>
+            </group>
+          </group>
+          <field name="observaciones"/>
+          <notebook>
+            <page string="No conformidades" name="nc">
+              <field name="nc_ids">
+                <list editable="bottom" create="false">
+                  <field name="descripcion"/>
+                  <field name="estado" widget="badge" decoration-danger="estado=='abierta'" decoration-success="estado=='cerrada'"/>
+                  <field name="solucion"/>
+                </list>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="view_nc_list" model="ir.ui.view">
+    <field name="name">dolan.calidad.no_conformidad.list</field>
+    <field name="model">dolan.calidad.no_conformidad</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="control_id"/>
+        <field name="product_id"/>
+        <field name="descripcion"/>
+        <field name="estado" widget="badge" decoration-danger="estado=='abierta'" decoration-success="estado=='cerrada'"/>
+      </list>
+    </field>
+  </record>
+  <record id="action_control" model="ir.actions.act_window">
+    <field name="name">Controles</field>
+    <field name="res_model">dolan.calidad.control</field>
+    <field name="view_mode">list,form</field>
+  </record>
+  <record id="action_punto" model="ir.actions.act_window">
+    <field name="name">Puntos de control</field>
+    <field name="res_model">dolan.calidad.punto_control</field>
+    <field name="view_mode">list,form</field>
+  </record>
+  <record id="action_nc" model="ir.actions.act_window">
+    <field name="name">No conformidades</field>
+    <field name="res_model">dolan.calidad.no_conformidad</field>
+    <field name="view_mode">list,form</field>
+  </record>
+  <record id="menu_root" model="ir.ui.menu">
+    <field name="name">Calidad</field>
+    <field name="web_icon">DOLAN_calidad,static/description/icon.png</field>
+    <field name="sequence">56</field>
+  </record>
+  <record id="menu_controles" model="ir.ui.menu">
+    <field name="name">Controles</field>
+    <field name="parent_id" ref="menu_root"/>
+    <field name="action" ref="action_control"/>
+    <field name="sequence">10</field>
+  </record>
+  <record id="menu_puntos" model="ir.ui.menu">
+    <field name="name">Puntos de control</field>
+    <field name="parent_id" ref="menu_root"/>
+    <field name="action" ref="action_punto"/>
+    <field name="sequence">20</field>
+  </record>
+  <record id="menu_nc" model="ir.ui.menu">
+    <field name="name">No conformidades</field>
+    <field name="parent_id" ref="menu_root"/>
+    <field name="action" ref="action_nc"/>
+    <field name="sequence">30</field>
+  </record>
+</odoo>
