@@ -60,7 +60,7 @@ class DolanAiMensaje(models.Model):
                            required=True, default="user")
     content = fields.Text(required=True)
 
-MAX_ITER = 3
+MAX_ITER = 8
 MAX_LIMIT = 20
 ALLOWED_TOOLS = ("search_read", "search_count", "read", "create", "write")
 WRITE_MODELS_LIMIT = {"res.partner", "crm.lead", "project.project"}
@@ -177,9 +177,12 @@ class AgenteLoop:
         previo = ""
         if self.history:
             previo = " Resultados de herramientas anteriores: " + json.dumps(self.history[-2:], ensure_ascii=False, default=str)[:800] + " Usá esos resultados y respondé con {\"reply\": ...} si ya tenés la respuesta."
+        from datetime import date as _date
+        fecha_hoy = _date.today().isoformat()
         prompt = (
             f"Sos el agente '{self.agente.name}'. Herramientas: {spec}. "
             f"Modelos autorizados: {modelos}. "
+            f"Contexto: la fecha de HOY es {fecha_hoy}; usala para calcular semanas/meses sin preguntar. "
             "Respondé SOLO JSON: {\"tool\": \"search_read|create\", \"args\": {...}} "
             "o {\"reply\": \"respuesta final\"}." + previo + " Pregunta: " + user_text[:400]
         )
@@ -202,7 +205,7 @@ class AgenteLoop:
         body = {
             "model": "gpt-6-luna",
             "input": msgs,
-            "max_output_tokens": 500,
+            "max_output_tokens": 1500,
             "stream": True,
             "store": False,
         }
@@ -233,7 +236,11 @@ class AgenteLoop:
                     parts.append(ev.get("delta", ""))
                 elif etype == "response.output_text.done" and ev.get("text"):
                     parts = [ev["text"]]
-                elif etype in ("response.failed", "response.incomplete"):
+                elif etype == "response.incomplete":
+                    # respuesta cortada por límite de tokens: usamos el texto acumulado
+                    text = "".join(parts)
+                    break
+                elif etype == "response.failed":
                     return {"done": False, "reply": None, "error": "stream_failed"}
         except (requests.RequestException, OSError):
             return {"done": False, "reply": None, "error": "stream_error"}

@@ -261,3 +261,13 @@ class DolanAiController(http.Controller):
                     "detalle": str(exc)[:220]}
         res["conversacion_id"] = conv.id
         return res
+
+    @http.route("/dolan_ai/prompts", type="jsonrpc", auth="user", methods=["POST"], csrf=False, sitemap=False)
+    def prompts_list(self, **kwargs):
+        if not request.env.user.has_group("base.group_user"):
+            return {"error": "no_autorizado"}
+        agente_id = int(kwargs.get("agente_id") or 0)
+        recs = request.env["dolan.ai.prompt"].sudo().search_read(
+            [("agente_id", "=", agente_id), ("activo", "=", True)],
+            ["name", "prompt"], limit=10)
+        return {"prompts": recs}
