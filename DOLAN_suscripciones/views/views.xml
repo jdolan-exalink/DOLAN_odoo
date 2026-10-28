@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_plan_list" model="ir.ui.view">
+    <field name="name">dolan.suscripcion.plan.list</field>
+    <field name="model">dolan.suscripcion.plan</field>
+    <field name="arch" type="xml">
+      <list editable="bottom">
+        <field name="name"/>
+        <field name="precio"/>
+        <field name="ciclo_dias"/>
+        <field name="product_id" optional="show"/>
+        <field name="activo"/>
+      </list>
+    </field>
+  </record>
+  <record id="view_sub_list" model="ir.ui.view">
+    <field name="name">dolan.suscripcion.suscripcion.list</field>
+    <field name="model">dolan.suscripcion.suscripcion</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="partner_id"/>
+        <field name="plan_id"/>
+        <field name="fecha_inicio"/>
+        <field name="fecha_ultima"/>
+        <field name="proxima"/>
+        <field name="state" widget="badge" decoration-success="state=='activa'" decoration-warning="state=='pausada'" decoration-muted="state=='cancelada'"/>
+      </list>
+    </field>
+  </record>
+  <record id="view_sub_form" model="ir.ui.view">
+    <field name="name">dolan.suscripcion.suscripcion.form</field>
+    <field name="model">dolan.suscripcion.suscripcion</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="write" type="object" string="Pausar" invisible="state != 'activa'" eval="{'state': 'pausada'}"/>
+          <button name="write" type="object" string="Reactivar" invisible="state != 'pausada'" eval="{'state': 'activa'}"/>
+          <field name="state" widget="statusbar"/>
+        </header>
+        <sheet>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="partner_id"/>
+              <field name="plan_id"/>
+            </group>
+            <group>
+              <field name="fecha_inicio"/>
+              <field name="fecha_ultima"/>
+              <field name="proxima"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="action_plan" model="ir.actions.act_window">
+    <field name="name">Planes</field>
+    <field name="res_model">dolan.suscripcion.plan</field>
+    <field name="view_mode">list,form</field>
+  </record>
+  <record id="action_sub" model="ir.actions.act_window">
+    <field name="name">Suscripciones</field>
+    <field name="res_model">dolan.suscripcion.suscripcion</field>
+    <field name="view_mode">list,form</field>
+  </record>
+  <record id="menu_root" model="ir.ui.menu">
+    <field name="name">Suscripciones</field>
+    <field name="web_icon">DOLAN_suscripciones,static/description/icon.png</field>
+    <field name="sequence">54</field>
+  </record>
+  <record id="menu_subs" model="ir.ui.menu">
+    <field name="name">Suscripciones</field>
+    <field name="parent_id" ref="menu_root"/>
+    <field name="action" ref="action_sub"/>
+    <field name="sequence">10</field>
+  </record>
+  <record id="menu_planes" model="ir.ui.menu">
+    <field name="name">Planes</field>
+    <field name="parent_id" ref="menu_root"/>
+    <field name="action" ref="action_plan"/>
+    <field name="sequence">20</field>
+  </record>
+</odoo>
