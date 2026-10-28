@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,operation,domain
+dolan_taller_user_dolan_taller_turno,access turno user,model_dolan_taller_turno,base.group_user,crud,
+dolan_taller_manager_dolan_taller_turno,access turno manager,model_dolan_taller_turno,base.group_system,crud,
+dolan_taller_user_dolan_taller_consumo,access consumo user,model_dolan_taller_consumo,base.group_user,crud,
+dolan_taller_manager_dolan_taller_consumo,access consumo manager,model_dolan_taller_consumo,base.group_system,crud,

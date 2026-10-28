@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="menu_root" model="ir.ui.menu">
+    <field name="name">Taller</field>
+    <field name="web_icon">DOLAN_taller,static/description/icon.png</field>
+    <field name="sequence">50</field>
+  </record>
+  <record id="menu_turnos" model="ir.ui.menu">
+    <field name="name">Turnos</field>
+    <field name="parent_id" ref="menu_root"/>
+    <field name="action" ref="action_turno"/>
+    <field name="sequence">10</field>
+  </record>
+</odoo>
