@@ -67,7 +67,7 @@ PAGE_HTML = """<!DOCTYPE html>
   </style>
   <script type="text/javascript" src="/DOLAN_ai/static/src/js/page.js?v=31"></script>
   <script type="text/javascript" src="/DOLAN_ai/static/src/js/ocr.js?v=31"></script>
-  <script type="text/javascript" src="/DOLAN_ai/static/src/js/embed_rail.js?v=31"></script>
+  <script type="text/javascript" src="/DOLAN_ai/static/src/js/embed_rail.js?v=32"></script>
 </body>
 </html>"""
 

@@ -53,7 +53,7 @@ fetch("/dolan_codigo_barras/modes",{method:"POST",headers:{"Content-Type":"appli
  const b1=document.getElementById("btn-op"), b2=document.getElementById("btn-inv");
  if(m.operaciones)b1.href="/odoo/action-"+m.operaciones;
  if(m.inventario)b2.href="/odoo/action-"+m.inventario;});
-</script><script type="text/javascript" src="/DOLAN_ai/static/src/js/embed_rail.js?v=31"></script></body></html>"""
+</script><script type="text/javascript" src="/DOLAN_ai/static/src/js/embed_rail.js?v=32"></script></body></html>"""
 
 
 class DolanCodigoBarras(http.Controller):

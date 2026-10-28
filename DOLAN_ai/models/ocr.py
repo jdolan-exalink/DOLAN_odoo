@@ -235,13 +235,17 @@ def create_draft(env, datos):
         return mapped
     vals = mapped["vals"]
     Partner = env["res.partner"].sudo()
-    partner = Partner.search([("name", "=", vals["partner_name_suggest"])], limit=1)
+    # buscar también partners de otras compañías (migración multi-compañía)
+    partner = Partner.with_context(active_test=False).search(
+        [("name", "=", vals["partner_name_suggest"])], order="company_id, id", limit=1)
     if not partner:
-        partner = Partner.create({"name": vals["partner_name_suggest"]})
+        # nuevo: compartido entre compañías (company_id False) para que el
+        # borrador se cree en la compañía activa del usuario sin cruces
+        partner = Partner.create({"name": vals["partner_name_suggest"], "company_id": False})
     tax = env.ref(vals["default_tax_xmlid"], raise_if_not_found=False)
     tax_ids = [(6, 0, [tax.id])] if tax else []
     Move = env["account.move"].sudo()
-    move = Move.create({
+    move_vals = {
         "move_type": "in_invoice",
         "partner_id": partner.id,
         "ref": vals.get("ref") or "",
@@ -249,8 +253,13 @@ def create_draft(env, datos):
             "name": ln["name"], "quantity": ln["quantity"],
             "price_unit": ln["price_unit"], "tax_ids": tax_ids,
         }) for ln in vals["lineas"]],
-    })
-    return {"ok": True, "move_id": move.id, "move_name": move.name or ""}
+    }
+    # el asiento vive en la compañía del partner (evita el cruce "inconsistencias en la empresa")
+    if partner.company_id:
+        move_vals["company_id"] = partner.company_id.id
+    move = Move.create(move_vals)
+    return {"ok": True, "move_id": move.id, "move_name": move.name or "",
+            "company": move.company_id.name}
 
 
 def extract_from_image(env, data_url):

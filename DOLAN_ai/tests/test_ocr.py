@@ -136,3 +136,36 @@ class TestOcrFechas(TransactionCase):
         self.assertEqual(move.state, "draft")
         move.unlink()
         self.env["res.partner"].search([("name", "=", "OCR USER SA")]).unlink()
+
+
+@tagged("post_install", "-at_install")
+class TestOcrMultiCompany(TransactionCase):
+
+    def test_partner_otra_compania(self):
+        # compañía distinta con diario de compras (migración multi-compañía real)
+        j = self.env["account.journal"].search([
+            ("type", "=", "purchase"), ("company_id", "!=", self.env.company.id)], limit=1)
+        self.assertTrue(j, "requiere otra compañía con diario de compras")
+        comp2 = j.company_id
+        p2 = self.env["res.partner"].create({"name": "Proveedor otra comp", "company_id": comp2.id})
+        res = ocr.create_draft(self.env, {
+            "proveedor": "Proveedor otra comp", "fecha": "2026-10-26", "total": 121.0,
+            "lineas": [{"descripcion": "Item", "cantidad": 1, "precio": 100.0}],
+        })
+        self.assertTrue(res["ok"], res)
+        move = self.env["account.move"].browse(res["move_id"])
+        self.assertEqual(move.company_id.id, comp2.id)
+        self.assertEqual(move.partner_id.id, p2.id)
+        move.unlink()
+        p2.unlink()
+
+    def test_partner_nuevo_compartido(self):
+        res = ocr.create_draft(self.env, {
+            "proveedor": "Proveedor compartido OCR", "total": 50.0,
+            "lineas": [{"descripcion": "x", "cantidad": 1, "precio": 50.0}],
+        })
+        self.assertTrue(res["ok"], res)
+        move = self.env["account.move"].browse(res["move_id"])
+        self.assertFalse(move.partner_id.company_id)
+        move.unlink()
+        self.env["res.partner"].search([("name", "=", "Proveedor compartido OCR")]).unlink()
