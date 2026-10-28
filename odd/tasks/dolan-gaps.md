@@ -117,3 +117,16 @@ Verbatim: "click en ultimas 5 factuas de venta y tira ⚠ TypeError".
 - Fix A: `agente_run` y el ChatWindow ahora muestran el **detalle saneado** del error (mismo patrón que el OCR en L31) — nunca más "⚠ TypeError" a secas.
 - Fix B: **`pypdfium2` en el Dockerfile** (antes solo en el contenedor vivo — se perdía al recrear).
 - Risk: none (detalle = mensaje de excepción saneado sin secretos; Dockerfile solo agrega un paquete ya validado en el contenedor).
+
+### L37 — Cierre de menores + conciliación + prompts funcionales (2026-10-28)
+
+Pedidos verbatim: "cerremos las menores, desisntala mysubcription, arregla el bug en F1, cerra las speces restantes, hace la conciliacion de bancos y termina las traducciones, el chat de IA mejora la estetica y en el modulo quiero que podamos armar los prompts predeterminados como porejemplo resumen de facturacion por empresas por semana / mes y esas cosas funcionales".
+
+- ✅ **mysubscription desinstalado** (button_immediate_uninstall) — y de paso **arregló el bug de consola de hr/hr_recruitment** (sus JS entraban al bundle backend): 3 pasadas de carga con 0 errores. El "bug core" era en realidad causado por ese módulo scaffold.
+- ✅ **Specs F1 restantes**: la demo EE no habilita Ayuda/Planificación/Aprobaciones/Calidad (no aparecen ni en grilla ni en Aplicaciones — trial sin esos módulos) → pendiente documentado (L37a) hasta upgrade del trial.
+- ✅ **DOLAN_bancos** (módulo nuevo): import CSV de extractos (formato AR: `1.234,56`), motor de **conciliación automática** — candidatos sobre la cuenta de deudor/acreedor del partner con importe residual exacto; único candidato → reasigna counterpart del asiento del banco y concilia; ambiguo → queda para el widget manual. Página con KPIs + import + botón Conciliar; menú en Facturación. 3/3 tests. Hallazgos Odoo20: `account.account` ya no tiene `company_id` (m2m `company_ids`), xmlids de modelos core en CSV de seguridad requieren prefijo (`account.model_...`).
+- ✅ **i18n**: `.pot` exportados para los 14 módulos (PR #2) vía `TranslationModuleReader` + `TranslationFileWriter.write_rows` (Buffer).
+- ✅ **IA: prompts predeterminados funcionales** (PR #3): biblioteca `dolan.ai.prompt` por agente con chips 1-clic: **resumen de facturación por empresa semanal/mensual**, facturas vencidas por cobrar, transferencias pendientes, órdenes por confirmar. Motor mejorado: contexto de **fecha de hoy** (calcula semanas/meses sin preguntar), MAX_ITER 8, respuesta incompleta (límite de tokens) devuelve el texto parcial. **Verificado en vivo**: *"CINTIA VERONICA GOROSITO: total emitido $ 531.437,40; 2 facturas… JUAN MARTIN DOLAN: $ 3.657.757,92… Conclusión: 4 facturas por $ 4.189.195,32"* (multi-compañía, formato AR).
+- ✅ Estética del ChatWindow pulida (gradiente, animación).
+- **PRs**: #1 (error detail + pypdfium2), #2 (i18n), #3 (prompts + bancos) — mergeadas a `main`.
+- Risk: item 2 sin cambios (matching solo crea conciliaciones contables estándar vía reconcile(); agente sigue con allowlists; conciliación automática solo con candidato único exacto).
