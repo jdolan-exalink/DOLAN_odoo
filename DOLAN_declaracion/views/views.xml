@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_periodo_list" model="ir.ui.view">
+    <field name="name">dolan.fiscal.periodo.list</field>
+    <field name="model">dolan.fiscal.periodo</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="fecha_desde"/>
+        <field name="fecha_hasta"/>
+        <field name="progreso" widget="progressbar"/>
+        <field name="state" widget="badge" decoration-success="state=='cerrado'" decoration-info="state=='abierto'"/>
+        <field name="company_id" groups="base.group_multi_company" optional="show"/>
+      </list>
+    </field>
+  </record>
+  <record id="view_periodo_form" model="ir.ui.view">
+    <field name="name">dolan.fiscal.periodo.form</field>
+    <field name="model">dolan.fiscal.periodo</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="action_cerrar" type="object" string="Cerrar periodo" class="btn-primary" invisible="state != 'abierto'"/>
+          <button name="action_reabrir" type="object" string="Reabrir" invisible="state != 'cerrado'"/>
+          <field name="state" widget="statusbar"/>
+        </header>
+        <sheet>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="company_id"/>
+            </group>
+            <group>
+              <field name="fecha_desde"/>
+              <field name="fecha_hasta"/>
+              <field name="progreso"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Checklist" name="checklist">
+              <field name="item_ids">
+                <list editable="bottom">
+                  <field name="name" readonly="1"/>
+                  <field name="done"/>
+                  <field name="notas"/>
+                </list>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids"/>
+          <field name="activity_ids"/>
+          <field name="message_ids"/>
+        </div>
+      </form>
+    </field>
+  </record>
+  <record id="action_periodo" model="ir.actions.act_window">
+    <field name="name">Períodos de cierre</field>
+    <field name="res_model">dolan.fiscal.periodo</field>
+    <field name="view_mode">list,form</field>
+  </record>
+</odoo>

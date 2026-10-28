@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,operation,domain
+dolan_declaracion_user_dolan_fiscal_periodo,access periodo user,model_dolan_fiscal_periodo,base.group_user,crud,
+dolan_declaracion_manager_dolan_fiscal_periodo,access periodo manager,model_dolan_fiscal_periodo,base.group_system,crud,
+dolan_declaracion_user_dolan_fiscal_item,access item user,model_dolan_fiscal_item,base.group_user,crud,
+dolan_declaracion_manager_dolan_fiscal_item,access item manager,model_dolan_fiscal_item,base.group_system,crud,

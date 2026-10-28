@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="menu_root" model="ir.ui.menu">
+    <field name="name">Declaración Fiscal</field>
+    <field name="web_icon">DOLAN_declaracion,static/description/icon.png</field>
+    <field name="sequence">42</field>
+  </record>
+  <record id="menu_periodos" model="ir.ui.menu">
+    <field name="name">Períodos de cierre</field>
+    <field name="parent_id" ref="menu_root"/>
+    <field name="action" ref="action_periodo"/>
+    <field name="sequence">10</field>
+  </record>
+</odoo>
