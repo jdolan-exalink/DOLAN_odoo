@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="action_dolan_escaneo" model="ir.actions.act_url">
+    <field name="name">Escaneo DOLAN</field>
+    <field name="url">/dolan_codigo_barras</field>
+    <field name="target">self</field>
+  </record>
+  <record id="menu_dolan_escaneo" model="ir.ui.menu">
+    <field name="name">Escaneo DOLAN</field>
+    <field name="parent_id" ref="stock.menu_stock_root"/>
+    <field name="action" ref="action_dolan_escaneo"/>
+    <field name="sequence">3</field>
+  </record>
+</odoo>
