@@ -254,3 +254,11 @@ Orden de construcción: OCR (usa infra existente) → Declaración fiscal → DO
 - Fixes: graph sin dotted-measure (v20), `return` faltante en `_producto` tras refactor.
 - **PR #4 mergeada** (`a0bbc87`), deploy verde: **89 tests** en el lote (55 ai + 7 barras + 9 alquileres + 5 bancos + 13 suscripciones), UI 200.
 - Risk: none (mismas reglas de seguridad; vista/JS propios).
+
+### L39 — Backups verificados de punta a punta (2026-10-28)
+
+- **Backup completo ejecutado**: `backups/daily/dolan_20261028_171841.sql.gz` (7.2 MB, 544k líneas) + configs.
+- **Prueba de fuego REAL**: restaurado en DB nueva `dolan_restaurada` → sanity completo (6 users, 512 moves, **189 con CAE**, 258 módulos instalados, 4 agentes IA, 5 prompts) → **Odoo arrancó con la DB restaurada y login OK (uid=7)** → cleanup de la DB de prueba.
+- **Cron instalado**: diario 2AM (`0 2 * * *`) con retención 30 días + mensuales del día 1 (script ya los hacía); path del script actualizado a `/root/DOLAN_odoo20/odoo20-argentina`.
+- Gotcha psql: `psql -U odoo` conecta a la DB "odoo" (que no existe) → comandos de mantenimiento requieren `-d postgres`.
+- Risk: none (drop de una DB de prueba creada ad-hoc; producción intacta).

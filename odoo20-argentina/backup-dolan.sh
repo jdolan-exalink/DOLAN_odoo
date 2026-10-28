@@ -3,7 +3,7 @@ set -euo pipefail
 # Backup diario de la DB `dolan` + configs del stack odoo20-argentina.
 # Patron del backup de dolibarr (backups/daily + monthly, .sql.gz).
 # Cron sugerido (NO se instala automaticamente):
-#   0 2 * * * cd /root/odoo20/odoo20-argentina && ./backup-dolan.sh >> backups/backup.log 2>&1
+#   0 2 * * * cd /root/DOLAN_odoo20/odoo20-argentina && ./backup-dolan.sh >> backups/backup.log 2>&1
 
 BASE="$(cd "$(dirname "$0")" && pwd)"
 cd "$BASE"
