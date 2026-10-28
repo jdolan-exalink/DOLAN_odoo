@@ -88,3 +88,32 @@ Según `ee-parity/ia-implementacion.md`:
 - 52/52 tests DOLAN_ai. Risk: item 2 sin cambios (write limitado a campos blancos; sin unlink; caps; log en conversación).
 
 **Verificación final L33**: 52/52 tests; en vivo 2 turnos con commit — turno1 *"Los 2 contactos se llaman A TODO COLOR SRL."* (con search_read ejecutada), turno2 *"Solo puedo buscar y contar contactos; no tengo acceso a los productos."* (recuerda contexto y limitación); browser muestra las 8 burbujas del hilo (Vos/Agente/🔧) con 0 errores (captura l33-chat-final.png). Nota: el shell de Odoo no commitea solo — cualquier prueba con persistencia necesita `env.cr.commit()` explícito.
+
+### L34 — IA integrada al webclient estilo EE (2026-10-28)
+
+Verbatim: "quiero que lo integremos al estilo del chat pero al lado con un boton que sea AI como el de odoo.com verifica como trabaja via RAE y arma los agentes correspondientes".
+
+- **REA del EE** (Chromium CDP propio, capturas `l34-ee-topbar/ia-panel/ia-chat.png`): el EE usa un **botón systray en la topbar** ("Preguntar a la IA") que abre un **ChatWindow flotante de 380px** (minimizar/cerrar) con: saludo, **chips de sugerencias** ("Latest PO from supplier…", "Show me the current cash flow status"…), composer, conversación **auto-nombrada por el primer mensaje** ("Conteo de contactos") y **estado de herramientas en vivo** ("Consultando campos de contactos >").
+- **Implementado en DOLAN** (patrón EE, sin código EE):
+  - **Botón systray "IA"** en la topbar (componente Owl mínimo + registro systray, assets en `web.assets_backend`).
+  - **ChatWindow flotante vanilla** (`chat_window.js`): selector de agente, hilo con burbujas, composer, minimizar/cerrar, tema oscuro automático, chips de sugerencias del agente (campo `sugerencias`), tema según `data-dolan-theme`.
+  - Chat disponible para **todos los usuarios internos** (gates `base.group_user`); OCR/setup sigue admin-only en `/dolan_ai`.
+  - **Agentes sembrados por dominio** (post_init_hook idempotente): Asistente **contable** (account.move/line/tax, solo lectura), **de compras** (purchase.order/line + partner), **de contactos**, **de operaciones** (stock.picking/quant, turnos de taller, alquileres, suscripciones). Con instrucciones en español + estilo EE (aclarar solo lo material, explicar limitación y sugerir próximo paso).
+- **En vivo**: chip "¿Cuántas facturas hay este mes?" → el agente preguntó aclaración ("¿De qué mes y año…?") → "octubre 2026" → siguió la conversación con contexto. 0 errores de consola.
+- Gotchas: el CRITICAL del log durante `-u` era del websocket en el shutdown (no del upgrade); CSS del ChatWindow debe inyectarse explícitamente (const CSS sin append = ventana invisible); el seed de agentes ahora es idempotente por nombre.
+- Risk: item 2 sin cambios (mismas allowlists y caps; el chat quedó abierto a usuarios internos con sus propias ACL de modelos); verificación browser + en vivo con tu ChatGPT.
+
+### L35 — Fix "⚠ TypeError" en el chat (2026-10-28)
+
+Verbatim: "click en ultimas 5 factuas de venta y tira ⚠ TypeError".
+
+- **Causa**: `json.dumps(tool_result)` revienta con **TypeError** cuando el resultado trae `datetime.date` (invoice_date/create_date) o tuples (many2one `(id, nombre)`) — las facturas siempre los traen. El route lo atrapaba y devolvía solo el nombre de la excepción → el chat mostraba "⚠ TypeError".
+- **Fix**: `default=str` en los 4 `json.dumps` del loop (history, turns, mensaje tool, previo) — serialización tolerante a dates/tuples/decimals.
+- **En vivo**: chip "Últimas 5 facturas de venta" → *"Las últimas 5 facturas disponibles son: FA-C 00008-00000043 — 26/10/2026 — OSUOMRA — $ …"* con 0 errores de consola (captura l34-chip-facturas.png). Tests: nuevo test de tool_result con date+tuple (52→55 tests, verde).
+
+### L36 — PR #1: errores con detalle + pypdfium2 en imagen (2026-10-28)
+
+- Primer flujo PR completo del monorepo: rama `fix/ai-errors-and-pdf-dep` → **PR #1** → **merge squash** (`9d08f11`) → deploy `-u DOLAN_ai` → verify (55/55 tests, ventana IA visible con 4 agentes y 3 chips, 0 errores).
+- Fix A: `agente_run` y el ChatWindow ahora muestran el **detalle saneado** del error (mismo patrón que el OCR en L31) — nunca más "⚠ TypeError" a secas.
+- Fix B: **`pypdfium2` en el Dockerfile** (antes solo en el contenedor vivo — se perdía al recrear).
+- Risk: none (detalle = mensaje de excepción saneado sin secretos; Dockerfile solo agrega un paquete ya validado en el contenedor).
