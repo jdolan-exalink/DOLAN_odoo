@@ -13,6 +13,17 @@ def lookup(env, code):
     code = (code or "").strip()
     if not code:
         return {"ok": False, "error": "codigo_vacio"}
+    # embalajes: en esta build CE v20 no existe product.packaging (EE-only);
+    # si el modelo aparece en el registry, se usa
+    if "product.packaging" in env:
+        packaging = env["product.packaging"].sudo().search([("barcode", "=", code)], limit=1)
+        if packaging:
+            product = packaging.product_id
+            return _producto(env, product, code, extra={
+                "embalaje": packaging.name or "Pack",
+                "unidades_por_pack": packaging.qty,
+            })
+
     Product = env["product.product"].sudo()
     product = Product.search([("barcode", "=", code)], limit=1)
     if not product:
@@ -51,7 +62,7 @@ def lookup(env, code):
     return {"ok": False, "error": "no_encontrado", "code": code}
 
 
-def _producto(env, product, code):
+def _producto(env, product, code, extra=None):
     quants = env["stock.quant"].sudo().search([
         ("product_id", "=", product.id),
         ("quantity", "!=", 0),
@@ -61,7 +72,7 @@ def _producto(env, product, code):
     for q in quants:
         key = q.location_id.complete_name or q.location_id.display_name
         existencias[key] = round(existencias.get(key, 0) + q.quantity, 3)
-    return {
+    out = {
         "ok": True, "tipo": "producto",
         "titulo": product.display_name,
         "detalle": f"SKU {product.default_code or '—'} · barras {product.barcode or '—'} · total {round(sum(existencias.values()), 3)} {product.uom_id.display_name}",
@@ -73,3 +84,6 @@ def _producto(env, product, code):
                      "unidad": product.uom_id.display_name, "categoria": product.categ_id.display_name},
         "code": code,
     }
+    if extra:
+        out.update(extra)
+    return out

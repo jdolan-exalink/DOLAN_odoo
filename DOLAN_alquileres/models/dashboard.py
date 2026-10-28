@@ -26,7 +26,15 @@ def kpis(env):
         ("move_id", "=", False),
         ("move_id.state", "=", "draft"),
     ])
+    mes_ini = hoy.replace(day=1).isoformat()
+    activos = C.search([("state", "in", ("activo", "finalizado")),
+                        ("fecha_inicio", ">=", mes_ini)])
+    ingresos_mes = round(sum(activos.mapped("total")), 2)
+    contratos_mes = len(activos)
+    dias_alquilados = sum(activos.mapped("dias"))
     return {
         "hoy": hoy_retiros, "pickups": pickups, "returns": returns,
         "tarde": tarde, "por_confirmar": por_confirmar, "por_facturar": por_facturar,
+        "ingresos_mes": ingresos_mes, "contratos_mes": contratos_mes,
+        "dias_alquilados": dias_alquilados,
     }

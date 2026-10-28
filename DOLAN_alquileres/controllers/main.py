@@ -15,8 +15,10 @@ PAGE = """<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"/><title>DOL
 fetch("/dolan_alquileres/kpi",{method:"POST",headers:{"Content-Type":"application/json"},
  body:JSON.stringify({jsonrpc:"2.0",method:"call",params:{}}),credentials:"same-origin"})
 .then(r=>r.json()).then(j=>{const d=(j.result||{}).data||{};
+ const f=n=>Number(n||0).toLocaleString("es-AR",{maximumFractionDigits:2});
  const cards=[["Hoy",d.hoy],["Pickups",d.pickups],["Returns",d.returns],["Tarde",d.tarde],
-  ["Por confirmar",d.por_confirmar],["Por facturar",d.por_facturar]];
+  ["Por confirmar",d.por_confirmar],["Por facturar",d.por_facturar],
+  ["Ingresos del mes","$"+f(d.ingresos_mes)],["Contratos del mes",d.contratos_mes],["Días alquilados",d.dias_alquilados]];
  document.getElementById("kpis").innerHTML=cards.map(([t,v])=>
   '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px;text-align:center">'+
   '<div style="font-size:26px;font-weight:800">'+(v??0)+'</div><div style="color:#6b7280;font-size:12px">'+t+'</div></div>').join("");});

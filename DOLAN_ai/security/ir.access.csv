@@ -7,3 +7,5 @@ dolan_ai_user_dolan_ai_mensaje,access mensaje user,model_dolan_ai_mensaje,base.g
 dolan_ai_manager_dolan_ai_mensaje,access mensaje manager,model_dolan_ai_mensaje,base.group_system,crud,
 dolan_ai_user_dolan_ai_prompt,access prompt user,model_dolan_ai_prompt,base.group_user,r,
 dolan_ai_manager_dolan_ai_prompt,access prompt manager,model_dolan_ai_prompt,base.group_system,crud,
+dolan_ai_user_dolan_ai_articulo,access articulo user,model_dolan_ai_articulo,base.group_user,r,
+dolan_ai_manager_dolan_ai_articulo,access articulo manager,model_dolan_ai_articulo,base.group_system,crud,

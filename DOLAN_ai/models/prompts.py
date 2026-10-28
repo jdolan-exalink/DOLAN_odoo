@@ -8,6 +8,23 @@ class DolanAiAgente(models.Model):
     prompts_ids = fields.One2many("dolan.ai.prompt", "agente_id", string="Prompts predeterminados")
 
 
+class DolanAiAgente(models.Model):
+    _inherit = "dolan.ai.agente"
+
+    articulos_ids = fields.One2many("dolan.ai.articulo", "agente_id", string="Artículos (contexto)")
+
+
+class DolanAiArticulo(models.Model):
+    _name = "dolan.ai.articulo"
+    _description = "Artículo de contexto para agente DOLAN (IA)"
+    _order = "id"
+
+    agente_id = fields.Many2one("dolan.ai.agente", required=True, ondelete="cascade")
+    titulo = fields.Char(required=True)
+    contenido = fields.Text(required=True)
+    activo = fields.Boolean(default=True)
+
+
 class DolanAiPrompt(models.Model):
     _name = "dolan.ai.prompt"
     _description = "Prompt predeterminado funcional"

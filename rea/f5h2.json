@@ -1,0 +1,577 @@
+{
+ "sale_management": {
+  "root": "sale.sale_menu_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  }
+ },
+ "pos_restaurant": {
+  "root": "",
+  "dark_juan": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  }
+ },
+ "account": {
+  "root": "account.menu_finance",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 50,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 50,
+   "errores": []
+  }
+ },
+ "crm": {
+  "root": "crm.crm_menu_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  }
+ },
+ "website": {
+  "root": "website.menu_website_configuration",
+  "dark_juan": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  }
+ },
+ "stock": {
+  "root": "stock.menu_stock_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 12,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 12,
+   "errores": []
+  }
+ },
+ "purchase": {
+  "root": "purchase.menu_purchase_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  }
+ },
+ "point_of_sale": {
+  "root": "point_of_sale.menu_point_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 7,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 7,
+   "errores": []
+  }
+ },
+ "project": {
+  "root": "project.menu_main_pm",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  }
+ },
+ "website_sale": {
+  "root": "",
+  "dark_juan": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  }
+ },
+ "mrp": {
+  "root": "mrp.menu_mrp_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  }
+ },
+ "mass_mailing": {
+  "root": "mass_mailing.mass_mailing_menu_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  }
+ },
+ "hr_expense": {
+  "root": "hr_expense.menu_hr_expense_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  }
+ },
+ "hr_holidays": {
+  "root": "hr_holidays.menu_hr_holidays_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 1,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 1,
+   "errores": []
+  }
+ },
+ "hr_recruitment": {
+  "root": "hr_recruitment.menu_hr_recruitment_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  }
+ },
+ "hr": {
+  "root": "hr.menu_hr_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  }
+ },
+ "DOLAN_ai": {
+  "root": "DOLAN_ai.menu_dolan_ai_root",
+  "dark_juan": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": [
+    "Failed to load resource: the server responded with a status of 403 (FORBIDDEN)"
+   ]
+  }
+ },
+ "DOLAN_alquileres": {
+  "root": "DOLAN_alquileres.menu_dolan_alquiler_root",
+  "dark_juan": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": [
+    "Failed to load resource: the server responded with a status of 403 (FORBIDDEN)"
+   ]
+  }
+ },
+ "DOLAN_calidad": {
+  "root": "DOLAN_calidad.menu_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 0,
+   "errores": []
+  }
+ },
+ "DOLAN_suscripciones": {
+  "root": "DOLAN_suscripciones.menu_root",
+  "dark_juan": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": [
+    "Failed to load resource: the server responded with a status of 403 (FORBIDDEN)"
+   ]
+  }
+ },
+ "data_recycle": {
+  "root": "data_recycle.menu_data_cleaning_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  },
+  "operador": {
+   "status": 0,
+   "error": "TimeoutError: locator.click: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting ",
+   "errores": []
+  }
+ },
+ "maintenance": {
+  "root": "maintenance.menu_maintenance_title",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 8,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 8,
+   "errores": []
+  }
+ },
+ "marketing_card": {
+  "root": "marketing_card.card_menu",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  }
+ },
+ "website_slides": {
+  "root": "website_slides.website_slides_menu_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  }
+ },
+ "website_event": {
+  "root": "",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 0,
+   "errores": []
+  }
+ },
+ "mail": {
+  "root": "mail.menu_root_discuss",
+  "dark_juan": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  }
+ },
+ "contacts": {
+  "root": "contacts.menu_contacts",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 80,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 80,
+   "errores": []
+  }
+ },
+ "calendar": {
+  "root": "calendar.mail_menu_calendar",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 1,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 1,
+   "errores": []
+  }
+ },
+ "fleet": {
+  "root": "fleet.menu_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 17,
+   "errores": []
+  }
+ },
+ "im_livechat": {
+  "root": "im_livechat.menu_livechat_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 8,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 8,
+   "errores": []
+  }
+ },
+ "survey": {
+  "root": "survey.menu_surveys",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 7,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 7,
+   "errores": []
+  }
+ },
+ "repair": {
+  "root": "repair.menu_repair_order",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  }
+ },
+ "hr_attendance": {
+  "root": "hr_attendance.menu_hr_attendance_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 1,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 1,
+   "errores": []
+  }
+ },
+ "mass_mailing_sms": {
+  "root": "mass_mailing_sms.mass_mailing_sms_menu_root",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  }
+ },
+ "project_todo": {
+  "root": "project_todo.menu_todo_todos",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 2,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 1,
+   "errores": []
+  }
+ },
+ "hr_skills": {
+  "root": "",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 0,
+   "errores": []
+  }
+ },
+ "lunch": {
+  "root": "lunch.menu_lunch",
+  "dark_juan": {
+   "status": 200,
+   "render": true,
+   "el": 7,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 7,
+   "errores": []
+  }
+ },
+ "website_hr_recruitment": {
+  "root": "",
+  "dark_juan": {
+   "status": 200,
+   "render": false,
+   "el": 0,
+   "errores": []
+  },
+  "operador": {
+   "status": 200,
+   "render": true,
+   "el": 10,
+   "errores": []
+  }
+ }
+}

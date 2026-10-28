@@ -1,0 +1,386 @@
+{
+ "sale_management": {
+  "kind": "action",
+  "root": "",
+  "rail": null,
+  "status": 200,
+  "landed": "/odoo/action-794",
+  "titulo": "Operaciones (resumen KPI)",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "pos_restaurant": {
+  "kind": "action",
+  "root": "",
+  "rail": null,
+  "status": 200,
+  "landed": "/odoo/action-1100",
+  "titulo": "Nuevo Mapas del piso",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "account": {
+  "kind": "action",
+  "root": "account.menu_finance",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-305",
+  "titulo": "Nuevo TableroFavoritos",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "crm": {
+  "kind": "action",
+  "root": "crm.crm_menu_root",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-510",
+  "titulo": "Odoo",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "website": {
+  "kind": "action",
+  "root": "website.menu_website_configuration",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-1064",
+  "titulo": "Operaciones (resumen KPI)",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "stock": {
+  "kind": "action",
+  "root": "stock.menu_stock_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-437",
+  "titulo": "Resumen de inventario1-5 / 5",
+  "registros": 11,
+  "errores_consola": []
+ },
+ "purchase": {
+  "kind": "action",
+  "root": "purchase.menu_purchase_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-330",
+  "titulo": "Nuevo  Subir Solicitudes de cotización",
+  "registros": 10,
+  "errores_consola": []
+ },
+ "point_of_sale": {
+  "kind": "action",
+  "root": "point_of_sale.menu_point_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-728",
+  "titulo": "Punto de venta",
+  "registros": 6,
+  "errores_consola": []
+ },
+ "project": {
+  "kind": "action",
+  "root": "project.menu_main_pm",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-572",
+  "titulo": "Proyectos",
+  "registros": 16,
+  "errores_consola": []
+ },
+ "website_sale": {
+  "kind": "url",
+  "root": "",
+  "rail": null,
+  "status": 200,
+  "landed": "/odoo/action-website.website_preview?path=/shop",
+  "titulo": "Products | My Website",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "mrp": {
+  "kind": "action",
+  "root": "mrp.menu_mrp_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-697",
+  "titulo": "Guardar  Descartar Ajustes",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "mass_mailing": {
+  "kind": "action",
+  "root": "mass_mailing.mass_mailing_menu_root",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-1045",
+  "titulo": "Nuevo CorreosMis correos",
+  "registros": 10,
+  "errores_consola": []
+ },
+ "hr_expense": {
+  "kind": "action",
+  "root": "hr_expense.menu_hr_expense_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-615",
+  "titulo": "Análisis de gastos",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "hr_holidays": {
+  "kind": "action",
+  "root": "hr_holidays.menu_hr_holidays_root",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-995",
+  "titulo": "Odoo",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "hr_recruitment": {
+  "kind": "action",
+  "root": "hr_recruitment.menu_hr_recruitment_root",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-935",
+  "titulo": "Odoo",
+  "registros": 0,
+  "errores_consola": [
+   "TypeError: Cannot read properties of undefined (reading 'key')\n    at SettingsPage.template_web_SettingsPage_SidePanel_R"
+  ]
+ },
+ "hr": {
+  "kind": "action",
+  "root": "hr.menu_hr_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-544",
+  "titulo": "Odoo",
+  "registros": 0,
+  "errores_consola": [
+   "TypeError: Cannot read properties of undefined (reading 'type')\n    at http://localhost:8070/web/assets/5a4cab2/web.asse"
+  ]
+ },
+ "DOLAN_ai": {
+  "kind": "url",
+  "root": "DOLAN_ai.menu_dolan_ai_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/dolan_ai",
+  "titulo": "DOLAN AI — ChatGPT",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "DOLAN_alquileres": {
+  "kind": "action",
+  "root": "DOLAN_alquileres.menu_dolan_alquiler_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-860",
+  "titulo": "Nuevo Contratos de alquiler",
+  "registros": 4,
+  "errores_consola": []
+ },
+ "DOLAN_calidad": {
+  "kind": "action",
+  "root": "DOLAN_calidad.menu_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-867",
+  "titulo": "Nuevo Controles",
+  "registros": 4,
+  "errores_consola": []
+ },
+ "DOLAN_suscripciones": {
+  "kind": "action",
+  "root": "DOLAN_suscripciones.menu_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-865",
+  "titulo": "Nuevo Suscripciones",
+  "registros": 4,
+  "errores_consola": []
+ },
+ "data_recycle": {
+  "kind": "action",
+  "root": "data_recycle.menu_data_cleaning_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-873",
+  "titulo": "Registros de reciclado de campos",
+  "registros": 10,
+  "errores_consola": []
+ },
+ "maintenance": {
+  "kind": "action",
+  "root": "maintenance.menu_maintenance_title",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-848",
+  "titulo": "Equipos de mantenimiento1-1 / 1",
+  "registros": 7,
+  "errores_consola": []
+ },
+ "marketing_card": {
+  "kind": "action",
+  "root": "marketing_card.card_menu",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-1080",
+  "titulo": "Odoo",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "website_slides": {
+  "kind": "action",
+  "root": "website_slides.website_slides_menu_root",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-1157",
+  "titulo": "Operaciones (resumen KPI)",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "website_event": {
+  "kind": "action",
+  "root": "",
+  "rail": null,
+  "status": 200,
+  "landed": "/odoo/action-1138",
+  "titulo": "Menús",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "mail": {
+  "kind": "action",
+  "root": "mail.menu_root_discuss",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-126",
+  "titulo": "Operaciones (resumen KPI)",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "contacts": {
+  "kind": "action",
+  "root": "contacts.menu_contacts",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-170",
+  "titulo": "Nuevo Contactos1-80 / 816",
+  "registros": 80,
+  "errores_consola": []
+ },
+ "calendar": {
+  "kind": "action",
+  "root": "calendar.mail_menu_calendar",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-490",
+  "titulo": "NuevoReuniones",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "fleet": {
+  "kind": "action",
+  "root": "fleet.menu_root",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-823",
+  "titulo": "Nuevo Vehículos",
+  "registros": 16,
+  "errores_consola": []
+ },
+ "im_livechat": {
+  "kind": "action",
+  "root": "im_livechat.menu_livechat_root",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-1020",
+  "titulo": "Odoo",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "survey": {
+  "kind": "action",
+  "root": "survey.menu_surveys",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-907",
+  "titulo": "Odoo",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "repair": {
+  "kind": "action",
+  "root": "repair.menu_repair_order",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-1005",
+  "titulo": "Nuevo Órdenes de reparación",
+  "registros": 10,
+  "errores_consola": []
+ },
+ "hr_attendance": {
+  "kind": "action",
+  "root": "hr_attendance.menu_hr_attendance_root",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-959",
+  "titulo": "Mis asistencias",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "mass_mailing_sms": {
+  "kind": "action",
+  "root": "mass_mailing_sms.mass_mailing_sms_menu_root",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-1085",
+  "titulo": "Nuevo Marketing por SMSMi marketing por SMS",
+  "registros": 10,
+  "errores_consola": []
+ },
+ "project_todo": {
+  "kind": "action",
+  "root": "project_todo.menu_todo_todos",
+  "rail": true,
+  "status": 200,
+  "landed": "/odoo/action-747",
+  "titulo": "NuevoActividades pendientesAbierta",
+  "registros": 1,
+  "errores_consola": []
+ },
+ "hr_skills": {
+  "kind": "action",
+  "root": "",
+  "rail": null,
+  "status": 200,
+  "landed": "/odoo/action-631",
+  "titulo": "Inventario de habilidadesTipo de habilidad>Habilidad",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "lunch": {
+  "kind": "action",
+  "root": "lunch.menu_lunch",
+  "rail": false,
+  "status": 200,
+  "landed": "/odoo/action-897",
+  "titulo": "Odoo",
+  "registros": 0,
+  "errores_consola": []
+ },
+ "website_hr_recruitment": {
+  "kind": "action",
+  "root": "",
+  "rail": null,
+  "status": 200,
+  "landed": "/odoo/action-1098",
+  "titulo": "Páginas de vacantesMy Website",
+  "registros": 10,
+  "errores_consola": []
+ }
+}
