@@ -26,12 +26,19 @@ class DolanSuscripcionSuscripcion(models.Model):
     fecha_ultima = fields.Date(string="Inicio del periodo vigente", required=True,
                                default=fields.Date.context_today,
                                help="Dia (>= inicio) desde el que se emite el ultimo periodo facturado; avanza el ciclo al facturar.")
+    user_id = fields.Many2one("res.users", string="Vendedor",
+                              default=lambda s: s.env.uid)
+    fase = fields.Selection([
+        ("cotizacion", "Cotizacion"),
+        ("renovado", "Renovado"),
+        ("venta_adicional", "Venta adicional"),
+    ], default="renovado", required=True)
     state = fields.Selection([
         ("activa", "Activa"),
         ("pausada", "Pausada"),
         ("cancelada", "Cancelada"),
     ], default="activa", required=True)
-    proxima = fields.Date(compute="_compute_proxima")
+    proxima = fields.Date(compute="_compute_proxima", store=True)
 
     @api.depends("fecha_ultima", "plan_id.ciclo_dias", "fecha_inicio")
     def _compute_proxima(self):

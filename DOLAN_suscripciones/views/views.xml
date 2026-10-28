@@ -24,6 +24,8 @@
         <field name="fecha_inicio"/>
         <field name="fecha_ultima"/>
         <field name="proxima"/>
+        <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+        <field name="fase" optional="show"/>
         <field name="state" widget="badge" decoration-success="state=='activa'" decoration-warning="state=='pausada'" decoration-muted="state=='cancelada'"/>
       </list>
     </field>
@@ -55,6 +57,26 @@
       </form>
     </field>
   </record>
+  <record id="view_sub_calendar" model="ir.ui.view">
+    <field name="name">dolan.suscripcion.suscripcion.calendar</field>
+    <field name="model">dolan.suscripcion.suscripcion</field>
+    <field name="arch" type="xml">
+      <calendar date_start="fecha_ultima" date_stop="proxima" mode="month">
+        <field name="partner_id"/>
+        <field name="plan_id"/>
+      </calendar>
+    </field>
+  </record>
+  <record id="view_sub_graph" model="ir.ui.view">
+    <field name="name">dolan.suscripcion.suscripcion.graph</field>
+    <field name="model">dolan.suscripcion.suscripcion</field>
+    <field name="arch" type="xml">
+      <graph string="Suscripciones">
+        <field name="state" type="row"/>
+        <field name="fase" type="row"/>
+      </graph>
+    </field>
+  </record>
   <record id="action_plan" model="ir.actions.act_window">
     <field name="name">Planes</field>
     <field name="res_model">dolan.suscripcion.plan</field>
@@ -63,7 +85,7 @@
   <record id="action_sub" model="ir.actions.act_window">
     <field name="name">Suscripciones</field>
     <field name="res_model">dolan.suscripcion.suscripcion</field>
-    <field name="view_mode">list,form</field>
+    <field name="view_mode">list,form,calendar,graph</field>
   </record>
   <record id="menu_root" model="ir.ui.menu">
     <field name="name">Suscripciones</field>
@@ -81,5 +103,16 @@
     <field name="parent_id" ref="menu_root"/>
     <field name="action" ref="action_plan"/>
     <field name="sequence">20</field>
+  </record>
+  <record id="action_sub_tablero" model="ir.actions.act_url">
+    <field name="name">Tablero MRR</field>
+    <field name="url">/dolan_suscripciones</field>
+    <field name="target">self</field>
+  </record>
+  <record id="menu_sub_tablero" model="ir.ui.menu">
+    <field name="name">Tablero MRR</field>
+    <field name="parent_id" ref="menu_root"/>
+    <field name="action" ref="action_sub_tablero"/>
+    <field name="sequence">5</field>
   </record>
 </odoo>
