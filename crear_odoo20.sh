@@ -58,7 +58,7 @@ SYSTEM_APPS="sale_management,point_of_sale,mrp,project,crm,hr_expense"
 # y app por defecto). Se copian desde el deploy canonico (odoo20-argentina/addons).
 # NOTA: web_responsive (OCA 19.0) NO se instala: su JS es Owl2 y Odoo 20 usa
 # Owl3 (crash de AppsMenu -> pantalla blanca). Esperar migracion oficial 20.0.
-CUSTOM_ADDONS="dolan_dash dolan_ui"
+CUSTOM_ADDONS="DOLAN_theme DOLAN_ai DOLAN_alquileres DOLAN_bancos DOLAN_calidad DOLAN_codigo_barras DOLAN_contabilidad DOLAN_declaracion DOLAN_flotilla DOLAN_mantenimiento DOLAN_suscripciones DOLAN_taller dolan_dash dolan_ui"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -162,7 +162,8 @@ RUN pip3 install --break-system-packages \
     qrcode \
     Pillow \
     dbf \
-    future
+    future \
+    pypdfium2
 
 RUN python3 - <<'PY2'
 import glob, os
@@ -316,4 +317,35 @@ if [[ -n "$INIT_DB" ]]; then
      VALUES ('l10n_ar_fiscal_ws.env_type','homologation',1,now(),1,now())
      ON CONFLICT (key) DO NOTHING;" 2>/dev/null || true
   echo "DB '${INIT_DB}' lista: apps de negocio instaladas y tiles enterprise ocultos"
+
+  # --- Post-deploy setup (usuarios, backup, env_type) ---
+  echo "Configurando usuarios..."
+  docker compose exec -T db psql -U odoo -d "$INIT_DB" -c \
+    "UPDATE res_users SET password='Dolan2026!' WHERE login='admin';"
+  docker compose exec -T odoo odoo --config=/etc/odoo/odoo.conf --logfile= --stop-after-init \
+    -d "$INIT_DB" --load-language=es_AR 2>&1 | tail -1
+
+  # Cambiar login del admin a admin@DOMINIO (el superuser no se borra)
+  ADMIN_EMAIL="${ADMIN_EMAIL:-admin@dolan.com.ar}"
+  docker compose exec -T db psql -U odoo -d "$INIT_DB" -c \
+    "UPDATE res_users SET login='${ADMIN_EMAIL}' WHERE login='admin';"
+
+  # backup-dolan.sh: copiar al proyecto si está disponible
+  if [[ -f "$SCRIPT_DIR/odoo20-argentina/backup-dolan.sh" ]]; then
+    cp "$SCRIPT_DIR/odoo20-argentina/backup-dolan.sh" .
+    chmod +x backup-dolan.sh
+    echo "  backup-dolan.sh copiado (configurar cron: 0 2 * * * cd $(pwd) && ./backup-dolan.sh)"
+  fi
+
+  # WSAA: production por defecto (los certs de Dolibarr son production)
+  docker compose exec -T db psql -U odoo -d "$INIT_DB" -c \
+    "UPDATE ir_config_parameter SET value='production' WHERE key='l10n_ar_fiscal_ws.env_type';"
+
+  # Copiar scripts de QA
+  if [[ -d "$SCRIPT_DIR/DOLAN_theme/qa" ]]; then
+    mkdir -p qa && cp -r "$SCRIPT_DIR/DOLAN_theme/qa"/* qa/ 2>/dev/null
+    echo "  qa/ scripts copiados"
+  fi
+
+  echo "Post-deploy setup completo. Accedé en http://<ip>:${PORT}"
 fi

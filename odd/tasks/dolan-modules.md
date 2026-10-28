@@ -262,3 +262,7 @@ Orden de construcción: OCR (usa infra existente) → Declaración fiscal → DO
 - **Cron instalado**: diario 2AM (`0 2 * * *`) con retención 30 días + mensuales del día 1 (script ya los hacía); path del script actualizado a `/root/DOLAN_odoo20/odoo20-argentina`.
 - Gotcha psql: `psql -U odoo` conecta a la DB "odoo" (que no existe) → comandos de mantenimiento requieren `-d postgres`.
 - Risk: none (drop de una DB de prueba creada ad-hoc; producción intacta).
+
+### L41 — Auditoría del deploy script (2026-10-28)
+- El script `crear_odoo20.sh` (319 líneas) genera el stack base + AR + dolan_dash/dolan_ui pero **NO incluye**: los 12 módulos DOLAN_* nuevos, `pypdfium2` en el Dockerfile, el usuario admin@dolan.com.ar, el cron de backup, ni los CSRs de homologación.
+- Actualización pendiente: ampliar CUSTOM_ADDONS, Dockerfile, y post-deploy setup.
