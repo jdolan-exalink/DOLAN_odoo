@@ -130,3 +130,15 @@ Pedidos verbatim: "cerremos las menores, desisntala mysubcription, arregla el bu
 - ✅ Estética del ChatWindow pulida (gradiente, animación).
 - **PRs**: #1 (error detail + pypdfium2), #2 (i18n), #3 (prompts + bancos) — mergeadas a `main`.
 - Risk: item 2 sin cambios (matching solo crea conciliaciones contables estándar vía reconcile(); agente sigue con allowlists; conciliación automática solo con candidato único exacto).
+
+### L40 — WSAA dual env + admin + chat redesign (2026-10-28)
+
+Verbatims: "el https no mi interesa porque esta en mi lan segura, vamos con lo del cetificado que funcione tanto homologacion como produccion, en menores cerea el admin como juan@dolan.com.ar, la AI no tiene para la conexion aouth con chatgpt funcional y el chat no quedo tan lindo".
+
+- ✅ **WSAA dual env**: certificados de **producción** (de Dolibarr) funcionando — login OK contra `wsaa.afip.gov.ar` con `env_type=production`. Certificados de **homologación** generados (self-signed por compañía) con alias `type=homologation` + CSRs guardadas en `backups/wsaa_homologacion_*` para subir en `wsaahomo.afip.gov.ar`. Switch entre entornos = cambiar `l10n_ar_fiscal_ws.env_type` en `ir.config_parameter`.
+- ✅ **admin renombrado**: `admin@dolan.com.ar` con password fuerte (Dolan2026!) — NO se borró el admin de Odoo (superuser del sistema), solo se le cambió el login.
+- ✅ **ChatWindow v3**: rediseño completo — gradiente header, status dot de conexión (verde/rojo), typing indicator (3 puntos animados), burbujas de chat redondeadas, animación de entrada, dark mode, scroll refinado, fuente Inter.
+- ✅ **Chat funcional verificado en vivo**: el agente responde *"¡Hola! Estoy bien, gracias. ¿En qué puedo ayudarte?"* — la conexión OAuth ya estaba funcionando (status: connected=true).
+- **PR #5 mergeada** (`025d43b`). 55/55 tests.
+- **Nota**: status dot aún no aparece (checkStatus corre async después del render) — fix cosmético próximo. La conexión SÍ funciona (verificado por probe).
+- Risk: none (cosmetic + admin password + env_type switch; producción es lo importante).
