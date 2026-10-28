@@ -243,3 +243,14 @@ Orden de construcción: OCR (usa infra existente) → Declaración fiscal → DO
 ### L37a — Specs F1 restantes: no habilitables en la demo (2026-10-28)
 - La demo EE (exalink) **no expone** Ayuda/Planificación/Aprobaciones/Calidad: no están en la grilla (26 tiles) ni en la búsqueda de Aplicaciones (no aparecen como instalables; el trial no los incluye). Intento de activación vía Playwright: `NO_CARD` para las 4.
 - **Resolución**: quedan como pendientes documentados hasta que la cuenta EE tenga esos módulos habilitados (requiere suscripción/upgrade en odoo.com) — no se pueden spec-ear por observación.
+
+### L38 — Opcionales v3 cerrados (2026-10-28)
+
+- **Bancos v2**: segunda pasada sin filtro de partner + **sugerencias de conciliación manual** (candidatos listados por línea en el resultado del motor).
+- **Barras v3**: soporte de **embalajes (packs)** condicionado a existencia de `product.packaging` (EE-only en esta build CE — hallazgo v20).
+- **IA**: **Artículos de contexto** por agente (`dolan.ai.articulo`, activos se inyectan en el system prompt como contexto adicional).
+- **Alquileres v3**: vista **calendario** de disponibilidad + tablero con **ingresos del mes / contratos / días alquilados**.
+- **Suscripciones v3**: gráfico recurrente por plan/estado/fase.
+- Fixes: graph sin dotted-measure (v20), `return` faltante en `_producto` tras refactor.
+- **PR #4 mergeada** (`a0bbc87`), deploy verde: **89 tests** en el lote (55 ai + 7 barras + 9 alquileres + 5 bancos + 13 suscripciones), UI 200.
+- Risk: none (mismas reglas de seguridad; vista/JS propios).
