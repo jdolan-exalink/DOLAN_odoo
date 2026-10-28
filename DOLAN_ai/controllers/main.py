@@ -69,9 +69,9 @@ PAGE_HTML = """<!DOCTYPE html>
     #dolan-ai-connect { background: #714b67; border-color: #714b67; color: #fff; }
     #dolan-ai-connect:hover { background: #5d3d56; }
   </style>
-  <script type="text/javascript" src="/DOLAN_ai/static/src/js/page.js?v=33"></script>
-  <script type="text/javascript" src="/DOLAN_ai/static/src/js/ocr.js?v=31"></script>
-  <script type="text/javascript" src="/DOLAN_ai/static/src/js/embed_rail.js?v=32"></script>
+  <script type="text/javascript" src="/DOLAN_ai/static/src/js/page.js?v=36"></script>
+  <script type="text/javascript" src="/DOLAN_ai/static/src/js/ocr.js?v=36"></script>
+  <script type="text/javascript" src="/DOLAN_ai/static/src/js/embed_rail.js?v=36"></script>
 </body>
 </html>"""
 
@@ -256,7 +256,8 @@ class DolanAiController(http.Controller):
             if not conv:
                 conv = Conv.create({"name": (text[:40] or "Nueva conversación"), "agente_id": agente.id})
             res = agente.run(text, conversacion=conv)
-        except Exception as exc:  # noqa: BLE001
-            return {"ok": False, "error": exc.__class__.__name__}
+        except Exception as exc:  # noqa: BLE001 — mensajes seguros (sin secretos)
+            return {"ok": False, "error": exc.__class__.__name__,
+                    "detalle": str(exc)[:220]}
         res["conversacion_id"] = conv.id
         return res
