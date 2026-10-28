@@ -214,3 +214,20 @@ Orden comprometido en L23 ejecutado para Suscripciones/Alquileres/Código de bar
 - Evidencia F5 (tabla en `ce-coverage-matrix.md` §Estado F5): POS+Restaurante smoke ✓ (0 consola, capturas f5-pos*); e2e **suscripción→cron→2 facturas draft→limpieza total** ✓; e2e **alquiler→factura AR draft $302,50→limpieza** ✓; **CAE:177 posted con CAE** ✓; compra CSV ya probado (L17); `hr` sin repro (transitorio L22); **`hr_recruitment` = bug CORE** (`SettingsPage.SidePanel` reading 'key', repro 100%, no nuestro) → matriz actualizada con leyenda B/C/P/CORE.
 - Siguiente inmediato dentro de "2": specs Ventas/Manufactura + actividades en suscripciones (lote pequeño); luego gaps grandes (Taller/Declaración/OCR/IA-agentes) según tu prioridad.
 - Risk: none (e2e con residuo cero y rollback; smoke y diagnósticos sólo lectura).
+
+### L26 — F5 hito 1 cerrado + gaps lote 1 (2026-10-28)
+
+- **F5 hito 1** (L25/commit168eb4c): POS+Restaurante smoke ✓, e2e sin residuo (suscripción cron y alquiler→factura) ✓, **CAE177** ✓, `hr` no-repro, **`hr_recruitment` = bug CORE web SettingsPage** (upstream), matriz con leyenda B/C/P/CORE.
+- **Gaps lote 1** (commit siguiente): specs `ee-parity/{ventas,manufactura}.md` (CE alto: sólo KPI strip/estado-factura/onboarding faltan en Ventas; Manufactura atado a DOLAN_taller para "Siguiente actividad") + **actividades en DOLAN_suscripciones**: `_inherit mail.thread + mail.activity.mixin`, chatter en form, columna actividad (`activity_state` widget activity) — verificado por arquitectura (form chatter/followers/activities ✓, list actividad/vendedor/fase ✓) y tests 13/13 verdes (incluye message_post + activity_schedule con residuo nulo).
+- Quedan (bloqueados por tu prioridad): **DOLAN_taller, Declaración fiscal AR, OCR de compras (F4), IA-agentes**, specs EE de Ayuda/Planificación/Aprobaciones si habilitás más módulos en la demo.
+- Risk: none (chatter = mixins nativos propios; specs/docs; tests+arquitectura verificados).
+
+### L27 — Decisiones para destrabar (2026-10-28)
+
+Respuestas del dueño (batch de preguntas):
+- **L27a**: construir los 4 gaps: DOLAN_taller, Declaración fiscal AR, OCR compras (F4), IA-agentes v1.
+- **L27b**: OCR = motor **ChatGPT (cloud)** (token ya conectado).
+- **L27c**: IA-agentes v1 = **con tool-loop** (permisos por herramienta, ítem 2).
+- **L27d**: F5 hito 2 (matriz B→C) = **después de los gaps**.
+
+Orden de construcción: OCR (usa infra existente) → Declaración fiscal → DOLAN_taller → IA-agentes. Feature doc nuevo: `odd/tasks/dolan-gaps.md` (Specs L27 verbatim).

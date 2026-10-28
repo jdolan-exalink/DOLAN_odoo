@@ -5,6 +5,7 @@ from odoo import http
 from odoo.http import request
 
 from ..models import chatgpt_oauth as ai
+from ..models import ocr as ai_ocr
 
 PAGE_HTML = """<!DOCTYPE html>
 <html lang="es">
@@ -26,6 +27,8 @@ PAGE_HTML = """<!DOCTYPE html>
         <button id="dolan-ai-connect" type="button">Conectar ChatGPT</button>
         <button id="dolan-ai-test" type="button">Probar</button>
         <button id="dolan-ai-logout" type="button">Desconectar</button>
+        <button id="dolan-ai-ocr" type="button">Escanear compra (IA)</button>
+        <input id="dolan-ai-file" type="file" accept="image/*" style="display:none"/>
       </div>
     </div>
     <div id="dolan-ai-device" style="display: none; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px;">
@@ -37,7 +40,10 @@ PAGE_HTML = """<!DOCTYPE html>
     <p style="color: #6b7280; font-size: 13px; margin-top: 22px;">
       El primer test luego de autorizar valida la llamada a
       <code>chatgpt.com/backend-api/codex/responses</code> con tu token.
+      El botón <b>Escanear compra (IA)</b> sube una foto de factura y crea un
+      borrador en Facturas de compra (previsualizá antes de confirmar).
     </p>
+    <div id="dolan-ai-ocr-out" style="margin-top:12px"></div>
   </div>
   <style>
     .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #e5e7eb; }
@@ -119,3 +125,29 @@ class DolanAiController(http.Controller):
             prompt = re.sub(r"\s+", " ", prompt)[:200]
             return ai.ask(prompt)
         return self._rpc(_run)
+
+    @http.route("/dolan_ai/ocr_scan", type="jsonrpc", auth="user", methods=["POST"], csrf=False, sitemap=False)
+    def ocr_scan(self, **kwargs):
+        """Imagen data-URL -> OCR -> vista previa / creacion de borrador."""
+        if not _is_admin():
+            return {"ok": False, "error": "no_autorizado"}
+        data_url = str(kwargs.get("image") or "")
+        commit = bool(kwargs.get("commit"))
+        if not data_url.startswith("data:image/"):
+            return {"ok": False, "error": "imagen_invalida"}
+        if len(data_url) > ai_ocr.MAX_IMAGE_BYTES * 2:  # base64 ~4/3
+            return {"ok": False, "error": "imagen_muy_grande"}
+        try:
+            res = ai_ocr.extract_from_image(request.env, data_url)
+        except Exception as exc:  # noqa: BLE001
+            return {"ok": False, "error": exc.__class__.__name__}
+        if not res.get("ok"):
+            return res
+        if not commit:
+            mapped = ai_ocr.map_to_draft(request.env, res["datos"])
+            return {**res, **mapped, "preview": True}
+        try:
+            created = ai_ocr.create_draft(request.env, res["datos"])
+        except Exception as exc:  # noqa: BLE001
+            return {"ok": False, "error": exc.__class__.__name__}
+        return created
