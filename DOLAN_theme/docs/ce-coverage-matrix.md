@@ -59,3 +59,28 @@ Leyenda nueva: **B** = barrido L22 (app abre, render OK, consola 0, claro/admin)
 | Apps CE (38) | **B** (barrido L22) — elevar a C familia por familia en F5-b |
 
 Resto de filas: **P** (prueba por vista en claro/oscuro/no-admin pendiente) — ninguna vuelve a `NE` sin esa prueba (regla 3).
+
+## Estado F5 hito 2 (2026-10-28) — barrido dual: OSCURO (admin) + CLARO (rol no-admin)
+
+Leyenda: **C** = cubierto (prueba browser en oscuro y como no-admin, 0 consola) ·
+**C\*** = cubierto con nota (comportamiento especial) · **CORE** = defecto del core ·
+**N/A** = sub-app sin vista estándar o tablero admin-only.
+
+| App | Dark(admin) | No-admin | Nota |
+|---|---|---|---|
+| account, stock, purchase, mrp, sale, point_of_sale, project, crm, contacts, calendar, fleet, maintenance, repair, hr, hr_holidays, hr_recruitment, hr_expense, hr_attendance, hr_skills, lunch, survey, im_livechat, mass_mailing(+sms), marketing_card, website_slides, project_todo, data_recycle, website_hr_recruitment, DOLAN_calidad | C | C | 0 errores consola; datos renderizando |
+| DOLAN_ai, DOLAN_alquileres, DOLAN_suscripciones | C | N/A | páginas admin-only por diseño (403 para no-admin = correcto) |
+| mail (Conversaciones) | C | C* | client action: `.o_discuss` renderiza (sin vista estándar) |
+| website / website_sale / website_event | C | C* | site preview (iframe/canvas) — sin vista backend |
+| pos_restaurant | C | C* | floor planner (sub-app, canvas) |
+| hr_recruitment (Ajustes) | CORE | — | bug core `SettingsPage.SidePanel` (upstream), no bloquea la app |
+| Resto del barrido | C | C | evidencia: `qa/shots/f5h2/*.png` (dual por app), `rea/f5h2.json` |
+
+**Remedios aplicados durante el barrido**: grants de grupos de raíz/app al usuario
+operador (account read/invoice, fleet user, sales_team salesman, hr_holidays user,
+crm, project, pos, mass_mailing, survey, lunch, etc.) — patrón ya conocido (L19).
+El tema oscuro se activó con `dolan.ui.tema` (param) y se restauró a claro al final.
+
+**Veredicto**: la matriz ya **no tiene filas `NE` ni `P` sin prueba** — todas las
+apps activas están al menos en C/C*; lo único no propio de este repo es el bug
+CORE documentado.

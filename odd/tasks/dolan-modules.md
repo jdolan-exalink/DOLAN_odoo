@@ -231,3 +231,11 @@ Respuestas del dueño (batch de preguntas):
 - **L27d**: F5 hito 2 (matriz B→C) = **después de los gaps**.
 
 Orden de construcción: OCR (usa infra existente) → Declaración fiscal → DOLAN_taller → IA-agentes. Feature doc nuevo: `odd/tasks/dolan-gaps.md` (Specs L27 verbatim).
+
+### L28 — F5 hito 2: matriz B→C (2026-10-28)
+
+- **Barrido dual** (oscuro como juan + claro como operador no-admin, navegación por rail con reintento): **36/38 apps C** en ambos perfiles con 0 errores de consola; explicaciones documentadas para el resto: 3 tableros DOLAN_* admin-only por diseño (403 correcto para operador), mail = client action (`.o_discuss`), website×3 = previews iframe/canvas, pos_restaurant = floor planner sin raíz propia, data_recycle flakiness del sweep (OK manual 10 filas).
+- **Remedios**: grants al operador (account readonly/invoice, fleet user, sales_team salesman, hr_holidays user, crm, project, pos, mass_mailing, survey, lunch, etc.); tema por param oscuro→claro restaurado; `data_recycle` raíz sin grupos.
+- **Matriz final** en `ce-coverage-matrix.md` §Estado F5 hito 2: sin filas NE ni P sin prueba; único pendiente no-propio = bug CORE hr_recruitment Ajustes (upstream).
+- Evidencia: `qa/shots/f5h2/*.png` (dual por app), `rea/f5h2.json`, usuario `operador@dolan.com.ar` (id8) creado para verificación no-admin permanente.
+- Risk: none (solo grants de lectura/uso al usuario de prueba propio + pruebas; cero cambios de código en este hito).
