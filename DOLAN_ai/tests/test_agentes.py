@@ -159,3 +159,29 @@ class TestConversaciones(TransactionCase):
             loop.step("hola")
         b = post.call_args.kwargs.get("json") or {}
         self.assertIn("asistente de contactos", b["input"][0]["content"][0]["text"].lower())
+
+
+@tagged("post_install", "-at_install")
+class TestLoopToolResults(TransactionCase):
+
+    def test_tool_result_con_fechas_no_rompe(self):
+        """search_read de account.move trae dates y tuples → el loop no debe reventar."""
+        import datetime
+        ag = self.env["dolan.ai.agente"].create({
+            "name": "Loop dates probe",
+            "modelos_ids": [(6, 0, [self.env["ir.model"].search([("model", "=", "res.partner")], limit=1).id])],
+        })
+        conv = self.env["dolan.ai.conversacion"].create({"name": "Conv dates", "agente_id": ag.id})
+        pid = self.env["res.partner"].create({"name": "Date probe"}).id
+        from odoo.addons.DOLAN_ai.models import agentes as ag_mod
+        fake = {"done": False, "tool_result": {
+            "result": [{"id": pid, "name": "Date probe", "create_date": datetime.date(2026, 1, 5),
+                        "parent_id": [1, "Root"]}], "reply": None}}
+        with mock.patch.object(ag_mod.AgenteLoop, "step") as step:
+            step.side_effect = [fake, {"done": True, "reply": "listo", "tool": None}]
+            res = ag.run("dame un contacto", conversacion=conv)
+        self.assertTrue(res["done"])
+        roles = conv.mensaje_ids.mapped("rol")
+        self.assertIn("tool", roles)
+        self.assertIn("assistant", roles)
+        self.env["res.partner"].browse(pid).unlink()

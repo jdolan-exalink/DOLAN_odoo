@@ -172,11 +172,11 @@ class AgenteLoop:
         if tokens.get("needs_reconnect"):
             return {"done": False, "reply": None, "error": "token_vencido_reconectar"}
         import requests
-        spec = json.dumps(self.tool_spec(), ensure_ascii=False)
+        spec = json.dumps(self.tool_spec(), ensure_ascii=False, default=str)
         modelos = ", ".join(self.agente.modelos_ids.mapped("model"))
         previo = ""
         if self.history:
-            previo = " Resultados de herramientas anteriores: " + json.dumps(self.history[-2:], ensure_ascii=False)[:800] + " Usá esos resultados y respondé con {\"reply\": ...} si ya tenés la respuesta."
+            previo = " Resultados de herramientas anteriores: " + json.dumps(self.history[-2:], ensure_ascii=False, default=str)[:800] + " Usá esos resultados y respondé con {\"reply\": ...} si ya tenés la respuesta."
         prompt = (
             f"Sos el agente '{self.agente.name}'. Herramientas: {spec}. "
             f"Modelos autorizados: {modelos}. "
@@ -263,9 +263,9 @@ def loop_run(env, agente, user_text, max_iter=MAX_ITER, conversacion=None):
                 env["dolan.ai.mensaje"].sudo().create({"conversacion_id": conversacion.id, "rol": "assistant", "content": f"error: {step['error']}"})
             return step
         if step.get("tool_result"):
-            loop.turns.append({"role": "assistant", "content": f"tool_result: {json.dumps(step['tool_result'], ensure_ascii=False)[:1000]}"})
+            loop.turns.append({"role": "assistant", "content": f"tool_result: {json.dumps(step['tool_result'], ensure_ascii=False, default=str)[:1000]}"})
             if conversacion:
-                env["dolan.ai.mensaje"].sudo().create({"conversacion_id": conversacion.id, "rol": "tool", "content": json.dumps(step["tool_result"], ensure_ascii=False)[:1000]})
+                env["dolan.ai.mensaje"].sudo().create({"conversacion_id": conversacion.id, "rol": "tool", "content": json.dumps(step["tool_result"], ensure_ascii=False, default=str)[:1000]})
         if step.get("done"):
             final = step
             break
