@@ -107,3 +107,32 @@ class TestOcrPdf(TransactionCase):
         b = ocr.build_ocr_text_body("CUIT 30-... TOTAL 1210")
         self.assertTrue(b["stream"])
         self.assertIn("input_text", b["input"][0]["content"][0]["type"])
+
+
+@tagged("post_install", "-at_install")
+class TestOcrFechas(TransactionCase):
+
+    def test_norm_date(self):
+        self.assertEqual(ocr._norm_date("2026-10-25"), "2026-10-25")
+        self.assertEqual(ocr._norm_date("25/10/2026"), "2026-10-25")
+        self.assertEqual(ocr._norm_date("25-10-2026"), "2026-10-25")
+        self.assertFalse(ocr._norm_date(""))
+        self.assertFalse(ocr._norm_date("ayer"))
+        self.assertFalse(ocr._norm_date(None))
+
+    def test_map_fecha_ddmm(self):
+        d = {"proveedor": "P", "total": 100.0, "fecha": "05/03/2026", "lineas": []}
+        m = ocr.map_to_draft(self.env, d)
+        self.assertEqual(m["vals"]["invoice_date"], "2026-03-05")
+
+    def test_create_usuario_normal(self):
+        # como juan (no superuser) — garantiza que create_draft no dependa del shell root
+        res = ocr.create_draft(self.env, {
+            "proveedor": "OCR USER SA", "fecha": "05/03/2026", "numero": "0004-00000001",
+            "total": 121.0, "lineas": [{"descripcion": "Item", "cantidad": 1, "precio": 100.0}],
+        })
+        self.assertTrue(res["ok"], res)
+        move = self.env["account.move"].browse(res["move_id"])
+        self.assertEqual(move.state, "draft")
+        move.unlink()
+        self.env["res.partner"].search([("name", "=", "OCR USER SA")]).unlink()

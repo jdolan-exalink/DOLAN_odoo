@@ -174,6 +174,21 @@ def extract_from_source(env, source):
     return {"ok": True, "datos": parsed}
 
 
+def _norm_date(value):
+    """Normaliza fecha OCR: acepta ISO, dd/mm/yyyy, dd-mm-yyyy. '' -> False."""
+    if not value or not isinstance(value, str):
+        return False
+    value = value.strip()
+    m = __import__("re").fullmatch(r"(\d{4})-(\d{1,2})-(\d{1,2})", value)
+    if m:
+        return value
+    m = __import__("re").fullmatch(r"(\d{1,2})[/\-](\d{1,2})[/\-](\d{4})", value)
+    if m:
+        d, mo, y = m.groups()
+        return f"{y}-{int(mo):02d}-{int(d):02d}"
+    return False
+
+
 def map_to_draft(env, datos, default_partner_name=None, default_tax_xmlid="l10n_ar.iva_21"):
     """Mapea JSON OCR a valores de factura borrador (sin crear aún)."""
     lineas = []
@@ -190,19 +205,18 @@ def map_to_draft(env, datos, default_partner_name=None, default_tax_xmlid="l10n_
                        "quantity": qty, "price_unit": price})
     if not lineas:
         # sin líneas legibles: un total único
-        total = datos.get("total")
         try:
-            total = float(total)
+            total = float(str(datos.get("total") or "").replace(",", "").replace("$", ""))
         except (TypeError, ValueError):
-            return {"ok": False, "error": "sin_lineas_ni_total"}
+            return {"ok": False, "error": "sin_lineas_ni_total", "detalle": "sin lineas y total ilegible"}
         lineas = [{"name": "Compra importada (OCR)", "quantity": 1, "price_unit": round(total, 2)}]
-    partner_name = datos.get("proveedor") or default_partner_name or "Proveedor OCR"
+    partner_name = str(datos.get("proveedor") or default_partner_name or "Proveedor OCR").strip()[:120] or "Proveedor OCR"
     return {
         "ok": True,
         "vals": {
             "move_type": "in_invoice",
             "partner_name_suggest": partner_name,
-            "invoice_date": datos.get("fecha"),
+            "invoice_date": _norm_date(datos.get("fecha")),
             "ref": datos.get("numero"),
             "ocr_meta": {
                 "cuit": datos.get("cuit"), "tipo_doc": datos.get("tipo_doc"),

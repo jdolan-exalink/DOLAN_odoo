@@ -24,7 +24,7 @@ fetch("/dolan_contabilidad/kpi",{method:"POST",headers:{"Content-Type":"applicat
   '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px">'+
   '<div style="font-size:22px;font-weight:800">'+(v??0)+'</div>'+
   '<div style="color:#6b7280;font-size:12px">'+t+'</div></div>').join("");});
-</script></body></html>"""
+</script><script type="text/javascript" src="/DOLAN_ai/static/src/js/embed_rail.js?v=31"></script></body></html>"""
 
 
 class DolanContabilidad(http.Controller):

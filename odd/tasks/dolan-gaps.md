@@ -58,3 +58,12 @@ Verbatims: "el selector de agentes esta vacio y sigue sin funcionar", "las factu
   - Fallback con error claro `pdf_sin_soporte` si no rasteriza ni tiene texto.
 - **Verificación**: PDF de prueba (imagen→PDF) en vivo → **borrador 810** creado con proveedor/líneas y limpiado; 36/36 tests; browser final selector+accept+0 errores (captura l30-ocr-pdf.png).
 - Nota de infra: `pypdfium2` se instaló con `pip --break-system-packages` **dentro del contenedor** (se pierde si se recrea el contenedor) → pendiente: bake en Dockerfile (task técnica para próxima pasada de stack).
+
+### L31 — Fix OCR UserError + rail universal + análisis IA EE (2026-10-28)
+
+Verbatims: "cuando le di crear borrador tiro error Error creando: UserError", "quiero que analices bien como esta implementara la IA en el demo y implementemos simimlar", "la sidebar se rompe… en alquileres subscripciones, verifica todas las apps que funcione correctamente".
+
+- **OCR UserError**: causa = fecha OCR sin formato ISO (p.ej. `25/10/2026`) cruda a `invoice_date` → `_norm_date` (ISO + dd/mm/yyyy + dd-mm-yyyy), total `$1.234,56`-safe, partner saneado; el controller ahora devuelve **detalle** del UserError al front (mensajes seguros, sin secretos) y ocr.js lo muestra. Tests: `_norm_date` + create **como usuario normal** (no shell root).
+- **Rail universal**: nuevo `DOLAN_ai/static/src/js/embed_rail.js` compartido (CSS claro/oscuro + active route + load_menus) incluido en las **7 páginas** /dolan_* (ai, mantenimiento, flotilla, contabilidad, alquileres, suscripciones, código de barras). Bug de deploy detectado en el camino: `cp -r src/controllers dest/controllers` anidaba `controllers/controllers` y el stack servía main.py viejo → copia plana de archivos (regla nueva para deploys). Verificado: **7/7 páginas con rail 415 items + contenido, 0 errores** (capturas l31-*.png).
+- **IA EE analizada** (nuevas capturas `ia-agentes-grid.png`, `ia-agente-form.png`): EE = agentes con chat tipo Discuss + historial, pestañas **Instrucciones/Habilidades/Artículos/Activadores**, tool-loop sobre "available tools". Spec de paridad en `ee-parity/ia-implementacion.md` con plan v2 (conversaciones persistentes multi-turno, instrucciones editables, más tools con caps, activadores post).
+- Risk: item 2 sin cambios (same allowlist/caps; el detalle de error mostrado es mensaje de UserError sin secretos); item 3 sin cambios.

@@ -40,7 +40,7 @@
                 if (r2.ok) {
                   out.innerHTML = '<a href="/odoo/accounting" style="color:#16a34a;font-weight:700">Borrador creado: ' + r2.move_name + " — abrir Facturas de compra</a>";
                 } else {
-                  out.innerHTML = '<span style="color:#dc2626">Error creando: ' + (r2.error || "?") + "</span>";
+                  out.innerHTML = '<span style="color:#dc2626">Error creando: ' + (r2.detalle || r2.error || "?") + "</span>";
                 }
               });
             });
