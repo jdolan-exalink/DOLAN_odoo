@@ -21,6 +21,8 @@ class DolanAiAgente(models.Model):
 
     name = fields.Char(required=True)
     proposito = fields.Text(string="Instrucciones", help="System-style prompt del agente (estilo EE: instrucciones + estilo de trabajo)")
+    sugerencias = fields.Text(string="Sugerencias (una por línea)",
+                              default="¿Cuántos registros hay?\nBuscá los últimos 5\nResumí lo que veas")
     modelos_ids = fields.Many2many("ir.model", string="Modelos autorizados",
                                    domain=[("transient", "=", False)])
     activo = fields.Boolean(default=True)

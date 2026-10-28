@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <t t-name="DOLAN_ai.SystrayButton">
+    <button type="button" class="o_dolan_ai_btn dropdown-toggle" title="DOLAN AI"
+            t-on-click="() => this.toggle()" aria-label="DOLAN AI">
+      <span class="o_dolan_ai_logo">IA</span>
+    </button>
+  </t>
+</templates>

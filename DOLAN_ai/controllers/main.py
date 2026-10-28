@@ -180,7 +180,7 @@ class DolanAiController(http.Controller):
 
     @http.route("/dolan_ai/agente/run", type="jsonrpc", auth="user", methods=["POST"], csrf=False, sitemap=False)
     def agente_run(self, **kwargs):
-        if not _is_admin():
+        if not request.env.user.has_group("base.group_user"):
             return {"ok": False, "error": "no_autorizado"}
         aid = kwargs.get("agente_id")
         text = str(kwargs.get("text") or "")[:500]
@@ -197,7 +197,7 @@ class DolanAiController(http.Controller):
 
     @http.route("/dolan_ai/agentes", type="jsonrpc", auth="user", methods=["POST"], csrf=False, sitemap=False)
     def agentes_list(self, **kwargs):
-        if not _is_admin():
+        if not request.env.user.has_group("base.group_user"):
             return {"error": "no_autorizado"}
         Agent = request.env["dolan.ai.agente"].sudo()
         if not Agent.search_count([]):
@@ -208,12 +208,12 @@ class DolanAiController(http.Controller):
                 "proposito": "Busca y crea contactos (res.partner) cuando se lo pedís.",
                 "modelos_ids": [(6, 0, partner_m.ids)],
             })
-        recs = Agent.search_read([], ["name", "id", "proposito"], limit=20)
+        recs = Agent.search_read([], ["name", "id", "proposito", "sugerencias"], limit=20)
         return {"agentes": recs}
 
     @http.route("/dolan_ai/conv/list", type="jsonrpc", auth="user", methods=["POST"], csrf=False, sitemap=False)
     def conv_list(self, **kwargs):
-        if not _is_admin():
+        if not request.env.user.has_group("base.group_user"):
             return {"error": "no_autorizado"}
         agente_id = int(kwargs.get("agente_id") or 0)
         Conv = request.env["dolan.ai.conversacion"].sudo()
@@ -227,7 +227,7 @@ class DolanAiController(http.Controller):
 
     @http.route("/dolan_ai/conv/messages", type="jsonrpc", auth="user", methods=["POST"], csrf=False, sitemap=False)
     def conv_messages(self, **kwargs):
-        if not _is_admin():
+        if not request.env.user.has_group("base.group_user"):
             return {"error": "no_autorizado"}
         cid = int(kwargs.get("conversacion_id") or 0)
         msgs = request.env["dolan.ai.mensaje"].sudo().search_read(
@@ -236,7 +236,7 @@ class DolanAiController(http.Controller):
 
     @http.route("/dolan_ai/agente/run", type="jsonrpc", auth="user", methods=["POST"], csrf=False, sitemap=False)
     def agente_run(self, **kwargs):
-        if not _is_admin():
+        if not request.env.user.has_group("base.group_user"):
             return {"ok": False, "error": "no_autorizado"}
         aid = kwargs.get("agente_id")
         text = str(kwargs.get("text") or "")[:500]
