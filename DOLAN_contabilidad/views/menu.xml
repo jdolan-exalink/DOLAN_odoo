@@ -11,4 +11,21 @@
     <field name="action" ref="action_dolan_contabilidad"/>
     <field name="sequence">5</field>
   </record>
+
+  <!-- S8/P1 — paridad con la app "Contabilidad" de la demo EE (see
+       docs/ee-parity-contabilidad.md, C1-C2).
+       1) La app contable pasa a llamarse Contabilidad en todos los idiomas
+          (el nombre "Facturación" venía de la traducción CE de Invoicing).
+       2) En CE, el rol "Administrator" de contabilidad (group_account_manager)
+          NO implicaba "Show Full Accounting Features", por lo que al admin no
+          le aparecían las secciones Contabilidad / Revisión / Reportes.
+          Se le agrega la implicación para que un administrador contable vea
+          exactamente lo que ve la demo. -->
+  <record id="account.menu_finance" model="ir.ui.menu">
+    <field name="name" eval="{'en_US': 'Contabilidad', 'es_AR': 'Contabilidad'}"/>
+  </record>
+
+  <record id="account.group_account_manager" model="res.groups">
+    <field name="implied_ids" eval="[(4, ref('account.group_account_user'))]"/>
+  </record>
 </odoo>
