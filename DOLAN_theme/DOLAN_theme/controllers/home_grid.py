@@ -27,10 +27,6 @@ PAGE = """<!DOCTYPE html>
     html[data-dolan-theme="dark"] .icon_wrap{background:#2a2a4a;box-shadow:0 2px 10px rgba(0,0,0,.3)}
     html[data-dolan-theme="dark"] .name{color:#e2e8f0}
     html[data-dolan-theme="dark"] #theme-toggle{background:#2a2a4a;color:#e2e8f0;border-color:#40406a}
-    html[data-dolan-theme="dark"] .o_dolan_rail{background:#1e1e3a!important;color:#e2e8f0;border-color:#40406a}
-    html[data-dolan-theme="dark"] .o_dolan_rail_title{color:#94a3b8}
-    html[data-dolan-theme="dark"] .o_dolan_rail_item{color:#e2e8f0}
-    html[data-dolan-theme="dark"] .o_dolan_rail_toggle{background:#2a2a4a;color:#e2e8f0;border-color:#40406a}
   </style>
   <script>
   document.addEventListener("DOMContentLoaded", function() {
