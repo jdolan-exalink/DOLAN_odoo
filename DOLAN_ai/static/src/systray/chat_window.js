@@ -13,7 +13,7 @@ import { rpc } from "@web/core/network/rpc";
     .o_dolan_ai_head{display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;flex-shrink:0}
     .o_dolan_ai_logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#714b67,#a67d8e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;letter-spacing:.5px}
     .o_dolan_ai_head .o_dolan_ai_name{font-weight:700;font-size:15px;flex:1;letter-spacing:-.3px}
-    .o_dolan_ai_head .o_dolan_ai_status_dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .o_dolan_ai_head .o_dolan_ai_status_dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:#94a3b8}
     .o_dolan_ai_head .o_dolan_ai_status_dot.ok{background:#34d399;box-shadow:0 0 6px #34d39966}
     .o_dolan_ai_head .o_dolan_ai_status_dot.err{background:#f87171}
     .o_dolan_ai_head button{background:rgba(255,255,255,.12);border:0;color:#fff;cursor:pointer;font-size:15px;padding:4px 8px;border-radius:8px;transition:background .15s}
@@ -81,12 +81,22 @@ import { rpc } from "@web/core/network/rpc";
         return div;
     }
     async function checkStatus() {
-        try {
-            const st = await rpc2("/dolan_ai/status");
-            const dot = win.querySelector(".o_dolan_ai_status_dot");
-            if (dot) dot.className = "o_dolan_ai_status_dot " + (st.connected ? "ok" : "err");
-            return st;
-        } catch { return null; }
+        const setDot = (cls, title) => {
+            const dot = win && win.querySelector(".o_dolan_ai_status_dot");
+            if (dot) { dot.className = "o_dolan_ai_status_dot " + cls; dot.title = title; }
+        };
+        setDot("pending", "Verificando conexión…");
+        let st = null;
+        try { st = await rpc2("/dolan_ai/status"); } catch { st = null; }
+        if (!st || st.error || typeof st.connected !== "boolean") {
+            // sin dato fiable (permisos, red, error): gris, nunca verde ni rojo mentiroso
+            setDot("pending", "Estado no disponible");
+        } else if (st.connected) {
+            setDot("ok", st.expired ? "Conectado — token por renovar" : "Conectado con ChatGPT");
+        } else {
+            setDot("err", st.device_pending ? "Código de conexión pendiente" : "Sin conexión");
+        }
+        return st;
     }
     async function loadThread(cid) {
         convActual = cid;
@@ -165,7 +175,7 @@ import { rpc } from "@web/core/network/rpc";
             <div class="o_dolan_ai_head">
                 <div class="o_dolan_ai_logo">IA</div>
                 <span class="o_dolan_ai_name">DOLAN AI</span>
-                <span class="o_dolan_ai_status_dot ok" title="Estado de conexión"></span>
+                <span class="o_dolan_ai_status_dot pending" title="Verificando conexión…"></span>
                 <button data-a="min" title="Minimizar">—</button>
                 <button data-a="close" title="Cerrar">✕</button>
             </div>
