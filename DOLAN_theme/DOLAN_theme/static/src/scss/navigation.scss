@@ -68,7 +68,9 @@
 /* ---------- Apps dropdown nativo (Odoo 20) ---------- */
 .o-dropdown--menu:has(.o_app) {
   min-width: 240px;
-  max-height: min(70vh, 560px);
+  // libsass evalúa min() y falla con unidades mixtas ("Incompatible units: 'px' and 'vh'")
+  // rompiendo TODO web.assets_web. Emitimos el valor literal: lo resuelve el navegador.
+  max-height: unquote("min(70vh, 560px)");
   overflow-y: auto;
   border: 1px solid var(--o-dolan-bd) !important;
   border-radius: var(--o-dolan-radius) !important;
