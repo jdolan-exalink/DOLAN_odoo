@@ -15,6 +15,7 @@ PAGE_HTML = """<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
 </head>
 <body style="font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #1f2937;">
+<a href="/odoo" style="position:fixed;top:14px;left:16px;z-index:20;display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:#4338ca;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:7px 14px;font-family:system-ui,sans-serif;font-size:13px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.06)">&#8592; Volver a Odoo</a>
   <div style="max-width: 780px; margin: 40px auto; padding: 0 16px;">
     <h3 style="margin: 0 0 4px;">DOLAN AI — ChatGPT (OAuth)</h3>
     <p style="color: #6b7280; font-size: 13px; margin-top: 0;">
@@ -71,7 +72,7 @@ PAGE_HTML = """<!DOCTYPE html>
   </style>
   <script type="text/javascript" src="/DOLAN_ai/static/src/js/page.js?v=36"></script>
   <script type="text/javascript" src="/DOLAN_ai/static/src/js/ocr.js?v=36"></script>
-  <script type="text/javascript" src="/DOLAN_ai/static/src/js/embed_rail.js?v=36"></script>
+  
 </body>
 </html>"""
 

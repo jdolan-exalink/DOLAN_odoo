@@ -9,13 +9,13 @@ PAGE = """<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
 </head>
 <body>
+  <a href="/odoo" style="position:fixed;top:14px;left:16px;z-index:20;display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:#4338ca;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:7px 14px;font-family:system-ui,sans-serif;font-size:13px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.06)">&#8592; Volver a Odoo</a>
   <button id="theme-toggle" type="button" aria-label="Cambiar modo claro u oscuro" title="Cambiar modo claro u oscuro">🌓</button>
   <div style="display:flex;justify-content:center;padding:60px 40px;flex-wrap:wrap;gap:28px 16px;align-content:flex-start;max-width:900px;margin:0 auto" id="apps-grid"></div>
   <style>
-    body{font-family:system-ui,sans-serif;margin:0;background:#f4f6f9;color:#1f2937;padding-left:240px;min-height:100vh}
+    body{font-family:system-ui,sans-serif;margin:0;background:#f4f6f9;color:#1f2937;min-height:100vh}
     #theme-toggle{position:fixed;top:16px;right:20px;z-index:1050;border:1px solid #d1d5db;background:#fff;border-radius:999px;width:42px;height:42px;cursor:pointer;font-size:19px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
     #theme-toggle:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.14)}
-    @media(max-width:992px){body{padding-left:0 !important}}
     .o_dolan_home_app{display:flex;flex-direction:column;align-items:center;text-decoration:none!important;cursor:pointer;transition:transform .15s ease;width:130px}
     .o_dolan_home_app:hover{transform:translateY(-3px)}
     .o_dolan_home_app:hover .icon_wrap{box-shadow:0 8px 24px rgba(0,0,0,.14)}
@@ -32,7 +32,6 @@ PAGE = """<!DOCTYPE html>
     html[data-dolan-theme="dark"] .o_dolan_rail_item{color:#e2e8f0}
     html[data-dolan-theme="dark"] .o_dolan_rail_toggle{background:#2a2a4a;color:#e2e8f0;border-color:#40406a}
   </style>
-  <script type="text/javascript" src="/DOLAN_ai/static/src/js/embed_rail.js?v=36"></script>
   <script>
   document.addEventListener("DOMContentLoaded", function() {
     var root = document.documentElement;

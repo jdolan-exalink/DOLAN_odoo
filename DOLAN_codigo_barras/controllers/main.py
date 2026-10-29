@@ -7,6 +7,7 @@ PAGE = """<!DOCTYPE html>
 <html lang="es"><head><meta charset="utf-8"/><title>DOLAN — Escaneo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"/></head>
 <body style="font-family:system-ui,sans-serif;margin:0;background:#f6f7f9;color:#1f2937">
+<a href="/odoo" style="position:fixed;top:14px;left:16px;z-index:20;display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:#4338ca;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:7px 14px;font-family:system-ui,sans-serif;font-size:13px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.06)">&#8592; Volver a Odoo</a>
 <div style="max-width:760px;margin:28px auto;padding:0 16px">
   <h3 style="margin:0 0 12px">Escaneo de codigos</h3>
   <input id="scan" autofocus placeholder="Escanea o tipea el codigo y Enter"
@@ -53,7 +54,7 @@ fetch("/dolan_codigo_barras/modes",{method:"POST",headers:{"Content-Type":"appli
  const b1=document.getElementById("btn-op"), b2=document.getElementById("btn-inv");
  if(m.operaciones)b1.href="/odoo/action-"+m.operaciones;
  if(m.inventario)b2.href="/odoo/action-"+m.inventario;});
-</script><script type="text/javascript" src="/DOLAN_ai/static/src/js/embed_rail.js?v=36"></script></body></html>"""
+</script></body></html>"""
 
 
 class DolanCodigoBarras(http.Controller):
