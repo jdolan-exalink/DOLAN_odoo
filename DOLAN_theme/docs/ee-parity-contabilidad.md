@@ -119,7 +119,7 @@ Ocultos para juan (grupo "Show Accounting Features - Readonly"):
 | C7 IIBB por jurisdicción | ✅ ya existía | `l10n_ar` (Reportes > Informes Argentinos) |
 | C7 Resumen IVA | 🔴 bloqueado | `l10n_ar_fiscal_ws_reports` necesita port **fiscal**: la vista SQL y `_get_partner_document_code_and_number()` usan `res.partner.l10n_latam_identification_type_id`, eliminado en Odoo 20 → decisión sobre cómo derivar el código de documento en los TXT ARCA |
 | C13 Consultar factura en ARCA | ✅ hecho | menú propio sobre `l10n_ar_fiscal_ws.action_fiscal_ws_recover` |
-| C9 tablero con tarjetas | 🟡 pendiente | ampliar `dolan_dash` (fuera de este corte) |
+| C9 tablero con tarjetas | ✅ hecho | widget **Cheques de terceros** en `dolan_dash` (valor + `$` + propios, serie 6 meses y bloque "Últimos cheques"); QA `verify_tablero_cheques.mjs` 6/6 |
 | C10 estados financieros (Balance/ER/Flujo/Libro mayor) | 🔴 bloqueado | OCA `account_financial_report` 19.0 requiere port real: Odoo 20 **eliminó el modelo `account.group`** que usa para agrupar el balance |
 | C11 auditoría | 🔴 bloqueado | OCA `auditlog` 19.0: Odoo 20 exige tabla para todo modelo no abstracto (`auditlog.log.line.view` es una vista SQL) |
 | C12 Activos/Préstamos/Valuación/regularizaciones | 🔴 EE-only | fuera de alcance (licencia) |
@@ -130,6 +130,13 @@ Ocultos para juan (grupo "Show Accounting Features - Readonly"):
 3. Imports: `odoo.http.content_disposition` → `odoo.http.stream.content_disposition`; `odoo.http.serialize_exception` → `odoo.http.dispatcher.serialize_exception`.
 4. `ir.actions.report.report_file` eliminado → quitar el campo del XML.
 5. Manifests `version` 19.0.x → 20.0.x + `installable: True`.
+
+### Reproducibilidad
+`crear_odoo20.sh` clona las ramas **19.0** de OCA/reporting-engine,
+OCA/account-financial-reporting y OCA/server-ux, copia sólo
+`report_xlsx`, `report_xlsx_helper`, `date_range` y `partner_statement`,
+aplica el port 19→20 con un bloque Python idempotente (validado: 2 pasadas
+= sin cambios) y los agrega a la instalación vía `PARITY_ADDONS`.
 
 ### Sin portar (bloqueados, ver §7)
 - `account_financial_report` (modelo `account.group` eliminado en Odoo 20).
