@@ -16,6 +16,8 @@ S3 (MVP/Fase 3 = primer slice visible tras baseline): tokens Enterprise Modern a
 
 S4 (ciclo obligatorio por slice): instalar → verificar bundle+UI → desinstalar limpio → reinstalar (o test de upgrade `-u`); registro en `ce-coverage-matrix.md`; cada slice JS pasa checklist Owl3; evidencia por commit/iteración en ## Log.
 
+S5 (user, verbatim): "quiero que creemoms un theme nuevo que sea igual que el de la demo con iconos grandes etc con la mismas funciones, modo claro / oscuro y con las miismas funciones" — añadir home grid con iconos de 70×70, sidebar, modo claro/oscuro persistente, sin código Enterprise ni cambios al core.
+
 ## Tasks
 
 - T1 [S1,S2] Feature doc + esqueleto addon (manifest, __init__, core/tokens SCSS + assets). Route: inline.
@@ -24,6 +26,8 @@ S4 (ciclo obligatorio por slice): instalar → verificar bundle+UI → desinstal
 - T4 [S3] Slice launcher/sidebar Enterprise Modern (visible). Route: inline.
 - T5 [S3] Slice lote1: formularios + listas (account/contacts/purchase/sale). Route: inline.
 - T6 [Fase5 parcial] matriz + evidencia + Playwright (autorizado) cuando toque QA.
+- T7 [S5] Home grid y toggle claro/oscuro inspirados en demo, conservando navegación. Route: inline. Commit: pendiente.
+- T8 [S5,S4] Deploy, QA desktop/móvil/usuario no-admin, documentación y PR L42. Route: inline. Commit: pendiente.
 
 ## Log
 
@@ -58,3 +62,12 @@ S4 (ciclo obligatorio por slice): instalar → verificar bundle+UI → desinstal
 - **DOLAN AI**: diseño en `docs/dolan-ai-design.md` (OAuth ChatGPT/Claude + Ollama local, modelo `dolan.ai.provider/credential/usage`, creds solo por env) — backlog, requiere decisión de proveedor/presupuesto.
 - **P4 cheques**: **cerrado por datos** — `llv_arca_check` = 0 filas en Dolibarr → fuera de alcance (registro en `docs/ee-parity-facturacion.md` §5, con P1-P3 marcados ✅).
 - Risk: none (adiciones propias pedidas: campo compute + columna opcional en vistas heredadas; verificación RPC+browser+SQL ejecutadas).
+
+### L18 — Theme v2 (2026-10-29)
+- REA/CDP observado en `exalink.odoo.com`: home EE con 26 apps, imagen `.o_app_icon` de 70×70 px, tarjeta 142×115 px y fondo `rgb(248,249,250)`. No se encontró toggle oscuro disponible en esa sesión; no se infiere paridad de ese control.
+- DOLAN_theme implementa un launcher propio servido por `/dolan_apps`, con 70×70 px por ícono, navegación lateral conservada, links a rutas `/odoo/` generados desde el menú autorizado del usuario y toggle claro/oscuro. El switch persiste como preferencia por navegador en `localStorage` (`dolan_theme_mode`); `theme_apply.js` respeta esa preferencia sobre el default del servidor.
+- El botón systray ya no invoca el endpoint inexistente `/dolan_ui/tema`; se quitó la resolución dinámica de `@web/core/network/rpc`, causa del error `Failed to resolve module specifier`. El menú Inicio abre una acción URL propia, evitando el client action Owl que fallaba al llamar `useState` desde `@web/owl`.
+- El dropdown de apps de Odoo 20 se renderiza como portal bajo `body`; se identificó por `.o-dropdown--menu:has(.o_app)` para acotar el estilo al menú de apps sin modificar otros dropdowns del navbar. El contraste dark de grilla/sidebar se comprobó con colores calculados tras terminar la transición CSS.
+- **QA**: `qa/theme_v2_e2e.mjs` pasó en desktop y móvil. Usuario operador: 38 apps; usuario temporal con `base.group_user` y sin `base.group_system`: 17 apps. En ambos: Inicio→grilla→app, toggle persistente, iconos 70px, dark legible, 0 errores JS no capturados. El usuario temporal se eliminó tras el test. Capturas: `docs/evidence/theme-v2-local/`.
+- **Deploy**: addon sincronizado a `odoo20-argentina/addons/DOLAN_theme`; upgrade `-u DOLAN_theme`, invalidación de assets y reinicio; `http://localhost:8070/web/login` respondió 200.
+- **Error de upgrade y corrección**: Odoo no permite reutilizar el XMLID `DOLAN_theme.action_home_grid` para cambiar el modelo `ir.actions.client` a `ir.actions.act_url`. Se dejó el registro antiguo sin uso y se introdujo `action_home_grid_url`; la actualización y carga de registry posteriores pasaron.

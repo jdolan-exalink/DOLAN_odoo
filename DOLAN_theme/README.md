@@ -4,12 +4,7 @@ Tema/UX moderno para **Odoo 20 Community Edition** — módulo independiente (si
 
 ## Estado
 
-| Fase | Estado |
-|---|---|
-| 0 — Auditoría técnica | ✅ completada (docs/) |
-| 1 — Investigación (detallada) | 🔄 continúa con Fase 0 |
-| 2 — UX/UI: sistema de diseño + 3 prototipos | ⏳ **espera aprobación de dirección visual** |
-| 3–5 — MVP, UX avanzada, QA/cobertura CE | ⏳ posterior a aprobación |
+El addon está implementado para Odoo 20 CE y verificado en la base de prueba `dolan`. La interfaz incluye navegación lateral, una grilla de aplicaciones, y modo claro/oscuro.
 
 ## Lectura obligatoria
 
@@ -20,14 +15,27 @@ Tema/UX moderno para **Odoo 20 Community Edition** — módulo independiente (si
 - `docs/ce-module-inventory.md` · `docs/ce-coverage-matrix.md` · `docs/version-support-policy.md` — inventario/policy.
 - `docs/prototypes/` — tres propuestas visuales navegables (HTML estático).
 
-## Instalación (cuando exista el addon)
+## Uso e instalación
+
+Con `DOLAN_theme` instalado:
+
+- La grilla de aplicaciones está disponible desde el menú **Inicio** o en `/dolan_apps`.
+- El botón 🌓 del systray alterna entre claro y oscuro. La preferencia se guarda en `localStorage` por navegador; si el almacenamiento no está disponible, el cambio dura hasta recargar.
+- La grilla muestra iconos de 70×70 px y mantiene los enlaces y permisos nativos de Odoo.
+
+Para instalar en otro entorno, copiar el addon a `addons_path`, actualizar la lista de Apps e instalar **DOLAN Theme**. No requiere módulos Enterprise.
+
+## Verificación funcional
+
+El smoke test de Playwright cubre el toggle persistente, la navegación Inicio→grilla→app, iconos de 70 px, modo oscuro legible y viewport móvil:
 
 ```bash
-# copiar DOLAN_theme/ al addons_path e instalar desde Apps, o:
-odoo-bin -i DOLAN_theme -d <db> --stop-after-init
+cd DOLAN_theme/qa
+ODOO_URL=http://localhost:8070 ODOO_DB=dolan \
+  ODOO_LOGIN=<usuario> ODOO_PASSWORD=<clave> node theme_v2_e2e.mjs
 ```
 
-Hoy **el addon todavía no existe**: Fase 0 solo entrega auditoría, arquitectura, riesgos y prototipos pendientes de aprobación.
+Las credenciales se reciben por variables de entorno y no se guardan en el repositorio. Capturas locales: `docs/evidence/theme-v2-local/`.
 
 ## Licencia propuesta
 

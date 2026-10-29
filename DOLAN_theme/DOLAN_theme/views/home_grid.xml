@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="action_home_grid_url" model="ir.actions.act_url">
+    <field name="name">Inicio</field>
+    <field name="url">/dolan_apps</field>
+    <field name="target">self</field>
+  </record>
+  <record id="menu_home_grid" model="ir.ui.menu">
+    <field name="name">Inicio</field>
+    <field name="action" ref="action_home_grid_url"/>
+    <field name="sequence">-100</field>
+  </record>
+</odoo>

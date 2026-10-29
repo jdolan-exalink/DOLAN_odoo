@@ -84,3 +84,19 @@ El tema oscuro se activó con `dolan.ui.tema` (param) y se restauró a claro al 
 **Veredicto**: la matriz ya **no tiene filas `NE` ni `P` sin prueba** — todas las
 apps activas están al menos en C/C*; lo único no propio de este repo es el bug
 CORE documentado.
+
+## Theme v2 — Home grid y modo claro/oscuro (L42)
+
+| Superficie | Resultado verificado |
+|---|---|
+| Launcher Inicio | `/dolan_apps` accesible desde el menú nativo; las apps abren rutas Odoo válidas |
+| Home grid | iconos de 70×70; 38 apps con el usuario operador y 17 con un usuario interno sin `base.group_system` |
+| Tema | toggle claro/oscuro persiste tras recarga y al entrar a una app; el sidebar y las etiquetas mantienen contraste legible |
+| Móvil | viewport 390×844, grilla y toggle visibles, sin overflow horizontal |
+| Consola | sin errores JavaScript no capturados durante el smoke test |
+
+Reproducir con `qa/theme_v2_e2e.mjs` (credenciales solo por variables de entorno).
+Capturas locales de operador: `docs/evidence/theme-v2-local/`; las del usuario
+no-admin: `docs/evidence/theme-v2-local-noadmin/`. La preferencia del toggle es
+por navegador (`localStorage`); la configuración del servidor continúa siendo el
+valor inicial para navegadores sin preferencia local.

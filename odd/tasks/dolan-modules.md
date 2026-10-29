@@ -266,3 +266,11 @@ Orden de construcción: OCR (usa infra existente) → Declaración fiscal → DO
 ### L41 — Auditoría del deploy script (2026-10-28)
 - El script `crear_odoo20.sh` (319 líneas) genera el stack base + AR + dolan_dash/dolan_ui pero **NO incluye**: los 12 módulos DOLAN_* nuevos, `pypdfium2` en el Dockerfile, el usuario admin@dolan.com.ar, el cron de backup, ni los CSRs de homologación.
 - Actualización pendiente: ampliar CUSTOM_ADDONS, Dockerfile, y post-deploy setup.
+
+### L42 — Theme v2 inspirado en Odoo Enterprise (2026-10-29)
+- **Pedido original (verbatim)**: "quiero que creemoms un theme nuevo que sea igual que el de la demo con iconos grandes etc con la mismas funciones, modo claro / oscuro y con las miismas funciones". Continuación autorizada: "quiero que terminemos los pendientes".
+- Observación REA/CDP de la demo: grilla con 26 apps; imagen de icono 70×70 px y tarjetas de 142×115 px. El dark mode de la demo no quedó confirmado; se implementó el solicitado para DOLAN de forma propia, sin copiar código Enterprise ni modificar core.
+- DOLAN_theme: acción Inicio a `/dolan_apps`, grilla de iconos 70×70 derivada de menús permitidos, sidebar, toggle claro/oscuro persistido por navegador y conservación del default de configuración del servidor. Se corrigió el viejo import dinámico `@web/core/network/rpc` y se evitó el client action Owl que disparaba el error `useState is not a function`.
+- Verificación Odoo 20 real: 38 apps para operador; 17 para usuario temporal sin `base.group_system`; toggle tras reload y navegación a app; iconos 70px; dark legible; desktop y móvil 390×844; 0 errores JS no capturados. El usuario de QA temporal fue eliminado.
+- Evidencia: `DOLAN_theme/docs/evidence/theme-v2-local/`; smoke test `DOLAN_theme/qa/theme_v2_e2e.mjs`. Deploy local con upgrade de módulo, regeneración de assets, reinicio y HTTP 200.
+- Riesgo: item 3 (tema afecta la navegación compartida, pero estilos acotados al navbar/apps y no se alteran contratos del core). Risk: item 3 — comprobación por E2E admin/no-admin y revisión de CSS/asset bundle. Commit y PR: pendientes.

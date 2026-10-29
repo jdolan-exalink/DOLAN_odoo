@@ -65,37 +65,37 @@
   border-radius: 0 !important;
 }
 
-.o_main_navbar .o_dropdown_menu.o_app_menu_content, .o_main_navbar .o_dropdown_menu {
+/* ---------- Apps dropdown nativo (Odoo 20) ---------- */
+.o-dropdown--menu:has(.o_app) {
+  min-width: 240px;
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
   border: 1px solid var(--o-dolan-bd) !important;
   border-radius: var(--o-dolan-radius) !important;
   box-shadow: var(--o-dolan-shadow) !important;
   background: var(--o-dolan-surface) !important;
-  padding: var(--o-dolan-s3) !important;
+  padding: var(--o-dolan-s2) !important;
 
   .o_app {
+    display: flex !important;
+    align-items: center;
+    width: 100%;
+    padding: 9px 12px !important;
     border-radius: var(--o-dolan-radius-sm);
-    padding: 10px 12px !important;
-    transition: background .12s ease, transform .12s ease;
+    color: var(--o-dolan-tx);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    text-decoration: none !important;
 
-    .o_app_icon {
-      border-radius: 10px;
-      padding: 6px;
-      background: var(--o-dolan-pri-soft);
-    }
-
-    &:hover {
-      background: var(--o-dolan-hover, #f1f5f9);
-      transform: translateY(-1px);
-    }
-
-    /* app activa (core: clase focus = app actual) */
-    &.focus {
-      background: var(--o-dolan-pri-soft) !important;
-      color: var(--o-dolan-pri-dark);
-      font-weight: 700;
-      box-shadow: inset 3px 0 0 var(--o-dolan-pri);
-    }
+    &:hover { background: var(--o-dolan-hover) !important; color: var(--o-dolan-pri-dark); }
+    &.focus { background: var(--o-dolan-pri-soft) !important; color: var(--o-dolan-pri-dark); font-weight: 700; }
   }
+}
+
+:root[data-dolan-theme="dark"] .o-dropdown--menu:has(.o_app) {
+  background: var(--o-dolan-surface) !important;
+  .o_app { color: var(--o-dolan-tx); }
 }
 
 /* ---------- Sidebar de apps (panel lateral nativo) ---------- */

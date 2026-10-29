@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <t t-name="DOLAN_theme.ThemeToggle">
+    <button type="button" class="o_dolan_theme_toggle dropdown-toggle" title="Modo claro / oscuro"
+            aria-label="Modo claro / oscuro" t-on-click="() => this.toggle()">
+      <span style="font-size:15px">🌓</span>
+    </button>
+  </t>
+</templates>
