@@ -11,9 +11,6 @@
                 <group string="Orden de apps">
                     <field name="app_order" nolabel="1" colspan="2"/>
                 </group>
-                <group string="Entrada">
-                    <field name="default_app"/>
-                </group>
                 <group string="Apariencia">
                     <field name="tema"/>
                     <field name="densidad"/>
