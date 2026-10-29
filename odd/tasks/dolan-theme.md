@@ -20,6 +20,8 @@ S5 (user, verbatim): "quiero que creemoms un theme nuevo que sea igual que el de
 
 S6 (user, verbatim): "la sidebar esta funcionando mal, verifica eso y eliminemos si no logramos un buen funcionamioento" — diagnóstico: existían DOS sidebars; la del webclient (`DOLAN_theme.NavBar.Rail`) funcionaba bien, y la rail embebida de las páginas standalone `/dolan_*` (`DOLAN_ai/static/src/js/embed_rail.js`, duplicada en 8 controladores) era una copia degradada sin botón de compactar e ignorando el modo oscuro. Decisión del usuario (opción "Dejar una sola"): una sola sidebar — la del webclient —; las páginas `/dolan_*` quedan sin rail embebida y con un link "← Volver a Odoo".
 
+S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experiencia al estilo odoo enterprise ya que se ve que se mesclan y no sale bien cuando clickeamos en los iconos grandes por ejemplo de IA nos lleva a operaciones y cosas asi, trabajemos en lograr una experiencia con la version de la demo si necesitas te paso de nuevo http://exalink.odoo.com usuario juand666@gmail.com pass daytona1309" — (a) eliminar la rail del webclient (sin sidebar, topbar + grilla como la demo); (b) cada icono de la grilla abre SU app (hoy DOLAN AI / Alquileres caen en action-817 "Operaciones" por una carrera con `dolan_default_app`); (c) referencia visual = captura `docs/evidence/ee-theme-v2/01-home-grid-claro.png` (demo EE: sin rail, grilla centrada de tarjetas, topbar). Credenciales de la demo: solo por variables de proceso, nunca en archivos ni memoria.
+
 ## Tasks
 
 - T1 [S1,S2] Feature doc + esqueleto addon (manifest, __init__, core/tokens SCSS + assets). Route: inline.
@@ -31,6 +33,10 @@ S6 (user, verbatim): "la sidebar esta funcionando mal, verifica eso y eliminemos
 - T7 [S5] Home grid y toggle claro/oscuro inspirados en demo, conservando navegación. Route: inline. Commit: `2385044`.
 - T8 [S5,S4] Deploy, QA desktop/móvil/usuario no-admin, documentación y PR L42. Route: inline. Cerrado: PR **#6** (`feat/dolan-theme-v2-l42`, base main) con deploy+QA verificados (E2E 8/8, bundle CSS limpio tras el fix libsass).
 - T9 [S6] Una sola sidebar: quitar la rail embebida de las 8 páginas `/dolan_*`, borrar `DOLAN_ai/static/src/js/embed_rail.js`, link "← Volver a Odoo" y QA nuevo. Route: inline. Commits: `e052f35` (refactor) + `7e3e1f0` (QA), en PR #6.
+- T10 [S7] Navegación de iconos determinista: eliminar el secuestro de `dolan_default_app` (dolan_ui) y dejar que Odoo cargue la ruta pedida. Route: inline. Commit: `d093347`.
+- T11 [S7] Eliminar la rail del webclient: `navbar_rail.xml`, `rail_toggle.js`, CSS `.o_dolan_rail`/offsets, entrada de manifest y `home_grid.py` muerto; hotkeys `g+letra` re-apuntados al servicio `menu`. Route: inline. Commit: `83a3dd2`.
+- T12 [S7] QA: `verify_icon_navigation.mjs` (RED 7/9) en verde, `verify_single_rail.mjs` invertido (sin rail), `probe_rail.mjs` borrado, `theme_v2_e2e.mjs`/`verify_status_dot.mjs` arrancan en ruta explícita. Route: inline. Commit: `87b63bc`.
+- T13 [S7] Docs + commits + PR. Route: inline. Commits: `5baf7bd` (docs) + este.
 
 ## Log
 
@@ -82,3 +88,13 @@ S6 (user, verbatim): "la sidebar esta funcionando mal, verifica eso y eliminemos
 - **Evidencia**: `qa/shots/l44-single-rail-home-dark.png` (grilla oscura con pill "← Volver a Odoo"), `l44-rail-desktop.png`, `l44-embeddolan_*`.
 - **Nota**: `/web` sigue aterrizando de forma intermitente en `/dolan_apps` en vez de `/odoo/action-817` (routing de home inestable, probablemente en `dolan_ui`); provoca flakeos en el E2E. Queda como pendiente propio, fuera de este cambio.
 - Risk: none (se elimina una copia de UI propia y se agrega un link; la rail del webclient no cambia. Verificación: QA nuevo + E2E completo).
+
+### L45 — Sin sidebar + iconos correctos (2026-10-29)
+- **Bug de navegación reproducido (RED 7/9)**: `dolan_ui/dolan_default_app` se disparaba en cada arranque con `location.hash` vacío y peleaba con el servicio de acciones de Odoo → el icono **DOLAN AI** (`/odoo/action-856`) y **Alquileres** (`/odoo/action-1202`) terminaban en `action-817` "Operaciones"; la entrada limpia alternate entre `/dolan_apps` y `action-817` (el flake documentado en L44).
+- **Decisión del usuario (S7)**: entrada = estándar Odoo, cero código propio. Se borró `dolan_ui/static/src/default_app.js`, sus claves `default_action`/`default_menu_xmlid` de `get_public_config` y el campo **"App por defecto"** (modelo, vista, pot) que quedó sin consumidor. `-u dolan_ui` (el campo se limpió de `ir.model.fields`).
+- **Comportamiento comprobado**: Odoo 20 solo restaura el menú guardado cuando la URL trae una acción; en entrada limpia (`/odoo`) abre **siempre la primera app del orden** → sesión nueva = grilla Inicio (`/dolan_apps`), determinista. Los `act_url` ahora llegan a su destino (`/dolan_ai`, `/dolan_alquileres`, `/dolan_apps`).
+- **Rail eliminada (T11)**: `navbar_rail.xml`, `rail_toggle.js`, bloque `.o_dolan_rail*` + offsets `.o_action_manager` (240/68px) de `navigation.scss`, reglas dark muertas en `home_grid.py`, entradas del manifest. **Hotkeys** `g+letra` reescritos sobre el servicio oficial `menu` (`selectMenu`) — ya no clickean nodos de la rail; `g+c` verificado → `/odoo/purchase`.
+- **QA (GREEN total)**: `verify_icon_navigation.mjs` **10/10**, `verify_single_rail.mjs` **47/47** (8 páginas standalone sin rail + grilla + webclient sin rail/offset + atajo), `verify_status_dot.mjs` **9/9**, `theme_v2_e2e.mjs` **8/8**. `probe_rail.mjs` borrado (era específico de la rail).
+- **Evidencia**: `qa/shots/l45-webclient-sin-rail.png` (webclient sin rail, contenido al borde), `l44-single-rail-home-dark.png`.
+- **Brecha de paridad abierta**: la demo muestra la grilla de inicio **dentro** del webclient (con topbar); la nuestra es una página standalone con "← Volver a Odoo". Requiere decisión del usuario (client action vs página).
+- Risk: item 3 (se quitan la rail y una opción de Ajustes que consumía el servicio borrado; ambos contratos eran nuestros) — verificado con 4 suites completas + `-u dolan_ui` limpio.
