@@ -51,6 +51,16 @@ for (const want of ["Asientos contables", "Apuntes contables", "Pista de auditor
 const iibb = Object.values(res).filter((m) => m && m.name && /^IIBB/.test(m.name)).map((m) => m.name);
 check("informes argentinos (IIBB) dentro de Reportes", iibb.length >= 2, JSON.stringify(iibb));
 
+// S8/P2: cheques (C5) + estados de cuenta (C6) + consulta ARCA (C13)
+for (const want of ["Cheques de Terceros", "Cheques Propios"]) {
+  check(`menú "${want}" visible (C5)`, names.has(want), names.has(want) ? "ok" : "no visible");
+}
+for (const want of ["Estado de la cuenta del cliente", "Estado de los pendientes de la cuenta", "Actividad detallada del contacto"]) {
+  check(`estado de cuenta "${want}" (C6)`, names.has(want), names.has(want) ? "ok" : "no visible");
+}
+check("consulta de factura en ARCA (C13)", names.has("Consultar factura en ARCA"),
+  names.has("Consultar factura en ARCA") ? "ok" : "no visible");
+
 // navegación real: la app abre el webclient
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 950 } });
 const page = await ctx.newPage();
