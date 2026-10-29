@@ -282,3 +282,8 @@ Orden de construcción: OCR (usa infra existente) → Declaración fiscal → DO
 - **QA nuevo**: `DOLAN_theme/qa/verify_status_dot.mjs` (9 checks, Playwright, sin escrituras en BD: los estados no-admin/offline se simulan interceptando `/dolan_ai/status`). RED 6/9 → GREEN 9/9. Regresión: `theme_v2_e2e.mjs` 8/8 PASS tras el fix. Capturas: `qa/shots/l43-dot-{admin,noauth,offline}.png`. Gotcha: tras un reinicio del contenedor la primera carga compila los assets (~8.8 MB de JS) y el E2E puede flakear por timeout de 30 s; re-ejecutar ya compilado.
 - Risk: item 3 (el SCSS del dropdown es CSS compartido del bundle del backend) — comprobado con E2E completo del theme v2 + bundle compilado sin errores.
 - **PR #6 abierto** (`feat/dolan-theme-v2-l42` → main) con L42 + L43. Boundary de slice: 614 líneas desde main (código efectivo de los fixes ≈35; el resto evidencia/QA del theme v2).
+
+### L44 — Una sola sidebar (2026-10-29)
+- Rail del webclient verificada sana (11/11 + barrido de 6 vistas, 0 errores JS); la rail embebida de las 8 páginas `/dolan_*` (`DOLAN_ai/static/src/js/embed_rail.js`, copia sin compactar ni dark) fue eliminada por decisión del usuario. Cada página standalone gana un link "← Volver a Odoo".
+- QA: `verify_single_rail.mjs` RED 20/44 → GREEN **44/44**, `probe_rail.mjs` 11/11, `theme_v2_e2e.mjs` 8/8. Commits `e052f35` + `7e3e1f0` en PR #6. Detalle en `odd/tasks/dolan-theme.md` (L44).
+- Pendiente conocido: el ruteo de `/web` aterriza de forma intermitente en `/dolan_apps` (flakea el E2E); investigar en `dolan_ui`.

@@ -18,6 +18,8 @@ S4 (ciclo obligatorio por slice): instalar → verificar bundle+UI → desinstal
 
 S5 (user, verbatim): "quiero que creemoms un theme nuevo que sea igual que el de la demo con iconos grandes etc con la mismas funciones, modo claro / oscuro y con las miismas funciones" — añadir home grid con iconos de 70×70, sidebar, modo claro/oscuro persistente, sin código Enterprise ni cambios al core.
 
+S6 (user, verbatim): "la sidebar esta funcionando mal, verifica eso y eliminemos si no logramos un buen funcionamioento" — diagnóstico: existían DOS sidebars; la del webclient (`DOLAN_theme.NavBar.Rail`) funcionaba bien, y la rail embebida de las páginas standalone `/dolan_*` (`DOLAN_ai/static/src/js/embed_rail.js`, duplicada en 8 controladores) era una copia degradada sin botón de compactar e ignorando el modo oscuro. Decisión del usuario (opción "Dejar una sola"): una sola sidebar — la del webclient —; las páginas `/dolan_*` quedan sin rail embebida y con un link "← Volver a Odoo".
+
 ## Tasks
 
 - T1 [S1,S2] Feature doc + esqueleto addon (manifest, __init__, core/tokens SCSS + assets). Route: inline.
@@ -28,6 +30,7 @@ S5 (user, verbatim): "quiero que creemoms un theme nuevo que sea igual que el de
 - T6 [Fase5 parcial] matriz + evidencia + Playwright (autorizado) cuando toque QA.
 - T7 [S5] Home grid y toggle claro/oscuro inspirados en demo, conservando navegación. Route: inline. Commit: `2385044`.
 - T8 [S5,S4] Deploy, QA desktop/móvil/usuario no-admin, documentación y PR L42. Route: inline. Cerrado: PR **#6** (`feat/dolan-theme-v2-l42`, base main) con deploy+QA verificados (E2E 8/8, bundle CSS limpio tras el fix libsass).
+- T9 [S6] Una sola sidebar: quitar la rail embebida de las 8 páginas `/dolan_*`, borrar `DOLAN_ai/static/src/js/embed_rail.js`, link "← Volver a Odoo" y QA nuevo. Route: inline. Commits: `e052f35` (refactor) + `7e3e1f0` (QA), en PR #6.
 
 ## Log
 
@@ -71,3 +74,11 @@ S5 (user, verbatim): "quiero que creemoms un theme nuevo que sea igual que el de
 - **QA**: `qa/theme_v2_e2e.mjs` pasó en desktop y móvil. Usuario operador: 38 apps; usuario temporal con `base.group_user` y sin `base.group_system`: 17 apps. En ambos: Inicio→grilla→app, toggle persistente, iconos 70px, dark legible, 0 errores JS no capturados. El usuario temporal se eliminó tras el test. Capturas: `docs/evidence/theme-v2-local/`.
 - **Deploy**: addon sincronizado a `odoo20-argentina/addons/DOLAN_theme`; upgrade `-u DOLAN_theme`, invalidación de assets y reinicio; `http://localhost:8070/web/login` respondió 200.
 - **Error de upgrade y corrección**: Odoo no permite reutilizar el XMLID `DOLAN_theme.action_home_grid` para cambiar el modelo `ir.actions.client` a `ir.actions.act_url`. Se dejó el registro antiguo sin uso y se introdujo `action_home_grid_url`; la actualización y carga de registry posteriores pasaron.
+
+### L44 — Una sola sidebar (2026-10-29)
+- **Verificación previa**: rail del webclient 11/11 checks + barrido por 6 vistas (lista, board, kanban, ajustes, form, discuss): 1 rail, 240px, offset correcto, sin solape, 0 errores JS; compactar 240↔68 persiste tras reload; oculta en móvil. La rail embebida de `/dolan_apps` no tenía botón de compactar (`toggle=false`) e `/dolan_alquileres` en tema dark mostraba rail blanca (`themeAttr: "(none)"`).
+- **Implementación (S6)**: borrado `DOLAN_ai/static/src/js/embed_rail.js`; quitado el `<script>` de los 8 controladores (`DOLAN_ai`, `alquileres`, `codigo_barras`, `contabilidad`, `flotilla`, `mantenimiento`, `suscripciones`, `DOLAN_theme/home_grid`); link "← Volver a Odoo" (fixed, pill) en las 8 páginas; en `/dolan_apps` se eliminó el `body{padding-left:240px}` y su media query.
+- **QA nuevo**: `qa/verify_single_rail.mjs` (RED 20/44 → **GREEN 44/44**): 8 páginas sin rail, sin desplazamiento, link Volver presente, 200, sin scroll horizontal; home grid conserva 38 apps / iconos 70px / toggle y dark; rail del webclient intacta (toggle + offset). `qa/probe_rail.mjs` 11/11 y `qa/theme_v2_e2e.mjs` 8/8 tras actualizar sus dos aserciones que codificaban la rail embebida (comportamiento cambiado por decisión del usuario, no por fix).
+- **Evidencia**: `qa/shots/l44-single-rail-home-dark.png` (grilla oscura con pill "← Volver a Odoo"), `l44-rail-desktop.png`, `l44-embeddolan_*`.
+- **Nota**: `/web` sigue aterrizando de forma intermitente en `/dolan_apps` en vez de `/odoo/action-817` (routing de home inestable, probablemente en `dolan_ui`); provoca flakeos en el E2E. Queda como pendiente propio, fuera de este cambio.
+- Risk: none (se elimina una copia de UI propia y se agrega un link; la rail del webclient no cambia. Verificación: QA nuevo + E2E completo).
