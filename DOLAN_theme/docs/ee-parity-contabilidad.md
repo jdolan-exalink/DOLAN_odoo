@@ -106,3 +106,32 @@ Ocultos para juan (grupo "Show Accounting Features - Readonly"):
 
 - Risk: item 3 (menús/permisos compartidos del módulo `account`) → verificar por rol admin y no-admin.
 - Instalar módulos nuevos = item 5 (dependencias/entorno) si se suma OCA.
+
+## 7. Estado de implementación (2026-10-29)
+
+| Ítem | Estado | Evidencia |
+|---|---|---|
+| C1 app "Contabilidad" | ✅ hecho | `account.menu_finance` = Contabilidad (en_US+es_AR), `/odoo/accounting`; commit `8ca82e1` |
+| C2 secciones Contabilidad/Revisión/Reportes/Banco y Caja | ✅ hecho | implicación `group_account_manager → group_account_user`; QA 19/19 |
+| C3 Asientos/Apuntes/Pista de auditoría | ✅ hecho | visibles para el admin tras C2 |
+| C5 Cheques de Terceros / Propios | ✅ hecho | `l10n_latam_check` (core) instalado: menús en Clientes y Proveedores, igual que la demo |
+| C6 Estados de cuenta | ✅ hecho | OCA `partner_statement` (19.0, portado) + 3 menús en Reportes > Reportes del contacto |
+| C7 IIBB por jurisdicción | ✅ ya existía | `l10n_ar` (Reportes > Informes Argentinos) |
+| C7 Resumen IVA | 🔴 bloqueado | `l10n_ar_fiscal_ws_reports` necesita port **fiscal**: la vista SQL y `_get_partner_document_code_and_number()` usan `res.partner.l10n_latam_identification_type_id`, eliminado en Odoo 20 → decisión sobre cómo derivar el código de documento en los TXT ARCA |
+| C13 Consultar factura en ARCA | ✅ hecho | menú propio sobre `l10n_ar_fiscal_ws.action_fiscal_ws_recover` |
+| C9 tablero con tarjetas | 🟡 pendiente | ampliar `dolan_dash` (fuera de este corte) |
+| C10 estados financieros (Balance/ER/Flujo/Libro mayor) | 🔴 bloqueado | OCA `account_financial_report` 19.0 requiere port real: Odoo 20 **eliminó el modelo `account.group`** que usa para agrupar el balance |
+| C11 auditoría | 🔴 bloqueado | OCA `auditlog` 19.0: Odoo 20 exige tabla para todo modelo no abstracto (`auditlog.log.line.view` es una vista SQL) |
+| C12 Activos/Préstamos/Valuación/regularizaciones | 🔴 EE-only | fuera de alcance (licencia) |
+
+### Ports Odoo 19.0 → 20.0 aplicados (reproducibles en el deploy)
+1. `security/ir.model.access.csv` → `security/ir.access.csv` y columnas `perm_read/write/create/unlink` → una sola columna `operation` (letras `c`,`r`,`u`,`d`).
+2. Reglas `model="ir.rule"` → `model="ir.access"` + `domain_force` → `domain` + `<field name="operation">crud</field>` (y quitar `global`).
+3. Imports: `odoo.http.content_disposition` → `odoo.http.stream.content_disposition`; `odoo.http.serialize_exception` → `odoo.http.dispatcher.serialize_exception`.
+4. `ir.actions.report.report_file` eliminado → quitar el campo del XML.
+5. Manifests `version` 19.0.x → 20.0.x + `installable: True`.
+
+### Sin portar (bloqueados, ver §7)
+- `account_financial_report` (modelo `account.group` eliminado en Odoo 20).
+- `auditlog` (modelo SQL-view sin tabla).
+- `l10n_ar_fiscal_ws_reports` (identificación del partner eliminada → decisión fiscal).

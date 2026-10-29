@@ -20,6 +20,8 @@ S5 (user, verbatim): "quiero que creemoms un theme nuevo que sea igual que el de
 
 S6 (user, verbatim): "la sidebar esta funcionando mal, verifica eso y eliminemos si no logramos un buen funcionamioento" — diagnóstico: existían DOS sidebars; la del webclient (`DOLAN_theme.NavBar.Rail`) funcionaba bien, y la rail embebida de las páginas standalone `/dolan_*` (`DOLAN_ai/static/src/js/embed_rail.js`, duplicada en 8 controladores) era una copia degradada sin botón de compactar e ignorando el modo oscuro. Decisión del usuario (opción "Dejar una sola"): una sola sidebar — la del webclient —; las páginas `/dolan_*` quedan sin rail embebida y con un link "← Volver a Odoo".
 
+S8 (user, verbatim): "contabilidad no esta y creeria que lo que paso es que renombraste para ponerle facturacion, quiero que via MCP REA trabajemos para que Contabilidad quede igual con las mismas funciones que el de la demo" — paridad contra `accountant.menu_accounting` (app EE, 97 nodos) documentada en `DOLAN_theme/docs/ee-parity-contabilidad.md`. Diagnóstico: no hubo renombre; en CE la app contable es `account.menu_finance` ("Facturación", 42 nodos) y las secciones *Contabilidad*/*Revisión* están tras el grupo "Show Accounting Features - Readonly" que el usuario no tiene. Códigos: C1-C13 con vías CE/OO/EE-only.
+
 S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experiencia al estilo odoo enterprise ya que se ve que se mesclan y no sale bien cuando clickeamos en los iconos grandes por ejemplo de IA nos lleva a operaciones y cosas asi, trabajemos en lograr una experiencia con la version de la demo si necesitas te paso de nuevo http://exalink.odoo.com usuario juand666@gmail.com pass daytona1309" — (a) eliminar la rail del webclient (sin sidebar, topbar + grilla como la demo); (b) cada icono de la grilla abre SU app (hoy DOLAN AI / Alquileres caen en action-817 "Operaciones" por una carrera con `dolan_default_app`); (c) referencia visual = captura `docs/evidence/ee-theme-v2/01-home-grid-claro.png` (demo EE: sin rail, grilla centrada de tarjetas, topbar). Credenciales de la demo: solo por variables de proceso, nunca en archivos ni memoria.
 
 ## Tasks
@@ -37,6 +39,9 @@ S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experienc
 - T11 [S7] Eliminar la rail del webclient: `navbar_rail.xml`, `rail_toggle.js`, CSS `.o_dolan_rail`/offsets, entrada de manifest y `home_grid.py` muerto; hotkeys `g+letra` re-apuntados al servicio `menu`. Route: inline. Commit: `83a3dd2`.
 - T12 [S7] QA: `verify_icon_navigation.mjs` (RED 7/9) en verde, `verify_single_rail.mjs` invertido (sin rail), `probe_rail.mjs` borrado, `theme_v2_e2e.mjs`/`verify_status_dot.mjs` arrancan en ruta explícita. Route: inline. Commit: `87b63bc`.
 - T13 [S7] Docs + commits + PR. Route: inline. Commits: `5baf7bd` (docs) + este.
+- T14 [S8/P1] App "Contabilidad": renombrar `account.menu_finance` + visibilidad de las secciones Contabilidad/Revisión (grupo) + menús equivalentes C3. Route: inline. Commit: pendiente.
+- T15 [S8/P2] Funciones: cheques (C5), estados de cuenta (C6), informes argentinos (C7), consulta ARCA (C13), tarjetas del tablero (C9). Route: pendiente de aprobación de alcance.
+- T16 [S8/P3] Reportes financieros y auditoría (C10-C12): requieren OCA propio o implementación LGPL; nunca código EE. Route: pendiente de decisión.
 
 ## Log
 
@@ -98,3 +103,18 @@ S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experienc
 - **Evidencia**: `qa/shots/l45-webclient-sin-rail.png` (webclient sin rail, contenido al borde), `l44-single-rail-home-dark.png`.
 - **Brecha de paridad abierta**: la demo muestra la grilla de inicio **dentro** del webclient (con topbar); la nuestra es una página standalone con "← Volver a Odoo". Requiere decisión del usuario (client action vs página).
 - Risk: item 3 (se quitan la rail y una opción de Ajustes que consumía el servicio borrado; ambos contratos eran nuestros) — verificado con 4 suites completas + `-u dolan_ui` limpio.
+
+### L46 — Paridad "Contabilidad" con la demo (2026-10-29)
+- **Evidencia vía MCP REA**: `capture_browser_scenario` sobre `exalink.odoo.com` (login + `goto` a `/web/webclient/load_menus` con `capture.at_end=["dom"]`) → Evidence `ev_78bfb489fc80eb3ecb67747af1fa8388196d6779acb65059cc6a296979b26920`. En **9 corridas** se resolvieron: esquema de acciones (`step_id`/`locator{kind,selector}`/`value{source,value}`/`wait_for_timeout{duration_ms}`), claves de `capture` (`after_each_step`, `at_end`, `events`, `network`, `limits`), límites de cuerpo de red y el detalle de que el cuerpo del `request` no queda en los eventos → la salida fiable es **navegar al endpoint JSON y leer `artifacts.dom.value.text`**.
+- **Hallazgos**: la demo tiene 26 apps; la contable es `accountant.menu_accounting` (Enterprise, `/odoo/accounting`, acción 308, **97 nodos**). La nuestra es `account.menu_finance` (**42 nodos visibles**). Las secciones *Contabilidad* (151) y *Revisión* (156) **existen** en la BD pero están tras el grupo "Show Accounting Features - Readonly" que `juan@dolan.com.ar` no tiene.
+- **Documento**: `DOLAN_theme/docs/ee-parity-contabilidad.md` (árboles comparados + clasificación C1-C13 + plan P1-P3).
+- **Regla de licencia**: nada de código OPL-1; los estados financieros EE (C10) solo vía OCA/implementación propia.
+- Risk: pendiente de implementación (T14-T16) — el análisis es solo lectura.
+
+### L47 — Paridad Contabilidad: P1 + P2 parcial (2026-10-29)
+- **T14 (P1) cerrado** (`8ca82e1`): app renombrada a **Contabilidad** (en_US+es_AR, `/odoo/accounting`) e implicación `account.group_account_manager → account.group_account_user` en `DOLAN_contabilidad` para que el admin vea las secciones que CE esconde tras `group_account_readonly`. QA `verify_contabilidad_parity.mjs` **19/19**.
+- **T15 (P2) parcial**: instalados `l10n_latam_check` (core) → **Cheques de Terceros/Propios** en Clientes/Proveedores (igual que la demo) y OCA `partner_statement` (19.0 portado) → 3 estados de cuenta bajo Reportes > Reportes del contacto; menú **Consultar factura en ARCA** sobre la acción existente. Todo verificado en el QA (C5/C6/C13 en verde).
+- **Ports 19→20 aplicados** (documentados en `docs/ee-parity-contabilidad.md` §7): CSV `ir.model.access`→`ir.access` + `perm_*`→`operation`; `ir.rule`→`ir.access` con `domain`+`operation=crud`; imports `content_disposition`/`serialize_exception`; quitar `report_file` de `ir.actions.report`; bump de versiones. OCA clonado en rama 19.0 (las ramas **20.0 de OCA están vacías**): reporting-engine, account-financial-reporting, server-tools, server-ux. Respaldo previo: `backups/daily/dolan_20261029_190555.sql.gz` (verificado).
+- **Bloqueados (requieren decisión)**: (i) `l10n_ar_fiscal_ws_reports` (Resumen IVA) — port fiscal: Odoo 20 eliminó `res.partner.l10n_latam_identification_type_id`; (ii) `account_financial_report` — Odoo 20 eliminó el modelo `account.group`; (iii) `auditlog` — modelo SQL-view sin tabla en Odoo 20. Detalle en el doc de paridad §7.
+- **Verificador independiente no disponible**: `gentle-ai-verify` falló ("assistant reported an error") → auto-verificación con QA + SQL (regla: se reporta como no disponible, no se reintenta).
+- Risk: item 3 (menús/permisos del módulo `account` compartido) + item 5 (módulos nuevos instalados en la BD) — respaldo previo verificado y QA por rol admin; instalaciones nuevas sin cambios de datos de negocio.
