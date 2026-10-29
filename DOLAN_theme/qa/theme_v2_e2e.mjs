@@ -52,8 +52,14 @@ try {
     await homeMenu.click();
     await page.waitForURL("**/dolan_apps");
     await page.waitForSelector("#apps-grid");
-    await page.waitForSelector(".o_dolan_rail");
-    console.log("PASS: native Inicio menu opens the home grid with its sidebar.");
+    const homeState = await page.evaluate(() => ({
+        rails: document.querySelectorAll(".o_dolan_rail").length,
+        back: [...document.querySelectorAll("a")].some((a) => a.getAttribute("href") === "/odoo" && /volver/i.test(a.textContent || "")),
+    }));
+    if (homeState.rails !== 0 || !homeState.back) {
+        throw new Error(`Home grid must have no embedded rail and a back link: ${JSON.stringify(homeState)}`);
+    }
+    console.log("PASS: native Inicio menu opens the standalone home grid (no embedded sidebar, back link present).");
 
     await page.goto(`${baseURL}/dolan_apps`, { waitUntil: "domcontentloaded" });
     const grid = page.locator(".o_dolan_home_app");
@@ -86,9 +92,9 @@ try {
     const darkColors = await page.evaluate(() => ({
         background: getComputedStyle(document.body).backgroundColor,
         label: getComputedStyle(document.querySelector(".name")).color,
-        sidebar: getComputedStyle(document.querySelector(".o_dolan_rail")).backgroundColor,
+        back: [...document.querySelectorAll("a")].some((a) => a.getAttribute("href") === "/odoo" && /volver/i.test(a.textContent || "")),
     }));
-    if (darkColors.background !== "rgb(26, 26, 46)" || darkColors.label !== "rgb(226, 232, 240)" || darkColors.sidebar !== "rgb(30, 30, 58)") {
+    if (darkColors.background !== "rgb(26, 26, 46)" || darkColors.label !== "rgb(226, 232, 240)" || !darkColors.back) {
         throw new Error(`Dark-mode contrast validation failed: ${JSON.stringify(darkColors)}`);
     }
     await page.reload({ waitUntil: "domcontentloaded" });
