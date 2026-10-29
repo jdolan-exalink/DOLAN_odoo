@@ -26,8 +26,8 @@ S5 (user, verbatim): "quiero que creemoms un theme nuevo que sea igual que el de
 - T4 [S3] Slice launcher/sidebar Enterprise Modern (visible). Route: inline.
 - T5 [S3] Slice lote1: formularios + listas (account/contacts/purchase/sale). Route: inline.
 - T6 [Fase5 parcial] matriz + evidencia + Playwright (autorizado) cuando toque QA.
-- T7 [S5] Home grid y toggle claro/oscuro inspirados en demo, conservando navegación. Route: inline. Commit: pendiente.
-- T8 [S5,S4] Deploy, QA desktop/móvil/usuario no-admin, documentación y PR L42. Route: inline. Commit: pendiente.
+- T7 [S5] Home grid y toggle claro/oscuro inspirados en demo, conservando navegación. Route: inline. Commit: `2385044`.
+- T8 [S5,S4] Deploy, QA desktop/móvil/usuario no-admin, documentación y PR L42. Route: inline. Deploy+QA cerrados en L42/L43 (E2E 8/8, bundle CSS limpio tras el fix libsass); PR: pendiente de abrir.
 
 ## Log
 
