@@ -26,7 +26,10 @@ try {
     const authResult = await auth.json();
     if (!auth.ok() || !authResult.result?.uid) throw new Error("Odoo authentication failed.");
 
-    await page.goto(`${baseURL}/web`, { waitUntil: "domcontentloaded" });
+    // Entrada estándar Odoo (S7): una sesión limpia aterriza en la primera app
+    // (grilla /dolan_apps, página standalone). Para probar el webclient se pide
+    // una ruta explícita.
+    await page.goto(`${baseURL}/odoo/action-817`, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(".o_dolan_theme_toggle", { timeout: 30000 });
     if (await page.locator(".modal").count()) throw new Error("Odoo displayed a client error modal on startup.");
 
@@ -47,9 +50,13 @@ try {
     await page.waitForFunction(() => document.documentElement.dataset.dolanTheme === "light");
     console.log("PASS: systray dark/light toggle persists across reload.");
 
-    const homeMenu = page.locator('[data-menu-xmlid="DOLAN_theme.menu_home_grid"]');
-    if (await homeMenu.count() !== 1) throw new Error("The Inicio menu is missing from the native navigation rail.");
-    await homeMenu.click();
+    // Sin rail: Inicio se abre desde el menú nativo de apps de la topbar (camino EE)
+    await page.click(".o_navbar_apps_menu button");
+    const appsMenu = page.locator(".o-dropdown--menu:has(.o_app)");
+    await appsMenu.waitFor({ state: "visible" });
+    const inicioItem = appsMenu.locator(".o_app", { hasText: "Inicio" });
+    if ((await inicioItem.count()) < 1) throw new Error("Inicio is missing from the native apps menu.");
+    await inicioItem.first().click();
     await page.waitForURL("**/dolan_apps");
     await page.waitForSelector("#apps-grid");
     const homeState = await page.evaluate(() => ({

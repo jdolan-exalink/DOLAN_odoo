@@ -1,8 +1,8 @@
 import { chromium } from "playwright";
 
-// QA L44: una sola sidebar. Las páginas standalone /dolan_* NO deben traer la rail
-// embebida (DOLAN_ai/embed_rail.js); deben tener un link "Volver" y el contenido
-// sin desplazar. La rail del webclient (DOLAN_theme) se conserva y se verifica.
+// QA L45 (S7): SIN sidebar. Las páginas standalone /dolan_* no traen rail y tienen
+// link "Volver"; el webclient tampoco tiene rail (topbar + grilla como la demo):
+// sin offset de .o_action_manager, menú de apps nativo y atajos g+letra activos.
 const BASE = process.env.BASE || "http://localhost:8070";
 const shots = new URL("./shots/", import.meta.url).pathname;
 const PAGES = [
@@ -61,22 +61,32 @@ const dark = await page.evaluate(() => ({
 check("home grid: modo oscuro sigue funcionando", dark.attr === "dark" && dark.bg === "rgb(26, 26, 46)", JSON.stringify(dark));
 await page.screenshot({ path: shots + "l44-single-rail-home-dark.png" });
 
-// rail del webclient: se conserva intacta
+// webclient: sin rail y sin offset; atajos g+letra (servicio `menu`)
 await page.goto(`${BASE}/odoo/action-817`, { waitUntil: "domcontentloaded" });
 await page.waitForTimeout(5000);
 const wc = await page.evaluate(() => {
-  const rail = document.querySelector(".o_dolan_rail");
-  const am = document.querySelector(".o_action_manager");
-  return {
-    rails: document.querySelectorAll(".o_dolan_rail").length,
-    toggle: !!document.querySelector(".o_dolan_rail_toggle"),
-    items: document.querySelectorAll(".o_dolan_rail_item").length,
-    railW: rail ? Math.round(rail.getBoundingClientRect().width) : null,
-    amMargin: am ? getComputedStyle(am).marginLeft : null,
-  };
+    const am = document.querySelector(".o_action_manager");
+    return {
+        rails: document.querySelectorAll(".o_dolan_rail").length,
+        railAssets: document.querySelectorAll("[data-dolan-rail-toggle]").length,
+        amMargin: am ? getComputedStyle(am).marginLeft : null,
+        appsButton: !!document.querySelector(".o_navbar_apps_menu button"),
+    };
 });
-check("webclient: rail propia intacta (toggle + 38 apps + offset)",
-  wc.rails === 1 && wc.toggle && wc.items === 38 && wc.railW === 240 && wc.amMargin === "240px", JSON.stringify(wc));
+check("webclient: sin rail (y sin su toggle)", wc.rails === 0 && wc.railAssets === 0, JSON.stringify(wc));
+check("webclient: sin offset izquierdo (contenido al borde)", wc.amMargin === "0px", `margin-left=${wc.amMargin}`);
+check("webclient: menú de apps nativo presente", wc.appsButton, JSON.stringify(wc));
+await page.screenshot({ path: shots + "l45-webclient-sin-rail.png" });
+
+// atajo g + c -> Compras (hotkeys.js ahora navega con el servicio `menu`)
+await page.keyboard.press("g");
+await page.waitForTimeout(150);
+await page.keyboard.press("c");
+await page.waitForTimeout(4000);
+const hotkey = await page.evaluate(() => ({ path: location.pathname, crumbs: document.querySelector(".o_control_panel")?.textContent?.trim().slice(0, 40) }));
+check("atajo g+c abre Compras", hotkey.path === "/odoo/purchase", JSON.stringify(hotkey));
+await page.goto(`${BASE}/odoo/action-817`, { waitUntil: "domcontentloaded" });
+await page.waitForTimeout(3000);
 
 await browser.close();
 const seen = [...new Set(errs)];

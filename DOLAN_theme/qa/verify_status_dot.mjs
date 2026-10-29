@@ -45,7 +45,8 @@ async function dotState(statusResult, label, shot) {
       body: JSON.stringify({ jsonrpc: "2.0", id: null, result: statusResult }),
     }));
   }
-  await page.goto(`${BASE}/odoo`, { waitUntil: "domcontentloaded" });
+  // ruta explícita al webclient: la entrada limpia aterriza en la grilla standalone
+  await page.goto(`${BASE}/odoo/action-817`, { waitUntil: "domcontentloaded" });
   await page.waitForSelector(".o_dolan_ai_btn", { timeout: 30000 });
   await page.click(".o_dolan_ai_btn");
   await page.waitForSelector(".o_dolan_ai_win", { timeout: 15000 });
