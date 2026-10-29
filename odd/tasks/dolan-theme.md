@@ -27,7 +27,7 @@ S5 (user, verbatim): "quiero que creemoms un theme nuevo que sea igual que el de
 - T5 [S3] Slice lote1: formularios + listas (account/contacts/purchase/sale). Route: inline.
 - T6 [Fase5 parcial] matriz + evidencia + Playwright (autorizado) cuando toque QA.
 - T7 [S5] Home grid y toggle claro/oscuro inspirados en demo, conservando navegación. Route: inline. Commit: `2385044`.
-- T8 [S5,S4] Deploy, QA desktop/móvil/usuario no-admin, documentación y PR L42. Route: inline. Deploy+QA cerrados en L42/L43 (E2E 8/8, bundle CSS limpio tras el fix libsass); PR: pendiente de abrir.
+- T8 [S5,S4] Deploy, QA desktop/móvil/usuario no-admin, documentación y PR L42. Route: inline. Cerrado: PR **#6** (`feat/dolan-theme-v2-l42`, base main) con deploy+QA verificados (E2E 8/8, bundle CSS limpio tras el fix libsass).
 
 ## Log
 
