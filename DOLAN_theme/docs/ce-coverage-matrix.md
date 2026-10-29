@@ -91,7 +91,7 @@ CORE documentado.
 |---|---|
 | Launcher Inicio | `/dolan_apps` accesible desde el menú nativo; las apps abren rutas Odoo válidas |
 | Home grid | iconos de 70×70; 38 apps con el usuario operador y 17 con un usuario interno sin `base.group_system` |
-| Tema | toggle claro/oscuro persiste tras recarga y al entrar a una app; el sidebar y las etiquetas mantienen contraste legible |
+| Tema | toggle claro/oscuro persiste tras recarga y al entrar a una app; el navbar y las etiquetas mantienen contraste legible |
 | Móvil | viewport 390×844, grilla y toggle visibles, sin overflow horizontal |
 | Consola | sin errores JavaScript no capturados durante el smoke test |
 

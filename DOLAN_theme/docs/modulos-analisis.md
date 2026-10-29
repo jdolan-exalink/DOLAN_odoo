@@ -20,14 +20,14 @@ propio `:9222`): `inspect_web_page` (DOM/consola profunda) +
 - **2 con error de consola**: `hr` y `hr_recruitment` →
   `TypeError: Cannot read properties of undefined (reading 'type')`
   (núcleo/localizado; queda como hallazgo a diagnosticar en F5).
-- **Rail inicial**: 20/32 apps con raíz propia visibles → tras **grants de
+- **Apps visibles (inicial)**: 20/32 apps con raíz propia visibles → tras **grants de
   grupos de raíz a juan** (patrón fleet/mrp/pos): +10 (crm, project,
   mass_mailing, hr_recruitment, marketing_card, website_slides, im_livechat,
   survey, hr_attendance, lunch) → **37/38** → `hr_holidays` exigió fix
   distinto: la raíz quedaba fuera del payload aunque el grupo ya estaba →
   **raíz sin acción derivable** (primer hijo `Mi tiempo` sin acción) → se le
   asignó la acción del primer hijo con acción (`hr.leave.report.calendar`) +
-  ACL admin → **rail final 38/38** (raíces propias32/32; las6 restantes son
+  ACL admin → **apps visibles (final 38/38)** (raíces propias32/32; las6 restantes son
   sub-apps sin raíz, p.ej. website_sale/pos_restaurant).
 - Datos por app: título, registros listados, ruta aterrizada, errores.
 

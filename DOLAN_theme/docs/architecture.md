@@ -11,7 +11,7 @@ DOLAN_theme/                     ← repo git independiente (ya inicializado)
 │   ├── __manifest__.py          ← dependencias mínimas: ["base","web"] (nunca instala apps)
 │   ├── __init__.py
 │   ├── core/                    ← tokens SCSS/CSS (variables + custom properties), tipografía, iconos
-│   ├── navigation/              ← app launcher, sidebar, breadcrumbs (vistas+assets+JS mínimo)
+│   ├── navigation/              ← app launcher (topbar + grilla Inicio), breadcrumbs (vistas+assets+JS mínimo)
 │   ├── views/                   ← herencias de form/list (scoppeadas)
 │   ├── dashboard/               ← home por rol y widgets (acción client propia, datos vía ORM autorizado)
 │   ├── preferences/             ← densidad/tema por usuario (ir.default + res.users)
