@@ -1,4 +1,5 @@
-{'name': 'DOLAN Theme', 'version': '20.0.2.0.0', 'category': 'Themes/Backend', 'summary': 'Tema moderno para Odoo 20 CE: tokens, navegacion y vistas con estilo Enterprise (propio, LGPL-3, sin dependencias Enterprise)', 'author': 'Dolan', 'license': 'LGPL-3', 'depends': ['base', 'web'], 'data': ['views/home_grid.xml'],
-    'assets': {'web.assets_backend': ['DOLAN_theme/static/src/scss/tokens.scss', 'DOLAN_theme/static/src/scss/navigation.scss', 'DOLAN_theme/static/src/scss/views.scss', 'DOLAN_theme/static/src/js/hotkeys.js', 'DOLAN_theme/static/src/js/theme_apply.js',
+{'name': 'DOLAN Theme', 'version': '20.0.3.0.0', 'category': 'Themes/Backend', 'summary': 'Tema moderno para Odoo 20 CE: tokens, navegacion y vistas con estilo Enterprise (propio, LGPL-3, sin dependencias Enterprise)', 'author': 'Dolan', 'license': 'LGPL-3', 'depends': ['base', 'web'], 'data': ['views/home_grid.xml'],
+    'assets': {'web.assets_backend': ['DOLAN_theme/static/src/scss/tokens.scss', 'DOLAN_theme/static/src/scss/navigation.scss', 'DOLAN_theme/static/src/scss/views.scss', 'DOLAN_theme/static/src/scss/home_grid.scss', 'DOLAN_theme/static/src/js/hotkeys.js', 'DOLAN_theme/static/src/js/theme_apply.js', 'DOLAN_theme/static/src/js/home_grid_client.js',
+            'DOLAN_theme/static/src/xml/home_grid_client.xml',
             'DOLAN_theme/static/src/systray/theme_toggle.js',
             'DOLAN_theme/static/src/systray/theme_toggle.xml']}, 'installable': True, 'application': False}

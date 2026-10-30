@@ -1,0 +1,80 @@
+/* Grilla de apps "Inicio" dentro del webclient (client action dolan_theme.home_grid).
+   Estética igual a la página standalone: tarjetas de 132px con ícono de 70px. */
+
+.o_dolan_home_grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100%;
+  padding: 32px 24px 48px;
+  background: var(--o-dolan-bg, #f4f6f9);
+}
+
+.o_dolan_home_grid_inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px 16px;
+  justify-content: center;
+  align-content: flex-start;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.o_dolan_home_grid .o_dolan_home_app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 130px;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.o_dolan_home_grid .o_dolan_home_app:hover {
+  transform: translateY(-3px);
+}
+
+.o_dolan_home_grid .o_dolan_home_app:hover .icon_wrap {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+}
+
+.o_dolan_home_grid .o_dolan_home_app:hover .name {
+  color: var(--o-dolan-pri-dark, #714b67);
+}
+
+.o_dolan_home_grid .icon_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 82px;
+  height: 82px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  background: var(--o-dolan-surface, #fff);
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.15s ease;
+}
+
+.o_dolan_home_grid .icon_wrap img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.o_dolan_home_grid .icon_wrap .oi {
+  font-size: 36px;
+  color: var(--o-dolan-pri, #714b67);
+}
+
+.o_dolan_home_grid .name {
+  max-width: 130px;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--o-dolan-tx, #1f2937);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

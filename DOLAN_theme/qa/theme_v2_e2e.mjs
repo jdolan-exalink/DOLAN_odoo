@@ -57,16 +57,21 @@ try {
     const inicioItem = appsMenu.locator(".o_app", { hasText: "Inicio" });
     if ((await inicioItem.count()) < 1) throw new Error("Inicio is missing from the native apps menu.");
     await inicioItem.first().click();
-    await page.waitForURL("**/dolan_apps");
-    await page.waitForSelector("#apps-grid");
+    // M2: el Inicio ahora es un client action -> la grilla vive DENTRO del
+    // webclient (topbar nativa), como en la demo EE.
+    await page.waitForSelector(".o_dolan_home_grid", { timeout: 20000 });
+    await page.waitForTimeout(1500);
     const homeState = await page.evaluate(() => ({
         rails: document.querySelectorAll(".o_dolan_rail").length,
-        back: [...document.querySelectorAll("a")].some((a) => a.getAttribute("href") === "/odoo" && /volver/i.test(a.textContent || "")),
+        navbar: !!document.querySelector(".o_main_navbar"),
+        grid: !!document.querySelector(".o_dolan_home_grid"),
+        apps: document.querySelectorAll(".o_dolan_home_grid .o_dolan_home_app").length,
+        path: location.pathname,
     }));
-    if (homeState.rails !== 0 || !homeState.back) {
-        throw new Error(`Home grid must have no embedded rail and a back link: ${JSON.stringify(homeState)}`);
+    if (homeState.rails !== 0 || !homeState.navbar || !homeState.grid || homeState.apps < 1) {
+        throw new Error(`Home grid must render inside the webclient: ${JSON.stringify(homeState)}`);
     }
-    console.log("PASS: native Inicio menu opens the standalone home grid (no embedded sidebar, back link present).");
+    console.log(`PASS: Inicio opens the home grid inside the webclient (${homeState.apps} apps, path ${homeState.path}).`);
 
     await page.goto(`${baseURL}/dolan_apps`, { waitUntil: "domcontentloaded" });
     const grid = page.locator(".o_dolan_home_app");

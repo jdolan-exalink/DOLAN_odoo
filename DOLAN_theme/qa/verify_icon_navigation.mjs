@@ -11,9 +11,9 @@ const check = (name, ok, detail) => results.push({ name, ok, detail });
 const CASES = [
   ["DOLAN AI", "/dolan_ai"],
   ["Alquileres", "/dolan_alquileres"],
-  ["Inicio", "/dolan_apps"],
+  ["Inicio", "WEBCLIENT_GRID"],  // client action: grilla dentro del webclient (M2)
   ["Taller", "/odoo/action-1205"],
-  ["Facturación", "/odoo/customer-invoices"],
+  ["Contabilidad", "/odoo/accounting"],  // renombrada en L47 (antes Facturación)
   ["Declaración Fiscal", "/odoo/action-1204"],
   ["Compras", "/odoo/purchase"],
 ];
@@ -35,18 +35,33 @@ for (const [label, expected] of CASES) {
   const href = await icon.getAttribute("href");
   await icon.click();
   await page.waitForTimeout(5000);
-  const final = await page.evaluate(() => location.pathname);
-  check(`icono "${label}" -> ${expected}`, final === expected,
-    `href=${href} final=${final}${final !== expected ? " (esperado " + expected + ")" : ""}`);
+  const final = await page.evaluate(() => ({
+    path: location.pathname,
+    grid: !!document.querySelector(".o_dolan_home_grid"),
+    navbar: !!document.querySelector(".o_main_navbar"),
+  }));
+  if (expected === "WEBCLIENT_GRID") {
+    check(`icono "${label}" abre la grilla dentro del webclient`,
+      final.path.startsWith("/odoo/") && final.grid && final.navbar,
+      `href=${href} final=${final.path} grid=${final.grid} navbar=${final.navbar}`);
+  } else {
+    check(`icono "${label}" -> ${expected}`, final.path === expected,
+      `href=${href} final=${final.path}${final.path !== expected ? " (esperado " + expected + ")" : ""}`);
+  }
 }
 
-// Entrada estándar Odoo (decisión S7): 1ª visita de la sesión = primera app del
-// orden (Inicio → /dolan_apps); vuelta a /odoo = última app usada.
+// Entrada estándar Odoo (S7 + M2): la sesión limpia entra al webclient y abre
+// la primera app del orden = Inicio, ahora una grilla DENTRO del webclient.
 await page.goto(`${BASE}/odoo`, { waitUntil: "domcontentloaded" });
-await page.waitForTimeout(5000);
-const firstVisit = await page.evaluate(() => location.pathname);
-check("1ª visita de sesión: primera app del orden (grilla Inicio)", firstVisit === "/dolan_apps",
-  `pathname=${firstVisit}`);
+await page.waitForTimeout(6000);
+const firstVisit = await page.evaluate(() => ({
+  path: location.pathname,
+  grid: !!document.querySelector(".o_dolan_home_grid"),
+  navbar: !!document.querySelector(".o_main_navbar"),
+}));
+check("1ª visita de sesión: webclient con la grilla Inicio",
+  firstVisit.path.startsWith("/odoo/") && firstVisit.grid && firstVisit.navbar,
+  JSON.stringify(firstVisit));
 
 // Odoo 20 solo restaura el menú guardado cuando la URL trae una acción; en
 // una entrada limpia (/odoo sin ruta) abre SIEMPRE la primera app del orden.
@@ -59,9 +74,13 @@ await page.waitForTimeout(4000);
 const afterMenuClick = await page.evaluate(() => ({ path: location.pathname, stored: sessionStorage.getItem("menu_id") }));
 await page.goto(`${BASE}/odoo`, { waitUntil: "domcontentloaded" });
 await page.waitForTimeout(5000);
-const back = await page.evaluate(() => location.pathname);
-check("entrada limpia repetida: siempre la primera app (determinista)", back === "/dolan_apps",
-  `menu_id=${afterMenuClick.stored} tras click=${afterMenuClick.path} -> entrada=${back}`);
+const back = await page.evaluate(() => ({
+  path: location.pathname,
+  grid: !!document.querySelector(".o_dolan_home_grid"),
+}));
+check("entrada limpia repetida: siempre la primera app (determinista)",
+  back.path.startsWith("/odoo/") && back.grid,
+  `menu_id=${afterMenuClick.stored} tras click=${afterMenuClick.path} -> entrada=${back.path} grid=${back.grid}`);
 
 await browser.close();
 const seen = [...new Set(errs)];
