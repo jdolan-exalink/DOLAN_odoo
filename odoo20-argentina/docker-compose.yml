@@ -28,7 +28,7 @@ services:
     restart: always
 
   waha:
-    image: devlikepro/waha:latest
+    image: devlikeapro/waha:latest
     container_name: ${PROJECT_NAME:-odoo20-argentina}_waha
     restart: unless-stopped
     environment:

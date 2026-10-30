@@ -227,7 +227,7 @@ services:
       - PASSWORD=odoo
     restart: always
   waha:
-    image: devlikepro/waha:latest
+    image: devlikeapro/waha:latest
     restart: unless-stopped
     environment:
       WAHA_API_KEY: ${WAHA_API_KEY:-dolan-waha-key}

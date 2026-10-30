@@ -5,11 +5,12 @@
     'category': 'Social Network',
     'author': 'Dolan',
     'license': 'LGPL-3',
-    'depends': ['base', 'web'],
+    'depends': ['base', 'web', 'mail', 'account'],
     'data': [
         'security/ir.access.csv',
         'views/whatsapp_message.xml',
         'views/res_partner.xml',
+        'views/account_move.xml',
     ],
     'installable': True,
     'application': False,

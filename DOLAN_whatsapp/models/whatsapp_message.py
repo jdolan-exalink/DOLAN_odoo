@@ -124,7 +124,7 @@ class DolanWhatsappMessage(models.Model):
             existing = self.sudo().search([("external_id", "=", str(ext_id))], limit=1)
             if existing:
                 return existing
-        return self.sudo().create({
+        rec = self.sudo().create({
             "partner_id": partner.id if partner else False,
             "direction": "in",
             "body": p.get("body") or p.get("preview") or "",
@@ -132,3 +132,14 @@ class DolanWhatsappMessage(models.Model):
             "status": "received",
             "external_id": str(ext_id) if ext_id else False,
         })
+        if partner:
+            # historial visible en la ficha del contacto (W3)
+            try:
+                partner.sudo().message_post(
+                    body="WhatsApp entrante: %s" % (rec.body or "-"),
+                    message_type="notification",
+                    subtype_xmlid="mail.mt_note",
+                )
+            except Exception:  # noqa: BLE001
+                _logger.exception("WhatsApp chatter")
+        return rec
