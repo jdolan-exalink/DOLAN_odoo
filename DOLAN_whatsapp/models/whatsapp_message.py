@@ -70,7 +70,7 @@ class DolanWhatsappMessage(models.Model):
         if not body:
             raise UserError(_("El mensaje no puede estar vacio."))
         cfg = self._waha_config()
-        chat_id = self._chat_id(partner.mobile or partner.phone)
+        chat_id = self._chat_id(partner.phone)
         if not chat_id:
             raise UserError(_("El contacto no tiene telefono/movil para WhatsApp."))
 
@@ -118,8 +118,7 @@ class DolanWhatsappMessage(models.Model):
         digits = "".join(c for c in str(chat_id).split("@")[0] if c.isdigit())
         partner = self.env["res.partner"]
         if digits:
-            partner = self.env["res.partner"].search([
-                "|", ("mobile", "ilike", digits), ("phone", "ilike", digits)], limit=1)
+            partner = self.env["res.partner"].search([("phone", "ilike", digits)], limit=1)
         ext_id = p.get("id") or p.get("timestamp")
         if ext_id:
             existing = self.sudo().search([("external_id", "=", str(ext_id))], limit=1)
