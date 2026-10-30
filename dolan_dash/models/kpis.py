@@ -9,7 +9,10 @@ def ar(n):
     return s.replace(",", "\x00").replace(".", ",").replace("\x00", ".")
 
 
-WIDGETS_POR_DEFECTO = "facturas,gastos,efectivo,por_cobrar,compras,nc,remitos,recepciones"
+WIDGETS_POR_DEFECTO = "facturas,gastos,efectivo,por_cobrar,compras,nc,remitos,recepciones,cheques"
+
+# estados de l10n_latam.check (selection en ingles del core) -> etiqueta ES
+CHECK_ESTADOS = {"handed": "Entregado", "debited": "Depositado", "voided": "Anulado"}
 
 
 class DolanDash(models.TransientModel):
@@ -76,6 +79,14 @@ class DolanDash(models.TransientModel):
             gdom.append(("company_id", "=", co.id))
         gastos_mes = gasto_model.search(gdom)
 
+        # Cheques (l10n_latam_check, opcional): terceros vs propios por método de pago
+        terc = prop = False
+        if "l10n_latam.check" in self.env:
+            checks = self.env["l10n_latam.check"].search([("company_id", "=", co.id)])
+            terc = checks.filtered(
+                lambda c: (c.payment_method_line_id.payment_method_id.code or "") != "own_checks")
+            prop = checks - terc
+
         data = {
             "efectivo": {
                 "key": "efectivo", "label": "Efectivo",
@@ -126,13 +137,20 @@ class DolanDash(models.TransientModel):
                 "hint": "ingresos de inventario",
                 "tag": "bg-secondary-subtle text-secondary",
             },
+            "cheques": {
+                "key": "cheques", "label": "Cheques de terceros",
+                "valor": len(terc) if terc is not False else 0,
+                "hint": ("$ " + ar(sum(terc.mapped("amount"))) + " · propios "
+                         + str(len(prop))) if terc is not False else "módulo de cheques no instalado",
+                "tag": "bg-secondary-subtle text-secondary",
+            },
         }
         # filtro por permisos (por rol): quien no tiene el modulo no ve el widget
         gate = {
             "compras": can_account, "por_cobrar": can_account,
             "remitos": can_stock, "recepciones": can_stock,
             "efectivo": can_account, "gastos": can_expense,
-            "facturas": True, "nc": True,
+            "facturas": True, "nc": True, "cheques": can_account,
         }
         orden = self.env["ir.config_parameter"].sudo().get_str(
             "dolan.ui.widgets", WIDGETS_POR_DEFECTO)
@@ -213,8 +231,23 @@ class DolanDash(models.TransientModel):
                 "fecha": (r["date_done"] or r["scheduled_date"] or "").strftime("%d/%m/%Y"),
                 "monto": "",
             })
+
+        che = []
+        if "l10n_latam.check" in self.env:
+            for c in self.env["l10n_latam.check"].search(
+                    [("company_id", "=", co.id)],
+                    order="payment_date desc, id desc", limit=10):
+                code = c.payment_method_line_id.payment_method_id.code or ""
+                fecha = c.payment_date or (c.create_date.date() if c.create_date else hoy)
+                che.append({
+                    "num": c.name or "—",
+                    "tercero": "Propio" if code == "own_checks" else "Terceros",
+                    "fecha": fecha.strftime("%d/%m/%Y"),
+                    "estado": CHECK_ESTADOS.get(c.issue_state, c.issue_state or "—"),
+                    "monto": ar(c.amount or 0),
+                })
         return {"por_pagar": pend, "pagadas": pag, "facturas": fact,
-                "nc": nc, "remitos": rem}
+                "nc": nc, "remitos": rem, "cheques": che}
 
     @api.model
     def serie(self, nombre):
@@ -286,6 +319,19 @@ class DolanDash(models.TransientModel):
                                        ("payment_state", "not in", ("paid", "reversed"))],
                                acum="amount_residual")
             titulo = "Por cobrar (saldo, 6 meses)"
+        elif nombre == "cheques":
+            reads = (self.env["l10n_latam.check"].search_read(
+                [("company_id", "=", co.id)], ["payment_date"],
+                order="payment_date", limit=2000)
+                if "l10n_latam.check" in self.env else [])
+            buckets = {l: 0 for l in labels}
+            for r in reads:
+                d = r["payment_date"]
+                if d:
+                    k = d.strftime("%m/%y")
+                    buckets[k] = buckets.get(k, 0) + 1
+            vals = [buckets.get(l, 0) for l in labels]
+            titulo = "Cheques (cantidad, 6 meses)"
         else:
             code = "incoming" if nombre == "recepciones" else "outgoing"
             reads = self.env["stock.picking"].search_read(

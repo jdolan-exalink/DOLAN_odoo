@@ -26,16 +26,6 @@ msgid "Aplicar"
 msgstr ""
 
 #. module: dolan_ui
-#: model:ir.model.fields,help:dolan_ui.field_dolan_ui_settings__default_app
-msgid "App a la que entra el usuario despues del login."
-msgstr ""
-
-#. module: dolan_ui
-#: model:ir.model.fields,field_description:dolan_ui.field_dolan_ui_settings__default_app
-msgid "App por defecto"
-msgstr ""
-
-#. module: dolan_ui
 #: model:ir.model.fields,field_description:dolan_ui.field_dolan_ui_settings__apps_help
 msgid "Apps disponibles (en el orden actual)"
 msgstr ""

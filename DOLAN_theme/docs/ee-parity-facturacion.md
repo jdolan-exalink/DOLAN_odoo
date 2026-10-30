@@ -47,7 +47,7 @@ Playwright propio (la suite REA quedó para binarios/páginas WebMCP — ver
 
 ## 4. Home EE (00) → home CE
 
-EE = grid a pantalla completa de apps. Nuestra adopción CE = rail persistente con íconos + home KPI (decidido y aprobado en la Propuesta 1). Diferencia documentada: EE oculta el resto del UI al home; nosotros mantenemos rail+chips (contexto siempre visible).
+EE = grid a pantalla completa de apps. Nuestra adopción CE = grilla Inicio + topbar nativa de Odoo, SIN rail lateral (S7, decisión del usuario) + home KPI (decidido en la Propuesta 1). Diferencia documentada: EE oculta el resto del UI al home; nosotros mantenemos rail+chips (contexto siempre visible).
 
 ## 5. Brechas de negocio (funciones, no UI)
 

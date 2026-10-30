@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- S8/P2-C10 · Estados financieros propios (LGPL) sobre report_xlsx.
+         Odoo 20 CE trae el modelo account.report pero sin evaluador ni visor
+         (viven en Enterprise), así que el cálculo es nuestro: account.move.line
+         agrupado por tipo de cuenta. -->
+
+    <record id="view_dolan_financial_report_form" model="ir.ui.view">
+        <field name="name">dolan.financial.report.form</field>
+        <field name="model">dolan.financial.report</field>
+        <field name="arch" type="xml">
+            <form string="Estados financieros">
+                <group>
+                    <field name="report_type"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </group>
+                <footer>
+                    <button name="action_generate" string="Generar XLSX" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_financial_report_xlsx" model="ir.actions.report">
+        <field name="name">Estados financieros DOLAN</field>
+        <field name="model">dolan.financial.report</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">dolan_contabilidad.financial_report</field>
+    </record>
+
+    <record id="action_dolan_financial_balance" model="ir.actions.act_window">
+        <field name="name">Balance general</field>
+        <field name="res_model">dolan.financial.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_type': 'balance'}</field>
+    </record>
+
+    <record id="action_dolan_financial_results" model="ir.actions.act_window">
+        <field name="name">Estado de resultados</field>
+        <field name="res_model">dolan.financial.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_type': 'results'}</field>
+    </record>
+
+    <record id="action_dolan_financial_cash" model="ir.actions.act_window">
+        <field name="name">Flujo de efectivo</field>
+        <field name="res_model">dolan.financial.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_type': 'cash'}</field>
+    </record>
+
+    <record id="menu_financial_statements" model="ir.ui.menu">
+        <field name="name" eval="{'en_US': 'Financial Statements', 'es_AR': 'Estados financieros'}"/>
+        <field name="parent_id" ref="account.menu_finance_reports"/>
+        <field name="sequence">15</field>
+    </record>
+
+    <record id="menu_financial_balance" model="ir.ui.menu">
+        <field name="name" eval="{'en_US': 'Balance Sheet', 'es_AR': 'Balance general'}"/>
+        <field name="parent_id" ref="menu_financial_statements"/>
+        <field name="action" ref="action_dolan_financial_balance"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="menu_financial_results" model="ir.ui.menu">
+        <field name="name" eval="{'en_US': 'Profit and Loss', 'es_AR': 'Estado de resultados'}"/>
+        <field name="parent_id" ref="menu_financial_statements"/>
+        <field name="action" ref="action_dolan_financial_results"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="menu_financial_cash" model="ir.ui.menu">
+        <field name="name" eval="{'en_US': 'Cash Flow', 'es_AR': 'Flujo de efectivo'}"/>
+        <field name="parent_id" ref="menu_financial_statements"/>
+        <field name="action" ref="action_dolan_financial_cash"/>
+        <field name="sequence">30</field>
+    </record>
+</odoo>

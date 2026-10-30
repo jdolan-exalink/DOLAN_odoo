@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,operation,domain
+access_dolan_financial_report_accountant,dolan.financial.report accountant,model_dolan_financial_report,account.group_account_readonly,crud,
+access_dolan_financial_report_manager,dolan.financial.report manager,model_dolan_financial_report,account.group_account_manager,crud,
+access_dolan_journal_audit_accountant,dolan.journal.audit accountant,model_dolan_journal_audit,account.group_account_readonly,crud,
+access_dolan_journal_audit_manager,dolan.journal.audit manager,model_dolan_journal_audit,account.group_account_manager,crud,

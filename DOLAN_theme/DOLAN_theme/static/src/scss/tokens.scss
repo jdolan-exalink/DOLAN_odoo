@@ -46,29 +46,28 @@
 :root[data-dolan-density="compact"] { --o-dolan-fs-base: 13px; }
 
 
-/* ---------- Modo oscuro (data-dolan-theme="dark" via theme_apply.js;
-   el modo automatico lo resuelve JS con prefers-color-scheme) ---------- */
+/* Dark mode: activated by theme_apply.js, with local user preference support. */
 :root[data-dolan-theme="dark"] {
-  --o-dolan-pri: #38bdf8;
-  --o-dolan-pri-dark: #7dd3fc;
-  --o-dolan-pri-soft: rgba(56, 189, 248, .14);
+  --o-dolan-pri: #a67d8e;
+  --o-dolan-pri-dark: #c4b5fd;
+  --o-dolan-pri-soft: rgba(113, 75, 103, .25);
 
-  --o-dolan-bg: #0f172a;
-  --o-dolan-surface: #1e293b;
-  --o-dolan-surface2: #172033;
-  --o-dolan-hover: #233046;
-  --o-dolan-soft: rgba(56, 189, 248, .14);
-  --o-dolan-tx: #e5e7eb;
+  --o-dolan-bg: #1a1a2e;
+  --o-dolan-surface: #2a2a4a;
+  --o-dolan-surface2: #1e1e3a;
+  --o-dolan-hover: #2a2a4a;
+  --o-dolan-soft: #2a2a4a;
+  --o-dolan-tx: #e2e8f0;
   --o-dolan-tx-mut: #94a3b8;
-  --o-dolan-bd: #334155;
+  --o-dolan-bd: #40406a;
 
-  --o-dolan-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .35);
+  --o-dolan-shadow: 0 1px 2px rgba(0,0,0,.2), 0 8px 24px rgba(0,0,0,.15);
   --o-dolan-ok: #4ade80;
   --o-dolan-warn: #fbbf24;
   --o-dolan-danger: #f87171;
 }
 
-/* lienzo completo en oscuro (el body de Odoo usa su propio color) */
+/* Odoo containers use independent backgrounds, so theme the full work surface. */
 :root[data-dolan-theme="dark"] body,
 :root[data-dolan-theme="dark"] .o_web_client,
 :root[data-dolan-theme="dark"] .o_action_manager {

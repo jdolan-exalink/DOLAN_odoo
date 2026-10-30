@@ -14,7 +14,7 @@ export class DolanDashboard extends Component {
         useBus(this.env.bus, "ACTION_MANAGER:UPDATE", () => this.refresh());
         // Owl 3 (Odoo 20): estado reactivo via proxy() (patron del core; useState ya no existe)
         this.state = proxy({ kpis: { company: "", mes: "", widgets: [] }, seccion: null, serie: null,
-            detalle: { por_pagar: [], pagadas: [], facturas: [], nc: [], remitos: [] } });
+            detalle: { por_pagar: [], pagadas: [], facturas: [], nc: [], remitos: [], cheques: [] } });
         onWillStart(async () => {
             try {
                 const [kpis, detalle] = await Promise.all([
@@ -25,7 +25,7 @@ export class DolanDashboard extends Component {
                 this.state.detalle = detalle;
             } catch {
                 this.state.kpis = { company: "", mes: "", widgets: [] };
-                this.state.detalle = { por_pagar: [], pagadas: [], facturas: [], nc: [], remitos: [] };
+                this.state.detalle = { por_pagar: [], pagadas: [], facturas: [], nc: [], remitos: [], cheques: [] };
             }
         });
     }

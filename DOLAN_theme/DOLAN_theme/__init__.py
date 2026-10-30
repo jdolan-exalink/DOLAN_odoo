@@ -1,1 +1,1 @@
-# DOLAN_theme — sin modelos; solo assets y vistas en data/ (Fase 3+)
+from . import controllers

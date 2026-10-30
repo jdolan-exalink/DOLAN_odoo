@@ -140,5 +140,5 @@ Verbatims: "el https no mi interesa porque esta en mi lan segura, vamos con lo d
 - ✅ **ChatWindow v3**: rediseño completo — gradiente header, status dot de conexión (verde/rojo), typing indicator (3 puntos animados), burbujas de chat redondeadas, animación de entrada, dark mode, scroll refinado, fuente Inter.
 - ✅ **Chat funcional verificado en vivo**: el agente responde *"¡Hola! Estoy bien, gracias. ¿En qué puedo ayudarte?"* — la conexión OAuth ya estaba funcionando (status: connected=true).
 - **PR #5 mergeada** (`025d43b`). 55/55 tests.
-- **Nota**: status dot aún no aparece (checkStatus corre async después del render) — fix cosmético próximo. La conexión SÍ funciona (verificado por probe).
+- ~~**Nota**: status dot aún no aparece (checkStatus corre async después del render) — fix cosmético próximo.~~ **CERRADO en L43** (dolan-modules.md): el dot sí existía pero arrancaba en verde mentiroso y pintaba rojo cuando el status no estaba disponible; ahora tiene estados pending/ok/err con título descriptivo, verificado con `qa/verify_status_dot.mjs` (9/9). La conexión SÍ funciona (verificado por probe).
 - Risk: none (cosmetic + admin password + env_type switch; producción es lo importante).

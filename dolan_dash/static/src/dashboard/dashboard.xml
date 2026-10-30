@@ -119,6 +119,22 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="dolan_detail_block" t-att-class="this.state.seccion === 'cheques' ? 'dolan_block_active' : ''">
+                    <div class="dolan_detail_title">Últimos cheques</div>
+                    <table class="dolan_table">
+                        <thead><tr><th>N.º</th><th>Tipo</th><th>Fecha</th><th>Estado</th><th class="ta-r">Monto</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="this.state.detalle.cheques" t-as="row" t-key="row_index">
+                                <td class="mono" t-out="row.num"/>
+                                <td t-out="row.tercero"/>
+                                <td t-out="row.fecha"/>
+                                <td><span class="dolan_tag" t-att-class="row.estado === 'Anulado' ? 'dolan_tag_danger' : 'dolan_tag_ok'" t-out="row.estado"/></td>
+                                <td class="ta-r mono" t-out="row.monto"/>
+                            </tr>
+                            <tr t-if="!this.state.detalle.cheques.length"><td colspan="5" class="text-muted">Sin cheques registrados</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="text-muted small mt-3">
                 Menú <b>Configuración Dolan</b> (Ajustes): orden de apps, app por defecto.

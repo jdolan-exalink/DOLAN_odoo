@@ -60,6 +60,24 @@ SYSTEM_APPS="sale_management,point_of_sale,mrp,project,crm,hr_expense"
 # Owl3 (crash de AppsMenu -> pantalla blanca). Esperar migracion oficial 20.0.
 CUSTOM_ADDONS="DOLAN_theme DOLAN_ai DOLAN_alquileres DOLAN_bancos DOLAN_calidad DOLAN_codigo_barras DOLAN_contabilidad DOLAN_declaracion DOLAN_flotilla DOLAN_mantenimiento DOLAN_suscripciones DOLAN_taller dolan_dash dolan_ui"
 
+# Paridad de Contabilidad (S8): módulos que se instalan además de los custom.
+# l10n_latam_check es core; los demás vienen de OCA rama 19.0 con port 19->20
+# aplicado más abajo (docs/ee-parity-contabilidad.md §7). OCA todavía no tiene
+# ramas 20.0 utilizables (scaffolding vacío).
+#   report_xlsx / report_xlsx_helper : dependencias de reportes
+#   date_range                       : dependencia de account_financial_report
+#   partner_statement                : estados de cuenta del contacto (C6)
+# NO incluidos (port pendiente, ver §7): account_financial_report (Odoo 20
+# eliminó el modelo account.group) y auditlog (modelo SQL-view sin tabla).
+PARITY_ADDONS="l10n_latam_check report_xlsx report_xlsx_helper date_range partner_statement l10n_ar_fiscal_ws_reports"
+OCA_REPOS=(
+  "https://github.com/OCA/reporting-engine.git"
+  "https://github.com/OCA/account-financial-reporting.git"
+  "https://github.com/OCA/server-ux.git"
+)
+OCA_BRANCH="19.0"
+OCA_MODULES_WANTED="report_xlsx report_xlsx_helper date_range partner_statement"
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -n|--name) PROJECT_NAME="$2"; shift 2 ;;
@@ -242,12 +260,185 @@ if [[ -f l10n_ar_fiscal_ws/__manifest__.py ]]; then
   sed -i 's/"installable": False/"installable": True/' l10n_ar_fiscal_ws/__manifest__.py
   echo "  -> l10n_ar_fiscal_ws habilitado (port validado 2026-10-26)"
 fi
+
+# l10n_ar_fiscal_ws_reports (Libro de IVA / Análisis de IVA, S8/P2-C7): version
+# 20.0 + port fiscal. En Odoo 20 el tipo de documento del socio es el campo
+# compute l10n_ar_afip_code (catálogo A4 de ARCA) y ya existe la columna en
+# res_partner; el módulo 19.0 se unía a l10n_latam_identification_type (borrada).
+if [[ -f l10n_ar_fiscal_ws_reports/__manifest__.py ]]; then
+  python3 - <<'IVA_PORT_19_TO_20'
+import pathlib, re
+
+root = pathlib.Path("l10n_ar_fiscal_ws_reports")
+man = root / "__manifest__.py"
+if man.exists():
+    txt = man.read_text(encoding="utf-8")
+    new = re.sub(r'"version": "19\.0\.', '"version": "20.0.', txt)
+    new = re.sub(r"(['\"])installable\1\s*:\s*False", '"installable": True', new)
+    if new != txt:
+        man.write_text(new, encoding="utf-8")
+        print("     port: manifest 20.0 / installable")
+
+view = root / "report" / "account_ar_vat_line.py"
+if view.exists():
+    txt = view.read_text(encoding="utf-8")
+    new = txt.replace(
+        "(CASE WHEN lit.l10n_ar_afip_code = '80' THEN rp.vat ELSE null END) as cuit,",
+        "(CASE WHEN rp.l10n_ar_afip_code = '80' THEN rp.vat ELSE null END) as cuit,")
+    new = new.replace("LEFT JOIN\n    l10n_latam_identification_type AS lit\n"
+                      "    ON rp.l10n_latam_identification_type_id = lit.id\n", "")
+    new = new.replace("am.id, art.name, rp.id, lit.id", "am.id, art.name, rp.id")
+    if new != txt:
+        view.write_text(new, encoding="utf-8")
+        print("     port: vista SQL usa rp.l10n_ar_afip_code (catálogo A4)")
+
+ledger = root / "models" / "account_vat_ledger.py"
+if ledger.exists():
+    txt = ledger.read_text(encoding="utf-8")
+    old = ('        if partner.l10n_ar_afip_responsibility_type_id.code == "5":\n'
+           '            doc_code = f"{int(partner.l10n_latam_identification_type_id.l10n_ar_afip_code):0>2d}"\n'
+           '            doc_number = partner.vat or ""\n'
+           '            # limpiamos letras que no son soportadas\n'
+           '            doc_number = re.sub("[^0-9]", "", doc_number)')
+    new = ('        if partner.l10n_ar_afip_responsibility_type_id.code == "5":\n'
+           '            # Odoo 20: tipo de documento del socio = campo compute\n'
+           '            # l10n_ar_afip_code (catálogo A4 de ARCA); sin identificar =\n'
+           '            # 99 con documento 0 (arca.gob.ar, Tablas del Sistema).\n'
+           '            afip_code = partner.l10n_ar_afip_code\n'
+           '            doc_code = f"{int(afip_code):0>2d}" if afip_code else "99"\n'
+           '            doc_number = re.sub("[^0-9]", "", partner.vat or "")\n'
+           '            if not doc_number:\n'
+           '                doc_number = "0" if doc_code == "99" else ""')
+    if old in txt:
+        ledger.write_text(txt.replace(old, new), encoding="utf-8")
+        print("     port: código de documento ARCA (A4 + fallback 99)")
+IVA_PORT_19_TO_20
+  echo "  -> l10n_ar_fiscal_ws_reports portado (Libro de IVA / Análisis de IVA)"
+fi
+cd ..
+
+# ---------------------------------------------------------------------------
+# OCA 19.0 + port 19->20 para la paridad de Contabilidad (S8/L47).
+# Sólo los módulos de PARITY_ADDONS; se aplanan en addons/ como los de ingadhoc.
+# ---------------------------------------------------------------------------
+echo "Descargando módulos OCA (branch ${OCA_BRANCH} + port 19->20)..."
+cd addons
+for repo in "${OCA_REPOS[@]}"; do
+  name="$(basename "$repo" .git)"
+  echo "  -> $name (branch ${OCA_BRANCH})"
+  git clone --depth 1 --branch "${OCA_BRANCH}" "$repo" ".oca_${name}" >/dev/null 2>&1 || {
+    echo "     FALLÓ el clone de $name"; continue; }
+  for m in $OCA_MODULES_WANTED; do
+    if [[ -d ".oca_${name}/$m" ]]; then
+      rm -rf "$m"; cp -r ".oca_${name}/$m" "$m"; echo "     + $m"
+    fi
+  done
+  rm -rf ".oca_${name}"
+done
+
+python3 - <<'OCA_PORT_19_TO_20'
+import csv, pathlib, re
+
+MODS = ["report_xlsx", "report_xlsx_helper", "date_range", "partner_statement"]
+
+def operation(perm):
+    out = ""
+    if perm.get("perm_create") == "1": out += "c"
+    if perm.get("perm_read") == "1": out += "r"
+    if perm.get("perm_write") == "1": out += "u"
+    if perm.get("perm_unlink") == "1": out += "d"
+    return out
+
+for m in MODS:
+    root = pathlib.Path(m)
+    if not root.exists():
+        continue
+    # 1) CSV de permisos: ir.model.access.csv -> ir.access.csv, perm_* -> operation
+    for c in list(root.rglob("ir.model.access.csv")):
+        rows = list(csv.reader(c.open(newline="", encoding="utf-8")))
+        out = [["id", "name", "model_id:id", "group_id:id", "operation", "domain"]]
+        if rows and "perm_read" in rows[0]:
+            idx = {n: i for i, n in enumerate(rows[0])}
+            for r in rows[1:]:
+                if not r or not any(r):
+                    continue
+                get = lambda k: (r[idx[k]].strip() if k in idx and idx[k] < len(r) else "")
+                out.append([get("id"), get("name"), get("model_id:id"), get("group_id:id"),
+                            operation({k: get(k) for k in ("perm_read", "perm_write",
+                                                           "perm_create", "perm_unlink")}), ""])
+        else:
+            out = rows
+        c.with_name("ir.access.csv").write_text(
+            "\n".join(",".join(row) for row in out) + "\n", encoding="utf-8")
+        if c.name != "ir.access.csv":
+            c.unlink()  # el CSV viejo ya no lo referencia el manifest
+        print(f"     port: {m}/security/ir.model.access.csv -> ir.access.csv (operation)")
+    # 2) manifest: nombre del CSV, version 20.0, installable True
+    man = root / "__manifest__.py"
+    if man.exists():
+        txt = man.read_text(encoding="utf-8")
+        new = txt.replace("security/ir.model.access.csv", "security/ir.access.csv")
+        new = re.sub(r'"version": "19\.0\.', '"version": "20.0.', new)
+        new = re.sub(r"(['\"])installable\1\s*:\s*False", '"installable": True', new)
+        if new != txt:
+            man.write_text(new, encoding="utf-8")
+            print(f"     port: {m}/__manifest__.py (version 20.0 / csv / installable)")
+    # 3) XML: ir.rule -> ir.access (domain + operation obligatoria) y sin report_file
+    for x in root.rglob("*.xml"):
+        txt = x.read_text(encoding="utf-8", errors="replace")
+        if ('model="ir.rule"' not in txt and 'name="domain_force"' not in txt
+                and 'name="report_file"' not in txt):
+            continue
+        new = txt.replace('model="ir.rule"', 'model="ir.access"')
+        new = new.replace('name="domain_force"', 'name="domain"')
+        new = re.sub(r'\s*<field name="global"[^/]*/>\n', "\n", new)
+        new = re.sub(r'\s*<field name="report_file">[^<]*</field>', "", new)
+        def _add_op(match):
+            block = match.group(0)
+            if 'model="ir.access"' not in block or 'name="operation"' in block:
+                return block
+            return re.sub(r'(<field name="name">[^<]*</field>\s*)',
+                          r'\1<field name="operation">crud</field>\n        ', block, count=1)
+        new = re.sub(r'<record[^>]*>.*?</record>', _add_op, new, flags=re.S)
+        if new != txt:
+            x.write_text(new, encoding="utf-8")
+            print(f"     port: {x}")
+    # 4) imports movidos en Odoo 20
+    for py in root.rglob("*.py"):
+        txt = py.read_text(encoding="utf-8", errors="replace")
+        new = txt
+        if "content_disposition" in new:
+            new = new.replace("from odoo.http import content_disposition, request, route",
+                              "from odoo.http.stream import content_disposition\n"
+                              "from odoo.http import request, route")
+            new = new.replace("from odoo.http import content_disposition",
+                              "from odoo.http.stream import content_disposition")
+            new = re.sub(r"from odoo\.http import \(\s*content_disposition,\s*",
+                         "from odoo.http.stream import content_disposition\nfrom odoo.http import (\n    ", new)
+        if "serialize_exception" in new:
+            new = new.replace("from odoo.http import serialize_exception",
+                              "from odoo.http.dispatcher import serialize_exception")
+            new = re.sub(r"from odoo\.http import \(\s*serialize_exception as (_serialize_exception),",
+                         "from odoo.http.dispatcher import (\n    serialize_exception as \\1,", new)
+        if new != txt:
+            py.write_text(new, encoding="utf-8")
+            print(f"     port: {py} (imports odoo.http -> stream/dispatcher)")
+print("port OCA 19->20 aplicado")
+OCA_PORT_19_TO_20
 cd ..
 
 cat > addons/README.md <<'EOF'
 # Addons de Localizacion Argentina (Odoo 20 CE)
 
 Fuentes community (branch 20.0), descargadas por crear_odoo20.sh:
+
+OCA (paridad de Contabilidad, S8): crear_odoo20.sh también clona la branch
+19.0 de OCA/reporting-engine, OCA/account-financial-reporting y OCA/server-ux
+(sus ramas 20.0 siguen vacías), copia sólo report_xlsx, report_xlsx_helper,
+date_range y partner_statement, y les aplica el port 19->20 (CSV
+ir.access/operation, ir.rule->ir.access, imports odoo.http, report_file,
+version 20.0). NO copia account_financial_report ni auditlog: sus ports
+están pendientes (docs/ee-parity-contabilidad.md §7).
 
 - ingadhoc/odoo-argentina-ce: l10n_ar_fiscal_ws* (WSAA / WSFEv1 AFIP-ARCA)
 - ingadhoc/odoo-argentina: l10n_ar_tax, l10n_ar_bank, l10n_ar_purchase*, l10n_ar_ux
@@ -306,7 +497,7 @@ if [[ -n "$INIT_DB" ]]; then
   done
   echo "Inicializando DB '${INIT_DB}' (apps: ${SYSTEM_APPS} + custom: ${CUSTOM_ADDONS})..."
   docker compose exec -T odoo odoo --config=/etc/odoo/odoo.conf --logfile= \
-    --stop-after-init --without-demo=all -d "$INIT_DB" -i "$SYSTEM_APPS,${CUSTOM_ADDONS// /,}" 2>&1 \
+    --stop-after-init --without-demo=all -d "$INIT_DB" -i "$SYSTEM_APPS,${CUSTOM_ADDONS// /,},${PARITY_ADDONS// /,}" 2>&1 \
     | grep -E "ERROR|CRITICAL|Modules loaded|Registry loaded" | tail -5
   # Ocultar los tiles Enterprise (OEEL-1): no instalables en CE y solo ensucian el menu.
   docker compose exec -T db psql -U odoo -d "$INIT_DB" -c \

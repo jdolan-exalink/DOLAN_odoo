@@ -65,37 +65,39 @@
   border-radius: 0 !important;
 }
 
-.o_main_navbar .o_dropdown_menu.o_app_menu_content, .o_main_navbar .o_dropdown_menu {
+/* ---------- Apps dropdown nativo (Odoo 20) ---------- */
+.o-dropdown--menu:has(.o_app) {
+  min-width: 240px;
+  // libsass evalúa min() y falla con unidades mixtas ("Incompatible units: 'px' and 'vh'")
+  // rompiendo TODO web.assets_web. Emitimos el valor literal: lo resuelve el navegador.
+  max-height: unquote("min(70vh, 560px)");
+  overflow-y: auto;
   border: 1px solid var(--o-dolan-bd) !important;
   border-radius: var(--o-dolan-radius) !important;
   box-shadow: var(--o-dolan-shadow) !important;
   background: var(--o-dolan-surface) !important;
-  padding: var(--o-dolan-s3) !important;
+  padding: var(--o-dolan-s2) !important;
 
   .o_app {
+    display: flex !important;
+    align-items: center;
+    width: 100%;
+    padding: 9px 12px !important;
     border-radius: var(--o-dolan-radius-sm);
-    padding: 10px 12px !important;
-    transition: background .12s ease, transform .12s ease;
+    color: var(--o-dolan-tx);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    text-decoration: none !important;
 
-    .o_app_icon {
-      border-radius: 10px;
-      padding: 6px;
-      background: var(--o-dolan-pri-soft);
-    }
-
-    &:hover {
-      background: var(--o-dolan-hover, #f1f5f9);
-      transform: translateY(-1px);
-    }
-
-    /* app activa (core: clase focus = app actual) */
-    &.focus {
-      background: var(--o-dolan-pri-soft) !important;
-      color: var(--o-dolan-pri-dark);
-      font-weight: 700;
-      box-shadow: inset 3px 0 0 var(--o-dolan-pri);
-    }
+    &:hover { background: var(--o-dolan-hover) !important; color: var(--o-dolan-pri-dark); }
+    &.focus { background: var(--o-dolan-pri-soft) !important; color: var(--o-dolan-pri-dark); font-weight: 700; }
   }
+}
+
+:root[data-dolan-theme="dark"] .o-dropdown--menu:has(.o_app) {
+  background: var(--o-dolan-surface) !important;
+  .o_app { color: var(--o-dolan-tx); }
 }
 
 /* ---------- Sidebar de apps (panel lateral nativo) ---------- */
@@ -141,98 +143,4 @@
 :root[data-dolan-density="compact"] {
   .o_app_menu_sidebar .o_app { padding-top: 5px !important; padding-bottom: 5px !important; }
   .o_main_navbar { padding-top: 0; padding-bottom: 0; }
-}
-
-/* =========================================================================
-   Slice 1b — Rail lateral de apps (desktop), extension de template core.
-   Offset del contenido: .o_action_manager (ActionContainer, confirmado en
-   action_container.js). Oculto <992px (el core conserva su burger).
-   ========================================================================= */
-.o_dolan_rail {
-  position: fixed;
-  top: var(--o-dolan-navbar-h, 48px);
-  left: 0;
-  bottom: 0;
-  width: 240px;
-  flex-direction: column;        /* d-lg-flex de Bootstrap es row por defecto */
-  align-items: stretch;
-  justify-content: flex-start;
-  background: var(--o-dolan-surface);
-  border-right: 1px solid var(--o-dolan-bd);
-  box-shadow: 4px 0 16px rgba(15, 23, 42, .06);
-  z-index: 30;               /* bajo la topbar (z mayor), sobre el contenido */
-  overflow-y: auto;
-  padding: var(--o-dolan-s3) 0 var(--o-dolan-s4);
-
-  .o_dolan_rail_title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    color: var(--o-dolan-tx-mut);
-    font-weight: 700;
-    padding: 4px 16px 10px;
-  }
-
-  .o_dolan_rail_item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 14px;
-    margin: 1px 8px;
-    border-radius: var(--o-dolan-radius-sm);
-    color: var(--o-dolan-tx);
-    text-decoration: none;
-    transition: background .12s ease;
-
-    &:hover { background: var(--o-dolan-hover, #f1f5f9); color: var(--o-dolan-pri-dark); }
-
-    .o_dolan_rail_icon { width: 24px; height: 24px; border-radius: 6px; }
-    .o_dolan_rail_ico { font-size: 18px; color: var(--o-dolan-pri); width: 24px; text-align: center; }
-    .o_dolan_rail_label { font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    &.o_dolan_rail_active {
-      background: var(--o-dolan-pri-soft);
-      color: var(--o-dolan-pri-dark);
-      box-shadow: inset 3px 0 0 var(--o-dolan-pri);
-      .o_dolan_rail_label { font-weight: 800; }
-    }
-  }
-}
-
-/* desplazar el contenido a la derecha del rail (desktop, igual que el breakpoint d-lg) */
-@media (min-width: 992px) {
-  .o_action_manager { margin-left: 240px; }
-}
-
-/* ---------- Sidebar compacta (toggle con localStorage) ---------- */
-.o_dolan_rail_head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-right: 8px;
-}
-.o_dolan_rail_toggle {
-  border: 1px solid var(--o-dolan-bd);
-  background: var(--o-dolan-surface, #fff);
-  color: var(--o-dolan-tx-mut);
-  border-radius: 7px;
-  width: 26px;
-  height: 24px;
-  line-height: 1;
-  font-size: 13px;
-  cursor: pointer;
-  &:hover { background: var(--o-dolan-pri-soft); color: var(--o-dolan-pri-dark); }
-}
-.o_dolan_rail .tg-open { display: none; }
-
-.o_dolan_rail_compact {
-  width: 68px !important;
-  .o_dolan_rail_title, .o_dolan_rail_label { display: none; }
-  .o_dolan_rail_toggle .tg-close { display: none; }
-  .o_dolan_rail_toggle .tg-open { display: inline; }
-  .o_dolan_rail_item { justify-content: center; padding: 10px 0 !important; margin: 1px 6px; }
-  .o_dolan_rail_ico, .o_dolan_rail_icon { width: 26px; height: 26px; }
-}
-@media (min-width: 992px) {
-  body.dolan-compact .o_action_manager { margin-left: 68px; }
 }

@@ -1,6 +1,6 @@
-# DOLAN_theme — Arquitectura propuesta (sujeta a aprobación)
+# DOLAN_theme — Arquitectura implementada y evolutiva
 
-**Principio**: un solo addon instalable `DOLAN_theme` (entry point), capas internas organizadas por paquete, extensiones reversibles, desacoplado de verticales y del futuro módulo LLM/IA.
+**Principio**: un solo addon instalable `DOLAN_theme` (entry point), capas internas organizadas por paquete, extensiones reversibles, desacoplado de verticales y del futuro módulo LLM/IA. La arquitectura refleja el estado actual en Odoo 20 CE; las propuestas futuras quedan identificadas como tales.
 
 ## 1. Repositorio
 
@@ -11,7 +11,7 @@ DOLAN_theme/                     ← repo git independiente (ya inicializado)
 │   ├── __manifest__.py          ← dependencias mínimas: ["base","web"] (nunca instala apps)
 │   ├── __init__.py
 │   ├── core/                    ← tokens SCSS/CSS (variables + custom properties), tipografía, iconos
-│   ├── navigation/              ← app launcher, sidebar, breadcrumbs (vistas+assets+JS mínimo)
+│   ├── navigation/              ← app launcher (topbar + grilla Inicio), breadcrumbs (vistas+assets+JS mínimo)
 │   ├── views/                   ← herencias de form/list (scoppeadas)
 │   ├── dashboard/               ← home por rol y widgets (acción client propia, datos vía ORM autorizado)
 │   ├── preferences/             ← densidad/tema por usuario (ir.default + res.users)
@@ -27,7 +27,7 @@ DOLAN_theme/                     ← repo git independiente (ya inicializado)
 | Paquete | Mecanismo (confirmado en Odoo 20) | Reversibilidad |
 |---|---|---|
 | `core` tokens | SCSS/CSS custom properties en `web.assets_backend` (scoppeado a `html/body` con prefijo `o_dolan_theme`) + herencia de assets en manifest | alta: desinstalar quita assets |
-| `navigation` | herencia de vistas (`inherit_id` de `web.menu`/navbar XML core, ver Fase 3), `ir.ui.menu.sequence` para orden, launcher como client action propia | media: patches de vista heredada |
+| `navigation` | extensión QWeb del navbar nativo, `ir.ui.menu.sequence` y acción URL interna `/dolan_apps` para la grilla | media: herencia QWeb reversible |
 | `views` | `ir.ui.view` inherit **selectiva** por modelo (solo donde aporte; nunca ocultar validaciones/campos obligatorios) | alta |
 | `dashboard` | client action OWL **propia** (checklist Owl3 de `odoo20-compatibility.md`); datos con `orm` → respeta ACL/record rules/multiempresa | alta |
 | `preferences` | preferencias visuales por usuario (`res.users` fields no intrusivos o `ir.default`); densidades como clases en `html` | alta |
@@ -38,7 +38,7 @@ DOLAN_theme/                     ← repo git independiente (ya inicializado)
 ## 3. Sistema de diseño (resumen; detalle en Fase 2)
 
 - Tokens: colores semánticos (primary/accent/success/warning/danger + superficies), espaciado (escala 4/8/12/16/24), radios, sombras discretas, tipografía base ≥14px, iconografía (fontawesome del core).
-- **Modos**: claro / oscuro / automático (custom properties + clase en `<html>`, preferencia por usuario; sin tocar POS).
+- **Modos**: claro / oscuro / automático (custom properties en `<html>`). El modo del menú Configuración Dolan es el valor inicial del servidor; el toggle directo se recuerda por navegador con `localStorage` (`dolan_theme_mode`). Sin tocar POS.
 - **Densidades**: cómoda / normal / compacta (clase de espaciado en listas/formularios; legibilidad intacta).
 - Accesibilidad: contraste AA mínimo, foco visible, navegación por teclado, targets táctiles en POS.
 

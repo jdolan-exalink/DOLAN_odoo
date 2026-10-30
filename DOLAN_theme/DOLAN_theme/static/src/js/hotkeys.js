@@ -1,6 +1,6 @@
 /** @odoo-module **/
-// Atajos globales estilo Gmail: g + letra. Navega clickeando la rail
-// (mismo camino que un click de usuario; sin parches de componentes OWL).
+// Atajos globales estilo Gmail: g + letra. Navegan con el servicio oficial
+// `menu` (selectMenu) — mismo camino que un click de usuario, sin tocar el DOM.
 import { registry } from "@web/core/registry";
 
 const TECLAS = {
@@ -20,7 +20,8 @@ function esEditable(el) {
 }
 
 registry.category("services").add("dolan_hotkeys", {
-    start() {
+    dependencies: ["menu"],
+    start(env, { menu }) {
         let pendiente = false;
         document.addEventListener("keydown", (ev) => {
             if (ev.ctrlKey || ev.metaKey || ev.altKey || esEditable(document.activeElement)) {
@@ -42,11 +43,12 @@ registry.category("services").add("dolan_hotkeys", {
             if (!xmlid) {
                 return;
             }
-            const item = document.querySelector(`.o_dolan_rail_item[data-menu-xmlid="${xmlid}"]`);
-            if (item) {
-                item.classList.add("dolan_hotkey_flash");
-                window.setTimeout(() => item.classList.remove("dolan_hotkey_flash"), 500);
-                item.click();
+            const root = menu.getMenu("root");
+            const target = (root?.children || [])
+                .map((id) => menu.getMenu(id))
+                .find((m) => m && m.xmlid === xmlid);
+            if (target) {
+                menu.selectMenu(target);
             }
         }, true);
     },

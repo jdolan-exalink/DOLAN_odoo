@@ -4,7 +4,7 @@ from odoo.exceptions import UserError
 
 class DolanUiSettings(models.TransientModel):
     _name = "dolan.ui.settings"
-    _description = "Configuracion de apps Dolan (orden y por defecto)"
+    _description = "Configuracion de apps Dolan (orden)"
 
     app_order = fields.Char(
         string="Orden de apps (xmlids separados por coma)",
@@ -21,12 +21,6 @@ class DolanUiSettings(models.TransientModel):
     widgets_order = fields.Char(
         string="Widgets del Home (orden, sin usar = oculto)",
         help="Ej: facturas,compras,por_cobrar,nc,remitos,recepciones")
-    default_app = fields.Many2one(
-        "ir.ui.menu",
-        string="App por defecto",
-        domain="[('parent_id', '=', False), ('active', '=', True)]",
-        help="App a la que entra el usuario despues del login.",
-    )
 
     @api.model
     def _top_menus(self):
@@ -46,15 +40,9 @@ class DolanUiSettings(models.TransientModel):
             order = [x.strip() for x in stored.split(",") if x.strip()]
         else:
             order = [self._menu_xmlid(m) or str(m.id) for m in self._top_menus()]
-        default_xmlid = params.get_str("dolan.ui.default_app", "")
-        default_id = False
-        if default_xmlid:
-            rec = self.env.ref(default_xmlid, raise_if_not_found=False)
-            default_id = rec.id if rec else False
         return {
             "app_order": ", ".join(order),
             "apps_help": "\n".join(order),
-            "default_app": default_id,
             "tema": params.get_str("dolan.ui.tema", "auto"),
             "densidad": params.get_str("dolan.ui.densidad", "normal"),
             "widgets_order": params.get_str("dolan.ui.widgets",
@@ -65,7 +53,7 @@ class DolanUiSettings(models.TransientModel):
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
         defaults = self._load_defaults()
-        for fname in ("app_order", "apps_help", "default_app", "tema", "densidad", "widgets_order"):
+        for fname in ("app_order", "apps_help", "tema", "densidad", "widgets_order"):
             if fname in fields_list:
                 res[fname] = defaults[fname]
         return res
@@ -108,54 +96,17 @@ class DolanUiSettings(models.TransientModel):
         params.set_str("dolan.ui.densidad", self.densidad or "normal")
         params.set_str("dolan.ui.widgets",
                        (self.widgets_order or "").replace(" ", ""))
-        if self.default_app:
-            target = self.default_app
-            # menus raiz no tienen accion: derivar al primer hijo con accion
-            if not target.action:
-                child = self.env["ir.ui.menu"].search(
-                    [("parent_id", "=", target.id), ("active", "=", True),
-                     ("action", "!=", False)], order="sequence", limit=1)
-                if not child:
-                    raise UserError(
-                        "La app por defecto '%s' no tiene accion (elige un item hijo)." % target.name)
-                target = child
-            xid = self._menu_xmlid(target)
-            if not xid:
-                raise UserError("La app por defecto debe tener xmlid (menú de sistema).")
-            params.set_str("dolan.ui.default_app", xid)
-        else:
-            params.set_str("dolan.ui.default_app", "")
         return True
 
     @api.model
     def get_public_config(self):
-        def params_tema():
-            return self.env["ir.config_parameter"].sudo().get_str("dolan.ui.tema", "auto")
+        """Config publica para el cliente (tema/densidad).
 
-        def params_densidad():
-            return self.env["ir.config_parameter"].sudo().get_str("dolan.ui.densidad", "normal")
-
-        """Para el JS del cliente: accion por defecto (referencia de menu)."""
-        xid = self.env["ir.config_parameter"].sudo().get_str("dolan.ui.default_app", "")
-        if not xid:
-            return {"default_action": False, "default_menu_xmlid": False,
-                    "tema": params_tema(), "densidad": params_densidad()}
-        menu = self.env.ref(xid, raise_if_not_found=False)
-        if not menu or not menu.action:
-            return {"default_action": False, "default_menu_xmlid": False,
-                    "tema": params_tema(), "densidad": params_densidad()}
-        # Odoo20: menu.action devuelve recordset (p.ej. act_window(814,));
-        # tambien acepta el formato string 'ir.actions.act_window,814'
-        action = menu.action
-        if not action:
-            return {"default_action": False, "default_menu_xmlid": False,
-                    "tema": params_tema(), "densidad": params_densidad()}
-        if hasattr(action, "id"):
-            return {"default_action": str(action.id) if action.id else False,
-                    "default_menu_xmlid": xid,
-                    "tema": params_tema(), "densidad": params_densidad()}
-        action = str(action)
-        if "," in action:
-            action = action.split(",")[1]
-        return {"default_action": action, "default_menu_xmlid": xid,
-                "tema": params_tema(), "densidad": params_densidad()}
+        La entrada la decide Odoo: restaura la ultima app de la sesion o abre
+        la primera del orden. No hay accion por defecto propia (S7).
+        """
+        params = self.env["ir.config_parameter"].sudo()
+        return {
+            "tema": params.get_str("dolan.ui.tema", "auto"),
+            "densidad": params.get_str("dolan.ui.densidad", "normal"),
+        }

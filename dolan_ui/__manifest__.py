@@ -7,7 +7,6 @@
     "data": ["views/settings.xml"],
     "assets": {
         "web.assets_backend": [
-            "dolan_ui/static/src/default_app.js",
         ],
     },
     "license": "LGPL-3",

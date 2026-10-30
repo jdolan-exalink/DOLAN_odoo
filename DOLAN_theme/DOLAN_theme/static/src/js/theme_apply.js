@@ -14,7 +14,16 @@ function resolverTema(tema) {
 
 function aplicar(cfg) {
     if (!cfg) return;
-    document.documentElement.dataset.dolanTheme = resolverTema(cfg.tema);
+    let tema = resolverTema(cfg.tema);
+    try {
+        const preferenciaLocal = window.localStorage.getItem("dolan_theme_mode");
+        if (preferenciaLocal === "dark" || preferenciaLocal === "light") {
+            tema = preferenciaLocal;
+        }
+    } catch (_error) {
+        // Use the server-configured theme when browser storage is unavailable.
+    }
+    document.documentElement.dataset.dolanTheme = tema;
     if (cfg.densidad && cfg.densidad !== "normal") {
         document.documentElement.dataset.dolanDensity = cfg.densidad;
     } else {
