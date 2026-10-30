@@ -26,3 +26,20 @@ services:
       - USER=odoo
       - PASSWORD=odoo
     restart: always
+
+  waha:
+    image: devlikepro/waha:latest
+    container_name: ${PROJECT_NAME:-odoo20-argentina}_waha
+    restart: unless-stopped
+    environment:
+      WAHA_API_KEY: ${WAHA_API_KEY:-dolan-waha-key}
+      WAHA_LOCALFILE_STORE_PATH: /app/.sessions
+      WHATSAPP_RESTART_ALL_SESSIONS: "true"
+      TZ: America/Argentina/Buenos_Aires
+    ports:
+      - "3000:3000"
+    volumes:
+      - waha-store:/app/.sessions
+
+volumes:
+  waha-store:

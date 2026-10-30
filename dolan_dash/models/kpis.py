@@ -104,7 +104,7 @@ class DolanDash(models.TransientModel):
                 "key": "facturas", "label": "Facturas del mes",
                 "valor": len(facturas),
                 "hint": "$ " + ar(sum(facturas.mapped("amount_total"))),
-                "tag": "bg-primary-subtle text-primary",
+                "tag": "dolan_tag_facturas",  # azul Enterprise (cosmética L7)
             },
             "compras": {
                 "key": "compras", "label": "Compras por pagar",

@@ -58,7 +58,7 @@ SYSTEM_APPS="sale_management,point_of_sale,mrp,project,crm,hr_expense"
 # y app por defecto). Se copian desde el deploy canonico (odoo20-argentina/addons).
 # NOTA: web_responsive (OCA 19.0) NO se instala: su JS es Owl2 y Odoo 20 usa
 # Owl3 (crash de AppsMenu -> pantalla blanca). Esperar migracion oficial 20.0.
-CUSTOM_ADDONS="DOLAN_theme DOLAN_ai DOLAN_alquileres DOLAN_bancos DOLAN_calidad DOLAN_codigo_barras DOLAN_contabilidad DOLAN_declaracion DOLAN_flotilla DOLAN_mantenimiento DOLAN_suscripciones DOLAN_taller dolan_dash dolan_ui"
+CUSTOM_ADDONS="DOLAN_theme DOLAN_ai DOLAN_alquileres DOLAN_bancos DOLAN_calidad DOLAN_codigo_barras DOLAN_contabilidad DOLAN_declaracion DOLAN_flotilla DOLAN_mantenimiento DOLAN_suscripciones DOLAN_taller dolan_dash dolan_ui DOLAN_whatsapp"
 
 # Paridad de Contabilidad (S8): módulos que se instalan además de los custom.
 # l10n_latam_check es core; los demás vienen de OCA rama 19.0 con port 19->20
@@ -226,6 +226,21 @@ services:
       - USER=odoo
       - PASSWORD=odoo
     restart: always
+  waha:
+    image: devlikepro/waha:latest
+    restart: unless-stopped
+    environment:
+      WAHA_API_KEY: ${WAHA_API_KEY:-dolan-waha-key}
+      WAHA_LOCALFILE_STORE_PATH: /app/.sessions
+      WHATSAPP_RESTART_ALL_SESSIONS: "true"
+      TZ: America/Argentina/Buenos_Aires
+    ports:
+      - "3000:3000"
+    volumes:
+      - waha-store:/app/.sessions
+
+volumes:
+  waha-store:
 EOF
 
 cat > odoo.conf <<EOF
@@ -532,6 +547,13 @@ if [[ -n "$INIT_DB" ]]; then
   docker compose exec -T db psql -U odoo -d "$INIT_DB" -c \
     "UPDATE ir_config_parameter SET value='production' WHERE key='l10n_ar_fiscal_ws.env_type';"
 
+  # WAHA: parametros de integracion DOLAN_whatsapp
+  docker compose exec -T db psql -U odoo -d "$INIT_DB" -c \
+    "INSERT INTO ir_config_parameter (key,value,create_uid,create_date,write_uid,write_date) VALUES
+     ('dolan.waha.url','http://waha:3000',1,now(),1,now()),
+     ('dolan.waha.api_key','${WAHA_API_KEY:-dolan-waha-key}',1,now(),1,now()),
+     ('dolan.waha.webhook_token','${WAHA_WEBHOOK_TOKEN:-}',1,now(),1,now())
+     ON CONFLICT (key) DO NOTHING;" 2>/dev/null || true
   # Copiar scripts de QA
   if [[ -d "$SCRIPT_DIR/DOLAN_theme/qa" ]]; then
     mkdir -p qa && cp -r "$SCRIPT_DIR/DOLAN_theme/qa"/* qa/ 2>/dev/null
