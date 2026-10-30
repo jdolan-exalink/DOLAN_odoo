@@ -120,8 +120,8 @@ Ocultos para juan (grupo "Show Accounting Features - Readonly"):
 | C7 Resumen IVA / Libro de IVA | ✅ hecho | port 19→20 + port fiscal: el código de documento sale de `res.partner.l10n_ar_afip_code` (catálogo A4 de ARCA, verificado en `arca.gob.ar/iva/documentos/Libro-IVA-Digital-Tablas-del-Sistema.pdf`: 80 CUIT, 86 CUIL, 87 CDI, 89 LE, 90 LC, 91 CI extranjera, 96 DNI, 99 **Sin identificar / venta global diaria** = fallback con documento 0). Menús en español: Libro de IVA Ventas/Compras + Análisis de IVA |
 | C13 Consultar factura en ARCA | ✅ hecho | menú propio sobre `l10n_ar_fiscal_ws.action_fiscal_ws_recover` |
 | C9 tablero con tarjetas | ✅ hecho | widget **Cheques de terceros** en `dolan_dash` (valor + `$` + propios, serie 6 meses y bloque "Últimos cheques"); QA `verify_tablero_cheques.mjs` 6/6 |
-| C10 estados financieros (Balance/ER/Flujo/Libro mayor) | 🔴 bloqueado | OCA `account_financial_report` 19.0 requiere port real: Odoo 20 **eliminó el modelo `account.group`** que usa para agrupar el balance |
-| C11 auditoría | 🔴 bloqueado | OCA `auditlog` 19.0: Odoo 20 exige tabla para todo modelo no abstracto (`auditlog.log.line.view` es una vista SQL) |
+| C10 estados financieros | ✅ hecho (propio) | `DOLAN_contabilidad` con **wizard + XLSX** propios (LGPL): Balance general, Estado de resultados y Flujo de efectivo, calculados desde `account.move.line` por tipo de cuenta. Nota: el motor `account.report` de CE **no trae evaluador ni visor** (viven en Enterprise `account_reports`), por eso no se usó |
+| C11 auditoría | 🟡 en curso | implementación propia sin OCA (pista de auditoría nativa + auditoría de diario propia) — ver L51 |
 | C12 Activos/Préstamos/Valuación/regularizaciones | 🔴 EE-only | fuera de alcance (licencia) |
 
 ### Ports Odoo 19.0 → 20.0 aplicados (reproducibles en el deploy)
