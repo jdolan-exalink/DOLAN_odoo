@@ -69,7 +69,7 @@ CUSTOM_ADDONS="DOLAN_theme DOLAN_ai DOLAN_alquileres DOLAN_bancos DOLAN_calidad 
 #   partner_statement                : estados de cuenta del contacto (C6)
 # NO incluidos (port pendiente, ver §7): account_financial_report (Odoo 20
 # eliminó el modelo account.group) y auditlog (modelo SQL-view sin tabla).
-PARITY_ADDONS="l10n_latam_check report_xlsx report_xlsx_helper date_range partner_statement"
+PARITY_ADDONS="l10n_latam_check report_xlsx report_xlsx_helper date_range partner_statement l10n_ar_fiscal_ws_reports"
 OCA_REPOS=(
   "https://github.com/OCA/reporting-engine.git"
   "https://github.com/OCA/account-financial-reporting.git"
@@ -259,6 +259,61 @@ done
 if [[ -f l10n_ar_fiscal_ws/__manifest__.py ]]; then
   sed -i 's/"installable": False/"installable": True/' l10n_ar_fiscal_ws/__manifest__.py
   echo "  -> l10n_ar_fiscal_ws habilitado (port validado 2026-10-26)"
+fi
+
+# l10n_ar_fiscal_ws_reports (Libro de IVA / Análisis de IVA, S8/P2-C7): version
+# 20.0 + port fiscal. En Odoo 20 el tipo de documento del socio es el campo
+# compute l10n_ar_afip_code (catálogo A4 de ARCA) y ya existe la columna en
+# res_partner; el módulo 19.0 se unía a l10n_latam_identification_type (borrada).
+if [[ -f l10n_ar_fiscal_ws_reports/__manifest__.py ]]; then
+  python3 - <<'IVA_PORT_19_TO_20'
+import pathlib, re
+
+root = pathlib.Path("l10n_ar_fiscal_ws_reports")
+man = root / "__manifest__.py"
+if man.exists():
+    txt = man.read_text(encoding="utf-8")
+    new = re.sub(r'"version": "19\.0\.', '"version": "20.0.', txt)
+    new = re.sub(r"(['\"])installable\1\s*:\s*False", '"installable": True', new)
+    if new != txt:
+        man.write_text(new, encoding="utf-8")
+        print("     port: manifest 20.0 / installable")
+
+view = root / "report" / "account_ar_vat_line.py"
+if view.exists():
+    txt = view.read_text(encoding="utf-8")
+    new = txt.replace(
+        "(CASE WHEN lit.l10n_ar_afip_code = '80' THEN rp.vat ELSE null END) as cuit,",
+        "(CASE WHEN rp.l10n_ar_afip_code = '80' THEN rp.vat ELSE null END) as cuit,")
+    new = new.replace("LEFT JOIN\n    l10n_latam_identification_type AS lit\n"
+                      "    ON rp.l10n_latam_identification_type_id = lit.id\n", "")
+    new = new.replace("am.id, art.name, rp.id, lit.id", "am.id, art.name, rp.id")
+    if new != txt:
+        view.write_text(new, encoding="utf-8")
+        print("     port: vista SQL usa rp.l10n_ar_afip_code (catálogo A4)")
+
+ledger = root / "models" / "account_vat_ledger.py"
+if ledger.exists():
+    txt = ledger.read_text(encoding="utf-8")
+    old = ('        if partner.l10n_ar_afip_responsibility_type_id.code == "5":\n'
+           '            doc_code = f"{int(partner.l10n_latam_identification_type_id.l10n_ar_afip_code):0>2d}"\n'
+           '            doc_number = partner.vat or ""\n'
+           '            # limpiamos letras que no son soportadas\n'
+           '            doc_number = re.sub("[^0-9]", "", doc_number)')
+    new = ('        if partner.l10n_ar_afip_responsibility_type_id.code == "5":\n'
+           '            # Odoo 20: tipo de documento del socio = campo compute\n'
+           '            # l10n_ar_afip_code (catálogo A4 de ARCA); sin identificar =\n'
+           '            # 99 con documento 0 (arca.gob.ar, Tablas del Sistema).\n'
+           '            afip_code = partner.l10n_ar_afip_code\n'
+           '            doc_code = f"{int(afip_code):0>2d}" if afip_code else "99"\n'
+           '            doc_number = re.sub("[^0-9]", "", partner.vat or "")\n'
+           '            if not doc_number:\n'
+           '                doc_number = "0" if doc_code == "99" else ""')
+    if old in txt:
+        ledger.write_text(txt.replace(old, new), encoding="utf-8")
+        print("     port: código de documento ARCA (A4 + fallback 99)")
+IVA_PORT_19_TO_20
+  echo "  -> l10n_ar_fiscal_ws_reports portado (Libro de IVA / Análisis de IVA)"
 fi
 cd ..
 
