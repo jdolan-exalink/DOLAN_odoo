@@ -1,3 +1,4 @@
+import json
 import logging
 
 from odoo import http
@@ -22,9 +23,15 @@ class DolanWhatsappController(http.Controller):
         cfg = message_model._waha_config()
         if cfg["token"] and token != cfg["token"]:
             return request.make_json_response({"ok": False, "error": "token_invalido"})
+        raw = request.httprequest.data or b"{}"
         try:
-            body = request.get_jsonrequest() or {}
+            body = json.loads(raw)
         except Exception:  # noqa: BLE001
+            try:
+                body = request.get_jsonrequest() or {}
+            except Exception:  # noqa: BLE001
+                body = {}
+        if not isinstance(body, dict):
             body = {}
         params = body.get("params") if isinstance(body.get("params"), dict) else body
         payload = (params or {}).get("payload") or {}
