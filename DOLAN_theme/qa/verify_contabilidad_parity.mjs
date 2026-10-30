@@ -61,6 +61,11 @@ for (const want of ["Estado de la cuenta del cliente", "Estado de los pendientes
 check("consulta de factura en ARCA (C13)", names.has("Consultar factura en ARCA"),
   names.has("Consultar factura en ARCA") ? "ok" : "no visible");
 
+// S8/P2 · Resumen IVA (C7): libro de IVA y cubo de análisis en español
+for (const want of ["Libro de IVA - Ventas", "Libro de IVA - Compras", "Análisis de IVA"]) {
+  check(`IVA: "${want}" (C7)`, names.has(want), names.has(want) ? "ok" : "no visible");
+}
+
 // navegación real: la app abre el webclient
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 950 } });
 const page = await ctx.newPage();

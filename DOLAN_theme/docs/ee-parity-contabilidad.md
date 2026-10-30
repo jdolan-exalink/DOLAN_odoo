@@ -117,7 +117,7 @@ Ocultos para juan (grupo "Show Accounting Features - Readonly"):
 | C5 Cheques de Terceros / Propios | ✅ hecho | `l10n_latam_check` (core) instalado: menús en Clientes y Proveedores, igual que la demo |
 | C6 Estados de cuenta | ✅ hecho | OCA `partner_statement` (19.0, portado) + 3 menús en Reportes > Reportes del contacto |
 | C7 IIBB por jurisdicción | ✅ ya existía | `l10n_ar` (Reportes > Informes Argentinos) |
-| C7 Resumen IVA | 🔴 bloqueado | `l10n_ar_fiscal_ws_reports` necesita port **fiscal**: la vista SQL y `_get_partner_document_code_and_number()` usan `res.partner.l10n_latam_identification_type_id`, eliminado en Odoo 20 → decisión sobre cómo derivar el código de documento en los TXT ARCA |
+| C7 Resumen IVA / Libro de IVA | ✅ hecho | port 19→20 + port fiscal: el código de documento sale de `res.partner.l10n_ar_afip_code` (catálogo A4 de ARCA, verificado en `arca.gob.ar/iva/documentos/Libro-IVA-Digital-Tablas-del-Sistema.pdf`: 80 CUIT, 86 CUIL, 87 CDI, 89 LE, 90 LC, 91 CI extranjera, 96 DNI, 99 **Sin identificar / venta global diaria** = fallback con documento 0). Menús en español: Libro de IVA Ventas/Compras + Análisis de IVA |
 | C13 Consultar factura en ARCA | ✅ hecho | menú propio sobre `l10n_ar_fiscal_ws.action_fiscal_ws_recover` |
 | C9 tablero con tarjetas | ✅ hecho | widget **Cheques de terceros** en `dolan_dash` (valor + `$` + propios, serie 6 meses y bloque "Últimos cheques"); QA `verify_tablero_cheques.mjs` 6/6 |
 | C10 estados financieros (Balance/ER/Flujo/Libro mayor) | 🔴 bloqueado | OCA `account_financial_report` 19.0 requiere port real: Odoo 20 **eliminó el modelo `account.group`** que usa para agrupar el balance |

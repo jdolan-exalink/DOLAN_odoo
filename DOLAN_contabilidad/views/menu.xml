@@ -66,4 +66,22 @@
     <field name="action" ref="l10n_ar_fiscal_ws.action_fiscal_ws_recover"/>
     <field name="sequence">90</field>
   </record>
+
+  <!-- S8/P2 · Resumen IVA (C7): el módulo l10n_ar_fiscal_ws_reports ya trae
+       Libro de IVA ventas/compras y el cubo de análisis; se les ponen los
+       nombres en español como en la demo (Reportes > Informes Argentinos). -->
+  <record id="l10n_ar_fiscal_ws_reports.menu_account_sale_vat_ledger" model="ir.ui.menu">
+    <field name="name" eval="{'en_US': 'Sales VAT Ledger', 'es_AR': 'Libro de IVA - Ventas'}"/>
+    <field name="sequence">10</field>
+  </record>
+
+  <record id="l10n_ar_fiscal_ws_reports.menu_account_purchase_vat_ledger" model="ir.ui.menu">
+    <field name="name" eval="{'en_US': 'Purchases VAT Ledger', 'es_AR': 'Libro de IVA - Compras'}"/>
+    <field name="sequence">20</field>
+  </record>
+
+  <record id="l10n_ar_fiscal_ws_reports.menu_current_account" model="ir.ui.menu">
+    <field name="name" eval="{'en_US': 'VAT Analysis', 'es_AR': 'Análisis de IVA'}"/>
+    <field name="sequence">30</field>
+  </record>
 </odoo>
