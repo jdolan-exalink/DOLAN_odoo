@@ -121,7 +121,7 @@ Ocultos para juan (grupo "Show Accounting Features - Readonly"):
 | C13 Consultar factura en ARCA | ✅ hecho | menú propio sobre `l10n_ar_fiscal_ws.action_fiscal_ws_recover` |
 | C9 tablero con tarjetas | ✅ hecho | widget **Cheques de terceros** en `dolan_dash` (valor + `$` + propios, serie 6 meses y bloque "Últimos cheques"); QA `verify_tablero_cheques.mjs` 6/6 |
 | C10 estados financieros | ✅ hecho (propio) | `DOLAN_contabilidad` con **wizard + XLSX** propios (LGPL): Balance general, Estado de resultados y Flujo de efectivo, calculados desde `account.move.line` por tipo de cuenta. Nota: el motor `account.report` de CE **no trae evaluador ni visor** (viven en Enterprise `account_reports`), por eso no se usó |
-| C11 auditoría | 🟡 en curso | implementación propia sin OCA (pista de auditoría nativa + auditoría de diario propia) — ver L51 |
+| C11 auditoría | ✅ hecho (propio) | CE ya trae **Pista de auditoría** y **Apuntes contables**; se agregó **Auditoría de diario** propia (LGPL, `DOLAN_contabilidad`): wizard + XLSX con Resumen por diario (Documentos \| Por revisar \| Deber \| Haber \| Balance, como EE), Detalle por asiento y Controles (desbalanceados, borradores, huecos de secuencia) |
 | C12 Activos/Préstamos/Valuación/regularizaciones | 🔴 EE-only | fuera de alcance (licencia) |
 
 ### Ports Odoo 19.0 → 20.0 aplicados (reproducibles en el deploy)

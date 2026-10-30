@@ -141,3 +141,12 @@ S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experienc
 - **QA**: `DOLAN_theme/qa/verify_estados_financieros.mjs` **8/8** (menús, 3 wizards abren, 3 XLSX descargados con magic PK y >1 KB, 0 errores JS) + verificación numérica vía shell (hoja Balance parseada: totales correctos y Control = 0).
 - **ACL**: `security/ir.access.csv` con el formato nuevo de Odoo 20 (columna `operation`), grupos `account.group_account_readonly` y `account.group_account_manager`.
 - Risk: item 3 (reportes nuevos propios, sin contratos ajenos) — verificación: QA E2E de descarga + parseo del XLSX + identidad contable contra SQL.
+### L51 — Auditoría de diario propia sin OCA (2026-10-30)
+- **Investigación EE vía MCP REA** (login + `goto /odoo/action-359`, captura con `capture.at_end=["dom","screenshot"]`): el reporte "Auditoría de diario" de Enterprise vive en `/odoo/journal-report` y es imprimible, con filtros (año, tipo de diario, moneda) y columnas **Documentos | Por revisar | Deber | Haber | Balance**. Evidencia: captura en `/tmp` de la sesión + árbol de la demo en `docs/ee-parity-contabilidad.md`.
+- **Implementación propia (LGPL, sin OCA)** en `DOLAN_contabilidad`: wizard `dolan.journal.audit` (compañía, diario opcional, rango de fechas) + reporte XLSX `report.dolan_contabilidad.journal_audit` con dos hojas:
+  - **Resumen** por diario: Documentos, Por revisar (asientos con debe ≠ haber), Deber, Haber, Balance + fila TOTAL, y bloque **CONTROLES** (asientos desbalanceados, borradores en el período y huecos de secuencia por diario detectados en el número de comprobante).
+  - **Detalle**: cada asiento (diario, nombre, fecha, tercero, debe, haber, diferencia resaltada si ≠ 0, estado).
+- **Menú**: Revisión > Control > **Auditoría de diario** (bilingüe).
+- **Bugs/cuidados**: carrera de herramientas (el manifiesto se copió al deploy antes de la edición → el menú no se creó; resincronizado y `-u`); ACL con el formato nuevo `operation` de Odoo 20.
+- **QA**: `verify_estados_financieros.mjs` ampliado a los 4 reportes → **10/10** (menús, wizards, XLSX con magic PK) + parseo del XLSX: 97 asientos, Deber = Haber = 206.666.888,90 y balance 0 por diario.
+- Risk: item 3 (reporte propio nuevo; sólo lectura de asientos publicados) — verificación: E2E de descarga + parseo numérico + controles contra la BD.

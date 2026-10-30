@@ -10,6 +10,7 @@
         'security/ir.access.csv',
         'views/menu.xml',
         'views/financial_report.xml',
+        'views/journal_audit.xml',
     ],
     'installable': True,
     'application': False,

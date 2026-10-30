@@ -2,6 +2,7 @@ import { chromium } from "playwright";
 
 // QA L50 (S8/C10 · opción B): estados financieros propios en XLSX bajo
 // Contabilidad > Reportes > Estados financieros.
+// L51 (S8/C11): incluye la Auditoría de diario propia (Revisión > Control).
 const BASE = process.env.BASE || "http://localhost:8070";
 const PASS = process.env.PASS || "admin123";
 const results = [];
@@ -19,7 +20,12 @@ await ctx.request.post(`${BASE}/web/session/authenticate`, {
 
 // 1) localizar las acciones de los 3 reportes en load_menus
 const menus = await (await ctx.request.get(`${BASE}/web/webclient/load_menus`)).json();
-const wanted = { "Balance general": null, "Estado de resultados": null, "Flujo de efectivo": null };
+const wanted = {
+  "Balance general": null,
+  "Estado de resultados": null,
+  "Flujo de efectivo": null,
+  "Auditoría de diario": null,
+};
 for (const key of Object.keys(menus)) {
   const m = menus[key];
   if (m && m.name && Object.prototype.hasOwnProperty.call(wanted, m.name)) wanted[m.name] = m.actionID;
