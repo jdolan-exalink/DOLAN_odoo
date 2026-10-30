@@ -14,6 +14,12 @@
         transition: box-shadow .15s ease, transform .15s ease;
         &:hover { box-shadow: 0 6px 18px rgba(15, 23, 42, .10); transform: translateY(-2px); }
     }
+    /* tag "Facturas del mes": azul Enterprise (#0176b3) en vez del violeta
+       bg-primary-subtle de Odoo (pendiente cosmético de L7) */
+    .dolan_tag_facturas {
+        background: rgba(1, 118, 179, .15);
+        color: #0176b3;
+    }
     .dolan_icon {
         display: inline-block;
         font-size: 12px;
