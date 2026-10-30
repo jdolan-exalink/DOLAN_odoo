@@ -167,3 +167,10 @@ S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experienc
   - **Servicio en el despliegue**: `waha` (image `devlikepro/waha:latest`, puerto 3000, volumen `waha-store`, `WAHA_API_KEY`) agregado al `docker-compose.yml` **vivo** y a la **plantilla de `crear_odoo20.sh`** (+ `DOLAN_whatsapp` en `CUSTOM_ADDONS` e inserción de los parámetros `dolan.waha.*` en el post-deploy). `bash -n` OK.
   - **Bloqueado**: la ruta `/dolan_waha/webhook` devuelve 404 ("No database is selected") pese al módulo instalado → falta resolver la resolución de BD en rutas `auth="none"` (probado jsonrpc y http con `?db=`); los modelos/vistas/ACL sí cargan.
 - Risk: item 5 (servicio nuevo + módulo nuevo en el despliegue) y item 3 (webhook público con token) — sin verificación end-to-end del servicio WAHA en este corte.
+### L54 — WAHA en marcha + W2/W3 (2026-10-30)
+- **W1**: la imagen oficial es **`devlikeapro/waha`** (mi typo `devlikepro/` daba "access denied"). Servicio `odoo20-argentina_waha` **arriba**; `/api/sessions` → 200 con la API key (`[]`) y `/api/version` sin key → 401 (auth correcta).
+- **W2**: botón **"Enviar comprobante"** en la cabecera de la factura (`account.view_move_form`, sólo `posted`), que abre el mensaje de WhatsApp precargado con socio, comprobante e importe.
+- **W3**: el webhook ahora **deja historial en el chatter del contacto** (`message_post` con `mail.mt_note`); verificado en vivo con el teléfono de un contacto real → `{"ok":true,"id":3}` y el mensaje quedó en la ficha.
+- **Ports**: `res.partner.mobile` no existe en Odoo 20 (se usa `phone`); el body del webhook se lee con `json.loads` y la BD se resuelve con el header `X-Odoo-Database`.
+- **Bloqueados siguen**: `l10n_latam_check_ux` y el init de DB nueva (L53).
+- Risk: item 3 (botón nuevo en la factura y posteo de mensajes) — vistas y modelos verificados por SQL + webhook en vivo; sin prueba de click en navegador en este corte.
