@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <record id="action_home_grid_url" model="ir.actions.act_url">
+  <!-- S7/M2: el Inicio ahora es un client action (grilla dentro del webclient,
+       con la topbar nativa como en la demo EE). La página standalone
+       /dolan_apps se mantiene para enlaces viejos y para las páginas propias. -->
+  <record id="action_home_grid_client" model="ir.actions.client">
     <field name="name">Inicio</field>
+    <field name="tag">dolan_theme.home_grid</field>
+  </record>
+
+  <record id="action_home_grid_url" model="ir.actions.act_url">
+    <field name="name">Inicio (página)</field>
     <field name="url">/dolan_apps</field>
     <field name="target">self</field>
   </record>
+
   <record id="menu_home_grid" model="ir.ui.menu">
     <field name="name">Inicio</field>
-    <field name="action" ref="action_home_grid_url"/>
+    <field name="action" ref="action_home_grid_client"/>
     <field name="sequence">-100</field>
   </record>
 </odoo>

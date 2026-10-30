@@ -101,7 +101,7 @@ S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experienc
 - **Rail eliminada (T11)**: `navbar_rail.xml`, `rail_toggle.js`, bloque `.o_dolan_rail*` + offsets `.o_action_manager` (240/68px) de `navigation.scss`, reglas dark muertas en `home_grid.py`, entradas del manifest. **Hotkeys** `g+letra` reescritos sobre el servicio oficial `menu` (`selectMenu`) — ya no clickean nodos de la rail; `g+c` verificado → `/odoo/purchase`.
 - **QA (GREEN total)**: `verify_icon_navigation.mjs` **10/10**, `verify_single_rail.mjs` **47/47** (8 páginas standalone sin rail + grilla + webclient sin rail/offset + atajo), `verify_status_dot.mjs` **9/9**, `theme_v2_e2e.mjs` **8/8**. `probe_rail.mjs` borrado (era específico de la rail).
 - **Evidencia**: `qa/shots/l45-webclient-sin-rail.png` (webclient sin rail, contenido al borde), `l44-single-rail-home-dark.png`.
-- **Brecha de paridad abierta**: la demo muestra la grilla de inicio **dentro** del webclient (con topbar); la nuestra es una página standalone con "← Volver a Odoo". Requiere decisión del usuario (client action vs página).
+- ~~**Brecha de paridad abierta**: la demo muestra la grilla de inicio **dentro** del webclient (con topbar); la nuestra es una página standalone con "← Volver a Odoo".~~ **CERRADA en L52**: el Inicio ahora es un client action (`dolan_theme.home_grid`) que renderiza la grilla dentro del webclient; la página standalone `/dolan_apps` queda sólo para enlaces viejos.
 - Risk: item 3 (se quitan la rail y una opción de Ajustes que consumía el servicio borrado; ambos contratos eran nuestros) — verificado con 4 suites completas + `-u dolan_ui` limpio.
 
 ### L46 — Paridad "Contabilidad" con la demo (2026-10-29)
@@ -150,3 +150,12 @@ S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experienc
 - **Bugs/cuidados**: carrera de herramientas (el manifiesto se copió al deploy antes de la edición → el menú no se creó; resincronizado y `-u`); ACL con el formato nuevo `operation` de Odoo 20.
 - **QA**: `verify_estados_financieros.mjs` ampliado a los 4 reportes → **10/10** (menús, wizards, XLSX con magic PK) + parseo del XLSX: 97 asientos, Deber = Haber = 206.666.888,90 y balance 0 por diario.
 - Risk: item 3 (reporte propio nuevo; sólo lectura de asientos publicados) — verificación: E2E de descarga + parseo numérico + controles contra la BD.
+### L52 — Inicio dentro del webclient + limpieza (2026-10-30)
+- **Merge del PR #6** a `main` (merge commit `70fc60c`): theme v2 + L42-L51 (Contabilidad, cheques, estados de cuenta, IVA/ARCA, estados financieros propios, auditoría propia, reproducibilidad del installer).
+- **Ruteo de entrada (M2)**: medido que `/web` era determinista pero caía a la página standalone `/dolan_apps` **sin topbar** (el síntoma que molestaba). El Inicio ahora es un **client action** (`dolan_theme.home_grid`, Owl sin state: `fetch` de `/web/webclient/load_menus` + `t-foreach` de links) → `/web` → `/odoo` → **grilla dentro del webclient** con la barra nativa, el systray de tema y sin rail. La página standalone `/dolan_apps` se mantiene para enlaces viejos (sigue con su "← Volver a Odoo").
+- **Bug propio**: `rpc()` manda POST y `/web/webclient/load_menus` es GET → 405 y grilla vacía; corregido con `fetch(..., {credentials:"same-origin"})`.
+- **Bug propio (QA)**: el caso "Facturación" del QA seguía con el nombre viejo; renombrado a "Contabilidad" (`/odoo/accounting`).
+- **M3**: borrado el parámetro huérfano `dolan.ui.default_app` de `ir_config_parameter` (quedó sin consumidor tras L45); `dolan.ui.settings` sin ese campo y `/web/dolan_ui/config` devuelve sólo `tema`/`densidad`.
+- **M4**: `pypdfium2` **ya estaba** en el Dockerfile del installer (línea del `pip3 install`) y la imagen lo tiene (5.14.0) → sin cambios; el pendiente de los gaps quedaba desactualizado.
+- **QA (verde total tras el cambio)**: `verify_icon_navigation` **10/10**, `theme_v2_e2e` **8/8**, `verify_single_rail` **47/47**, `verify_contabilidad_parity` **22/22**, `verify_estados_financieros` **10/10**, `verify_tablero_cheques` **6/6**, `verify_status_dot` **9/9**. Evidencia: `qa/shots/m2-home-webclient.png`.
+- Risk: item 3 (cambia el target del menú Inicio y assets del tema; la página standalone sigue existiendo) — 7 suites de regresión en verde y 0 errores JS.
