@@ -11,6 +11,16 @@ def post_init_hook(env):
     def crear_si_falta(name, vals):
         if name in existentes:
             return
+        # Orden de carga: DOLAN_ai entra antes que DOLAN_taller/alquileres/... y
+        # mid() devuelve False para esos modelos -> [(6,0,[False])] truena el
+        # registry ("Invalid falsy real id"). Se filtran los falsos y, si no
+        # queda ninguno, no se crea el agente (otra pasada lo completa).
+        mm = vals.get("modelos_ids")
+        if mm and isinstance(mm[0], (list, tuple)) and mm[0][0] == 6:
+            validos = [i for i in mm[0][2] if i]
+            if not validos:
+                return
+            vals["modelos_ids"] = [(6, 0, validos)]
         Agent.create(dict(vals, name=name))
 
     crear_si_falta("Asistente de contactos", {

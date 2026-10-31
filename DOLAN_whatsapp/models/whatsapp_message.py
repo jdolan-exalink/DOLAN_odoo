@@ -133,9 +133,13 @@ class DolanWhatsappMessage(models.Model):
             "external_id": str(ext_id) if ext_id else False,
         })
         if partner:
-            # historial visible en la ficha del contacto (W3)
+            # historial visible en la ficha del contacto (W3).
+            # En rutas auth=none env.user queda vacio y message_post truena en
+            # _is_public(); se postea con un usuario real (admin).
             try:
-                partner.sudo().message_post(
+                env_user = api.Environment(
+                    self.env.cr, self.env.ref("base.user_admin").id, {})
+                partner.with_env(env_user).message_post(
                     body="WhatsApp entrante: %s" % (rec.body or "-"),
                     message_type="notification",
                     subtype_xmlid="mail.mt_note",

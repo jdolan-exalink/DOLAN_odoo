@@ -174,3 +174,14 @@ S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experienc
 - **Ports**: `res.partner.mobile` no existe en Odoo 20 (se usa `phone`); el body del webhook se lee con `json.loads` y la BD se resuelve con el header `X-Odoo-Database`.
 - **Bloqueados siguen**: `l10n_latam_check_ux` y el init de DB nueva (L53).
 - Risk: item 3 (botón nuevo en la factura y posteo de mensajes) — vistas y modelos verificados por SQL + webhook en vivo; sin prueba de click en navegador en este corte.
+### L55 — Init de DB nueva RESUELTO + fix del chatter (2026-10-31)
+- **W3 (chatter)**: en rutas `auth="none"` `env.user` queda vacío y `message_post` truena en `_is_public()`. Fix: postear con `api.Environment(cr, base.user_admin.id, {})`. Verificado: `mail_message 13484` en `res.partner/14` con author admin.
+- **W4b (init en DB nueva)**: cadena de bugs encontrados y corregidos hasta dejar el installer **EXIT=0 con 97 módulos** en una base recién creada:
+  1. `DOLAN_ai/hooks.py`: `mid()` devolvía `False` para modelos de módulos que cargan después (orden alfabético) → `[(6,0,[False])]` → *"Invalid falsy real id"*; ahora filtra ids falsos.
+  2. Mismo hook: índice equivocado `mm[0][3]` → `mm[0][2]` (la lista de ids va en la posición 2 del comando (6,0,ids)).
+  3. `DOLAN_contabilidad`: faltaban dependencias (`l10n_ar_fiscal_ws`, `l10n_ar_fiscal_ws_reports`, `partner_statement`) → `ref` irresoluble en una base nueva.
+  4. `dolan_dash`: usaba `purchase.menu_purchase_root` sin declarar `purchase` en `depends`.
+  5. Installer: el port de `l10n_ar_fiscal_ws_reports` ahora también convierte `security/ir.model.access.csv` → `ir.access.csv` (+ manifest) y `ir.rule` → `ir.access` con `operation`, igual que el bloque OCA.
+  6. **Los `eval="{'en_US':…,'es_AR':…}"` no sirven en una base nueva** (ningún idioma está activo al cargar datos): los nombres bilingües de nuestros menús ahora los escribe `DOLAN_contabilidad/hooks.py` (post_init_hook, SQL directo sobre el jsonb), y el renombre de la app a **Contabilidad** también vive ahí.
+- Evidencia: `/tmp/init_fresh10.log` (EXIT=0, "Registry loaded"), `ir_ui_menu` = `{"en_US": "Contabilidad", "es_AR": "Contabilidad"}` en la DB nueva, stack QA en :8071 con HTTP 200.
+- Risk: item 5 (cambios en el installer y en hooks de módulos) — validado con una instalación completa desde cero; el stack vivo quedó con los mismos ficheros sincronizados.

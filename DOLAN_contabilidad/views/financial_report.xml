@@ -56,27 +56,27 @@
     </record>
 
     <record id="menu_financial_statements" model="ir.ui.menu">
-        <field name="name" eval="{'en_US': 'Financial Statements', 'es_AR': 'Estados financieros'}"/>
+        <field name="name">Estados financieros</field>
         <field name="parent_id" ref="account.menu_finance_reports"/>
         <field name="sequence">15</field>
     </record>
 
     <record id="menu_financial_balance" model="ir.ui.menu">
-        <field name="name" eval="{'en_US': 'Balance Sheet', 'es_AR': 'Balance general'}"/>
+        <field name="name">Balance general</field>
         <field name="parent_id" ref="menu_financial_statements"/>
         <field name="action" ref="action_dolan_financial_balance"/>
         <field name="sequence">10</field>
     </record>
 
     <record id="menu_financial_results" model="ir.ui.menu">
-        <field name="name" eval="{'en_US': 'Profit and Loss', 'es_AR': 'Estado de resultados'}"/>
+        <field name="name">Estado de resultados</field>
         <field name="parent_id" ref="menu_financial_statements"/>
         <field name="action" ref="action_dolan_financial_results"/>
         <field name="sequence">20</field>
     </record>
 
     <record id="menu_financial_cash" model="ir.ui.menu">
-        <field name="name" eval="{'en_US': 'Cash Flow', 'es_AR': 'Flujo de efectivo'}"/>
+        <field name="name">Flujo de efectivo</field>
         <field name="parent_id" ref="menu_financial_statements"/>
         <field name="action" ref="action_dolan_financial_cash"/>
         <field name="sequence">30</field>
