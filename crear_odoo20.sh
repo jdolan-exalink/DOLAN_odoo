@@ -379,6 +379,124 @@ if ledger.exists():
 IVA_PORT_19_TO_20
   echo "  -> l10n_ar_fiscal_ws_reports portado (Libro de IVA / Análisis de IVA)"
 fi
+
+# l10n_latam_check_ux (port 19->20: causa y fixes en odd/tasks L56/L60).
+# Idempotente: cada paso chequea el patron antes de tocar.
+if [[ -f l10n_latam_check_ux/__manifest__.py ]]; then
+  python3 - <<'L10N_CHECK_UX_19_TO_20'
+import pathlib, re, shutil
+
+root = pathlib.Path("l10n_latam_check_ux")
+
+def edit(rel, fn):
+    p = root / rel
+    if not p.exists():
+        return
+    t = p.read_text(encoding="utf-8")
+    n = fn(t)
+    if n != t:
+        p.write_text(n, encoding="utf-8")
+        print("     port:", rel)
+
+def bank_id(t):
+    old = "    bank_id = fields.Many2one(tracking=True)"
+    new = ("    bank_id = fields.Many2one(\n"
+           "        \"res.partner.bank\", string=\"Bank\",\n"
+           "        compute=\"_compute_bank_id\", store=True, readonly=False, tracking=True,\n"
+           "    )")
+    if old in t:
+        t = t.replace(old, new, 1)
+    old_c = ('    @api.depends("payment_method_line_id.code", "payment_id.partner_id")\n'
+             '    def _compute_bank_id(self):\n'
+             '        payment_method_change = self._origin.payment_method_line_id != self.payment_method_line_id\n'
+             '        partner_id_change = self._origin.payment_id.partner_id != self.payment_id.partner_id\n'
+             '        if payment_method_change or partner_id_change:\n'
+             '            super()._compute_bank_id()')
+    new_c = ('    @api.depends("payment_method_line_id.code", "partner_id")\n'
+             '    def _compute_bank_id(self):\n'
+             '        for rec in self:\n'
+             '            rec.bank_id = False\n'
+             '            if rec.payment_method_line_id.code == "new_third_party_checks":\n'
+             '                rec.bank_id = rec.partner_id.bank_ids[:1]')
+    if old_c in t:
+        t = t.replace(old_c, new_c, 1)
+    return t
+edit("models/l10n_latam_check.py", bank_id)
+
+def dead_overrides(t):
+    m = re.search(r'\n    @api\.depends\("payment_method_line_id"\)\n    def _compute_available_destination_payment_method_line_ids\(self\):.*?(?=\n    @|\n    def |\Z)', t, flags=re.S)
+    if m:
+        t = t.replace(m.group(0), "\n    # Odoo 20: el campo/super ya no existe (port 19->20).\n", 1)
+    m2 = re.search(r'\n    def _prepare_paired_payment_values\(self\):.*?(?=\n    @|\n    def |\Z)', t, flags=re.S)
+    if m2:
+        t = t.replace(m2.group(0), "\n    # Odoo 20: core ya no tiene _prepare_paired_payment_values (port 19->20).\n", 1)
+    return t
+edit("models/account_payment.py", dead_overrides)
+
+def comodels(t):
+    if 'destination_journal_id = fields.Many2one(\n        check_company=False,' in t:
+        t = t.replace('destination_journal_id = fields.Many2one(\n        check_company=False,',
+                      'destination_journal_id = fields.Many2one(\n        "account.journal",\n        check_company=False,', 1)
+    if 'check_ids = fields.Many2many(\n        check_company=False,' in t:
+        t = t.replace('check_ids = fields.Many2many(\n        check_company=False,',
+                      'check_ids = fields.Many2many(\n        "l10n_latam.check",\n        check_company=False,', 1)
+    return t
+edit("wizards/l10n_latam_payment_mass_transfer.py", comodels)
+
+wiz = root / "wizards/l10n_latam_payment_mass_transfer.py"
+if wiz.exists():
+    wiz.rename(wiz.with_name(wiz.name + ".19"))
+    print("     port: wizard de transferencia retirado (.19)")
+edit("wizards/__init__.py", lambda t: "\n".join(l for l in t.split("\n") if "l10n_latam_payment_mass_transfer" not in l))
+
+def drop_wizard_data(t):
+    for e in ("'wizards/l10n_latam_payment_mass_transfer.xml',", '"wizards/l10n_latam_payment_mass_transfer.xml",'):
+        t = t.replace(e + "\n", "").replace(e, "")
+    return t
+edit("__manifest__.py", drop_wizard_data)
+
+FORM_OLD = ("            <form  position=" + chr(34) + "attributes" + chr(34) + ">\n"
+            "                <attribute name=" + chr(34) + "edit" + chr(34) + ">True</attribute>\n"
+            "            </form>\n")
+def form_fixes(t):
+    t = t.replace(FORM_OLD, "")
+    t = t.replace('<field name="bank_id" position="attributes">',
+                  '<field name="bank_account_id" position="attributes">')
+    return t
+edit("views/l10n_latam_check_view.xml", form_fixes)
+
+def payment_domain(t):
+    q = chr(34)
+    sq = chr(39)
+    domain = ("[(" + sq + "payment_method_code" + sq + ", " + sq + "=" + sq + ", " + sq + "new_third_party_checks" + sq + "), "
+              + "(" + sq + "company_id" + sq + ", " + sq + "=" + sq + ", company_id)]")
+    new_attr = chr(60) + "attribute name=" + q + "domain" + q + ">" + domain + chr(60) + "/attribute>"
+    return re.sub(r"<attribute name=.domain.>\[\(.payment_method_code.[\s\S]*?</attribute>",
+                   lambda _m: new_attr, t)
+edit("views/account_payment_view.xml", payment_domain)
+
+def drop_report_file(t):
+    return re.sub(r'\s*<field name="report_file">[^<]*</field>', "", t)
+for x in root.rglob("*.xml"):
+    t = x.read_text(encoding="utf-8", errors="replace")
+    if 'name="report_file"' in t:
+        x.write_text(drop_report_file(t), encoding="utf-8")
+        print("     port: report_file en", x.name)
+
+tst = root / "tests/test_check_transfer_destination_method.py"
+if tst.exists():
+    tst.rename(tst.with_name(tst.name + ".19"))
+    print("     port: test de overrides retirado (.19)")
+init = root / "tests/__init__.py"
+if init.exists():
+    t = init.read_text(encoding="utf-8")
+    n = "\n".join(l for l in t.split("\n") if "test_check_transfer_destination_method" not in l)
+    if n != t:
+        init.write_text(n, encoding="utf-8")
+        print("     port: import del test retirado")
+print("port l10n_latam_check_ux aplicado")
+L10N_CHECK_UX_19_TO_20
+fi
 cd ..
 
 # ---------------------------------------------------------------------------

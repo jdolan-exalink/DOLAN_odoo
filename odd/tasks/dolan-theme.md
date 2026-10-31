@@ -209,3 +209,16 @@ S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experienc
 - **Gotchas Odoo 20**: `res.bank` eliminado del core; `account.payment` sin `ref` (el motivo va al asiento); `account.account` sin `company_id` filtrable (usar `with_company`); restricción `account_move_line_check_accountable_required_fields` exige cuentas en las líneas de pago.
 - **Installer**: `DOLAN_bancos_ar` y `DOLAN_retenciones` agregados a `CUSTOM_ADDONS` para que un deploy nuevo los incluya.
 - Risk: item 1/5 (datos fiscales y módulos nuevos) — las alícuotas son parámetro con advertencia explícita en el wizard, sin automatización fiscal, y todo verificado con asiento real y rollback.
+### L60 — `l10n_latam_check_ux` instalado en Odoo 20 (2026-10-31)
+- **Causa raíz completa del port** (todas verificadas en el stack vivo):
+  1. `bank_id` declarado sin comodel (`???` → AssertionError) → declarado con `"res.partner.bank"` + compute propio espejo del `_compute_bank_account_id` del core (el core 20 ya no tiene `bank_id`).
+  2. Dos overrides muertos (su `super()` no existe en 20.0): `_compute_available_destination_payment_method_line_ids` y `_prepare_paired_payment_values` → eliminados.
+  3. Comodels explícitos: `destination_journal_id` → `"account.journal"`, `check_ids` → `"l10n_latam.check"`.
+  4. Wizard de transferencia masiva retirado (API renombrada en 20.0: `destination_journal_id`→`to_journal_id`, `main_company_id`→`company_ids`/`from_journal_id`): archivo `.19`, fuera del manifest y de `wizards/__init__.py`.
+  5. Vistas: `<form position="attributes">` sobre la raíz (inválido) eliminado; objetivo `bank_id`→`bank_account_id`; dominio de `l10n_latam_move_check_ids` simplificado (sin `destination_journal_id`/`is_internal_transfer`, campos que ya no existen) usando sólo `payment_method_code` + `company_id`.
+  6. `report_file` eliminado de `ir.actions.report` → quitado de `report_checks_to_date.xml`.
+  7. Test de los overrides retirados (`.19`) + import fuera de `tests/__init__.py`.
+- **Verificación**: `install exit=0`; `get_view()` de `l10n_latam.check` (3.796 b) y `account.payment` (18.552 b) OK; menús Cheques de Terceros/Propios re-padreados en "Banco y Caja"; suites **6/6** y **22/22** sin regresiones.
+- **Reproducible**: bloque `L10N_CHECK_UX_19_TO_20` en `crear_odoo20.sh` (idempotente, validado con diff=0 sobre el copy portado; sintaxis `bash -n` + `shellcheck -S error` 0); corre con cwd `addons` dentro del bloque correcto.
+- **Gotcha**: el log de esos fallos va al **host** (`--logfile=`) y no al contenedor; leer siempre `/tmp/<run>.log`.
+- Risk: item 5 (módulo externo portado e instalado) — instalación + render de vistas + 2 suites de regresión; el wizard de transferencia masiva queda en versión core (nuestros extras, retirados) y 7 tests quedaron fuera de carrera por depender de la API vieja.
