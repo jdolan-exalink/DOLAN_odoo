@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_dolan_iibb_wizard_form" model="ir.ui.view">
+    <field name="name">dolan.iibb.wizard.form</field>
+    <field name="model">dolan.iibb.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Retencion / percepcion de IIBB">
+        <group>
+          <field name="factura"/>
+          <field name="provincia"/>
+          <field name="tipo"/>
+          <field name="base"/>
+          <field name="alicuota"/>
+          <field name="monto"/>
+          <field name="journal_id"/>
+          <field name="cuenta_debe"/>
+          <field name="partner_id"/>
+          <field name="move_id" invisible="not move_id"/>
+        </group>
+        <footer>
+          <button name="action_create_move" string="Crear asiento" type="object"
+                  class="btn-primary"/>
+          <button string="Cancelar" special="cancel" class="btn-secondary"/>
+        </footer>
+        <div class="alert alert-info" role="alert">
+          La alicuota por defecto (3%) es un valor de referencia: verifique la
+          vigente en la jurisdiccion antes de usarlo. La herramienta registra
+          el pago a la jurisdiccion; no calcula retenciones automaticamente.
+        </div>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_dolan_iibb_wizard" model="ir.actions.act_window">
+    <field name="name">Retencion / percepcion IIBB</field>
+    <field name="res_model">dolan.iibb.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+
+  <menuitem id="menu_dolan_iibb" name="Retenciones y percepciones IIBB" sequence="35"
+            parent="account.menu_finance_entries" action="action_dolan_iibb_wizard"
+            groups="account.group_account_readonly"/>
+</odoo>

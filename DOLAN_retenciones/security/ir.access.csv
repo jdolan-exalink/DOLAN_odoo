@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,operation,domain
+access_dolan_iibb_wizard_user,dolan.iibb.wizard user,model_dolan_iibb_wizard,account.group_account_readonly,crud,
+access_dolan_iibb_wizard_manager,dolan.iibb.wizard manager,model_dolan_iibb_wizard,account.group_account_manager,crud,

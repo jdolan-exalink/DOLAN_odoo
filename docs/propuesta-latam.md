@@ -13,8 +13,9 @@
 - Backups diarios con prueba de restauración (fire-drill) + `shellcheck`/CI en PR.
 
 ## 2. Etapa 1 — corta, alto valor (1-2 sesiones)
-1. **Retenciones y percepciones**: instalar `l10n_ar_withholding` (ya está en el repo, instalable) y exponer sus comprobantes/constancias en Facturación.
-2. **Port de `l10n_latam_check_ux`** (bloqueo conocido, causa mapeada) → transferencias masivas de cheques, rechazos y reporte de cheques a fecha.
+1. **Retenciones y percepciones**: ✅ **herramienta propia desplegada** (`DOLAN_retenciones`): Santa Fe, Entre Ríos, Buenos Aires y Córdoba, con alícuota configurable por wizard y registro como asiento (debe tributo / haber banco). La automatización automática de `l10n_ar_tax` sigue pendiente de que ADHOC lo migre a 20.0 (staging.20.0 WIP).
+2. **Bancos**: ✅ catálogo propio desplegado (`DOLAN_bancos_ar`, 14 bancos con códigos de entidad de la nómina oficial del BCRA de enero-2025); `l10n_ar_bank` de ADHOC sigue sin poder instalarse (depende de `base_bank`, eliminado en Odoo 20).
+2b. **Port de `l10n_latam_check_ux`** (bloqueo conocido, causa mapeada) → transferencias masivas de cheques, rechazos y reporte de cheques a fecha.
 3. **Cierre fiscal asistido**: extender `DOLAN_declaracion` para validar Libro de IVA + IIBB + CAE pendientes **antes** de cerrar el período.
 
 ## 3. Etapa 2 — medios

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Catalogo propio (LGPL): codigos de entidad segun la nomina oficial
+       de entidades financieras del BCRA (enero 2025). Completar desde la
+       fuente oficial: bcra.gob.ar/entidades-financieras/ -->
+    <record model='dolan.banco.ar' id='dolan_bank_002'>
+      <field name='name'>Banco de la Nación Argentina</field>
+      <field name='code'>002</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_007'>
+      <field name='name'>Banco Galicia</field>
+      <field name='code'>007</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_015'>
+      <field name='name'>Industrial and Commercial Bank of China (ex BankBoston)</field>
+      <field name='code'>015</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_016'>
+      <field name='name'>Citibank N.A.</field>
+      <field name='code'>016</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_017'>
+      <field name='name'>Banco BBVA Argentina</field>
+      <field name='code'>017</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_020'>
+      <field name='name'>Banco Macro</field>
+      <field name='code'>020</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_027'>
+      <field name='name'>Banco Supervielle</field>
+      <field name='code'>027</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_029'>
+      <field name='name'>Banco de la Provincia de Buenos Aires (Bapro)</field>
+      <field name='code'>029</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_034'>
+      <field name='name'>Banco Patagonia</field>
+      <field name='code'>034</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_044'>
+      <field name='name'>Banco Hipotecario</field>
+      <field name='code'>044</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_045'>
+      <field name='name'>Banco de San Juan</field>
+      <field name='code'>045</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_072'>
+      <field name='name'>Banco Santander Argentina</field>
+      <field name='code'>072</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_banco'>
+      <field name='name'>Banco Ciudad de Buenos Aires</field>
+    </record>
+    <record model='dolan.banco.ar' id='dolan_bank_brubank'>
+      <field name='name'>Brubank</field>
+    </record>
+</odoo>
