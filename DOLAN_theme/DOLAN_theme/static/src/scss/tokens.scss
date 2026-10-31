@@ -73,3 +73,72 @@
 :root[data-dolan-theme="dark"] .o_action_manager {
   background-color: var(--o-dolan-bg) !important;
 }
+
+/* =========================================================================
+   PRD 04 · F1 — Design tokens v2 (aditivo)
+   Identidad propia, sobria; inspirada en la claridad de Enterprise sin
+   copiar assets propietarios ni atarnos a una version concreta.
+   ========================================================================= */
+:root {
+  /* Tipografia */
+  --dolan-font-sans: Inter, -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  --dolan-fs-xs: 0.75rem;
+  --dolan-fs-sm: 0.8125rem;
+  --dolan-fs-base: 0.875rem;
+  --dolan-fs-lg: 1rem;
+  --dolan-fs-xl: 1.25rem;
+  --dolan-fs-2xl: 1.5rem;
+  --dolan-lh-tight: 1.25;
+  --dolan-lh-base: 1.5;
+
+  /* Espaciado (base 4px) */
+  --dolan-space-1: 4px;
+  --dolan-space-2: 8px;
+  --dolan-space-3: 12px;
+  --dolan-space-4: 16px;
+  --dolan-space-5: 24px;
+  --dolan-space-6: 32px;
+  --dolan-space-7: 48px;
+
+  /* Radios */
+  --dolan-radius-sm: 6px;
+  --dolan-radius-md: 10px;
+  --dolan-radius-lg: 16px;
+  --dolan-radius-pill: 999px;
+
+  /* Sombras */
+  --dolan-shadow-1: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --dolan-shadow-2: 0 4px 12px rgba(15, 23, 42, 0.10);
+  --dolan-shadow-3: 0 16px 40px rgba(15, 23, 42, 0.16);
+
+  /* Estados semanticos (no depender solo del color: siempre con texto/icono) */
+  --dolan-ok: #16a34a;
+  --dolan-warn: #d97706;
+  --dolan-danger: #dc2626;
+  --dolan-info: #0176b3;
+
+  /* Densidad */
+  --dolan-row-h: 40px;
+  --dolan-row-h-compact: 30px;
+  --dolan-tap-min: 44px;
+}
+
+/* Dark mode: los mismos tokens con valores accesibles */
+:root[data-dolan-theme="dark"] {
+  --dolan-ok: #4ade80;
+  --dolan-warn: #fbbf24;
+  --dolan-danger: #f87171;
+  --dolan-info: #38bdf8;
+  --dolan-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --dolan-shadow-2: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --dolan-shadow-3: 0 16px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* =========================================================================
+   PRD 04 · F1 — Breakpoints por CONTENIDO (no por ancho fijo generico).
+   Consulta:  < 768px   → cards/listas, accion primaria fija, sin hover
+   Tablet:    768–1199  → objetivos tactiles amplios, 1-2 columnas
+   Desktop:  >= 1200    → multicolumna, densidad controlada, atajos
+   ========================================================================= */
+$-dolan-consulta-max: 767.98px;
+$-dolan-desktop-min: 1200px;
