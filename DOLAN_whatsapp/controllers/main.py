@@ -35,7 +35,12 @@ class DolanWhatsappController(http.Controller):
             body = {}
         params = body.get("params") if isinstance(body.get("params"), dict) else body
         payload = (params or {}).get("payload") or {}
+        event = str((body.get("event") or params.get("event")
+                      or payload.get("event") or "")).lower()
         try:
+            if event and ("ack" in event or "updated" in event or "read" in event):
+                rec = message_model.sudo()._update_delivery(payload)
+                return request.make_json_response({"ok": True, "delivery": bool(rec)})
             rec = message_model.sudo()._register_incoming(payload)
             return request.make_json_response({"ok": True, "id": rec.id})
         except Exception as exc:  # noqa: BLE001
