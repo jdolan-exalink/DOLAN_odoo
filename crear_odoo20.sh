@@ -58,7 +58,7 @@ SYSTEM_APPS="sale_management,point_of_sale,mrp,project,crm,hr_expense"
 # y app por defecto). Se copian desde el deploy canonico (odoo20-argentina/addons).
 # NOTA: web_responsive (OCA 19.0) NO se instala: su JS es Owl2 y Odoo 20 usa
 # Owl3 (crash de AppsMenu -> pantalla blanca). Esperar migracion oficial 20.0.
-CUSTOM_ADDONS="DOLAN_theme DOLAN_ai DOLAN_alquileres DOLAN_bancos DOLAN_calidad DOLAN_codigo_barras DOLAN_contabilidad DOLAN_declaracion DOLAN_flotilla DOLAN_mantenimiento DOLAN_suscripciones DOLAN_taller dolan_dash dolan_ui DOLAN_whatsapp"
+CUSTOM_ADDONS="DOLAN_theme DOLAN_ai DOLAN_alquileres DOLAN_bancos DOLAN_calidad DOLAN_codigo_barras DOLAN_contabilidad DOLAN_declaracion DOLAN_flotilla DOLAN_mantenimiento DOLAN_suscripciones DOLAN_taller dolan_dash dolan_ui DOLAN_whatsapp DOLAN_bancos_ar DOLAN_retenciones"
 
 # Paridad de Contabilidad (S8): módulos que se instalan además de los custom.
 # l10n_latam_check es core; los demás vienen de OCA rama 19.0 con port 19->20
