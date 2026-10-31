@@ -285,6 +285,52 @@ if [[ -f l10n_ar_fiscal_ws_reports/__manifest__.py ]]; then
 import pathlib, re
 
 root = pathlib.Path("l10n_ar_fiscal_ws_reports")
+import csv, re as _re
+# CSV de permisos: Odoo 20 exige ir.access.csv con la columna operation
+for _c in list(root.rglob("ir.model.access.csv")):
+    _rows = list(csv.reader(_c.open(newline="", encoding="utf-8")))
+    _out = [["id", "name", "model_id:id", "group_id:id", "operation", "domain"]]
+    if _rows and "perm_read" in _rows[0]:
+        _idx = {n: i for i, n in enumerate(_rows[0])}
+        for _r in _rows[1:]:
+            if not _r or not any(_r):
+                continue
+            _g = lambda k: (_r[_idx[k]].strip() if k in _idx and _idx[k] < len(_r) else "")
+            _op = ""
+            if _g("perm_create") == "1": _op += "c"
+            if _g("perm_read") == "1": _op += "r"
+            if _g("perm_write") == "1": _op += "u"
+            if _g("perm_unlink") == "1": _op += "d"
+            _out.append([_g("id"), _g("name"), _g("model_id:id"), _g("group_id:id"), _op, ""])
+    else:
+        _out = _rows
+    _c.with_name("ir.access.csv").write_text("\n".join(",".join(x) for x in _out) + "\n", encoding="utf-8")
+    if _c.name != "ir.access.csv":
+        _c.unlink()
+    print("     port: CSV ir.access/operation en", root.name)
+# reglas: ir.rule desapareció en Odoo 20 (fusionada en ir.access)
+for _x in list(root.rglob("*.xml")):
+    _t = _x.read_text(encoding="utf-8", errors="replace")
+    if 'model="ir.rule"' not in _t and 'name="domain_force"' not in _t:
+        continue
+    _n = _t.replace('model="ir.rule"', 'model="ir.access"').replace('name="domain_force"', 'name="domain"')
+    _n = re.sub(r'\s*<field name="global"[^/]*/>\n', "\n", _n)
+    def _add_op(_mo):
+        _b = _mo.group(0)
+        if 'model="ir.access"' not in _b or 'name="operation"' in _b:
+            return _b
+        return re.sub(r'(<field name="name">[^<]*</field>\s*)', r'\1<field name="operation">crud</field>\n        ', _b, count=1)
+    _n = re.sub(r'<record[^>]*>.*?</record>', _add_op, _n, flags=re.S)
+    if _n != _t:
+        _x.write_text(_n, encoding="utf-8")
+        print("     port: ir.rule->ir.access en", _x.name)
+    _man = root / "__manifest__.py"
+    if _man.exists():
+        _t = _man.read_text(encoding="utf-8")
+        if "security/ir.model.access.csv" in _t:
+            _man.write_text(_t.replace("security/ir.model.access.csv", "security/ir.access.csv"), encoding="utf-8")
+            print("     port: manifest del CSV en", root.name)
+
 man = root / "__manifest__.py"
 if man.exists():
     txt = man.read_text(encoding="utf-8")

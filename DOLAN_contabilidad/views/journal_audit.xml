@@ -39,7 +39,7 @@
     </record>
 
     <record id="menu_dolan_journal_audit" model="ir.ui.menu">
-        <field name="name" eval="{'en_US': 'Journal Audit', 'es_AR': 'Auditoría de diario'}"/>
+        <field name="name">Auditoría de diario</field>
         <field name="parent_id" ref="account.account_audit_control_menu"/>
         <field name="action" ref="action_dolan_journal_audit"/>
         <field name="sequence">40</field>
