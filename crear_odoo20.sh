@@ -260,8 +260,11 @@ echo "Descargando modulos Localizacion Argentina (branch ${ODOO_VERSION})..."
 cd addons
 for repo in "${AR_REPOS[@]}"; do
   name="$(basename "$repo" .git)"
-  echo "  -> $name (branch ${ODOO_VERSION})"
-  git clone --depth 1 --branch "${ODOO_VERSION}" "$repo"
+  # odoo-argentina no publica rama 20.0: su migración vive en staging.20.0
+  branch="${ODOO_VERSION}"
+  if [[ "$name" == "odoo-argentina" ]]; then branch="staging.20.0"; fi
+  echo "  -> $name (branch ${branch})"
+  git clone --depth 1 --branch "${branch}" "$repo"
   shopt -s dotglob nullglob
   mv "$name"/* . 2>/dev/null || true
   rm -rf "$name"
