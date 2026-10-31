@@ -13,6 +13,7 @@
         'views/journal_audit.xml',
         'views/check_reject.xml',
         'views/workpaper.xml',
+        'views/annual_report.xml',
     ],
     'post_init_hook': 'post_init_hook',
     'installable': True,

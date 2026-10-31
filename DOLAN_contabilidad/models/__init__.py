@@ -3,3 +3,4 @@ from . import financial_report
 from . import journal_audit
 from . import check_reject
 from . import workpaper
+from . import annual_report

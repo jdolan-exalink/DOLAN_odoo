@@ -228,3 +228,9 @@ S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experienc
 - **Verificado (odoo shell, rollback)**: alta con adjunto (`libro_iva.pdf`), transiciones draft→review (reviewer+fecha)→approved→draft, adjunto persistido, 2 menús creados (`menu_audit_workpapers` + hijo).
 - **Gotchas Odoo 20**: `fields.Binary` ya no acepta `bytes` en `create` (usa `BinaryValue`; desde el formulario va el base64 normal) y `w.datas` devuelve `BinaryBytes` (no tiene `len()`).
 - Risk: item 3 (módulo propio nuevo dentro de DOLAN_contabilidad, sólo datos propios) — verificado con alta/transiciones reales y rollback; sin afectar datos existentes.
+### L62 — Reporte anual propio (cierra los restos EE) (2026-10-31)
+- **`dolan.annual.report`** en `DOLAN_contabilidad` (LGPL, sin código EE): wizard de ejercicio (fecha desde/hasta, default año calendario) que genera un **XLSX** con 4 bloques: **Resumen de resultados** (ingresos, costos y gastos, resultado), **Balance resumido al cierre** (activo/pasivo/patrimonio/resultado acumulado), **Archivos de trabajo** del ejercicio (contadores por estado + títulos) e **Indicadores** (comprobantes publicados, facturas y NC).
+- **Reutiliza** los agrupadores por tipo de cuenta de `models/financial_report.py` (mismo criterio que el Balance) y se apoya en `dolan.workpaper` (L61), dejando el ciclo cerrado: papeles de trabajo → reporte anual.
+- **Menú**: Revisión > Auditoría > **Reporte anual**.
+- **Verificado (odoo shell, rollback)**: `report_action(config=False)` devuelve `ir.actions.report`, `_render_xlsx` genera 6.133 bytes con la hoja `sheet1` y las 4 secciones presentes (CHECK True ×4); menú creado.
+- Risk: item 3 (reporte propio nuevo, sólo lectura de asientos publicados y de archivos de trabajo) — verificado por parseo del XLSX generado.
