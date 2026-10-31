@@ -78,3 +78,46 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* =========================================================================
+   PRD 04 · F1 — Comportamiento por contenido en la grilla
+   ========================================================================= */
+.o_dolan_home_grid .o_dolan_home_app {
+  /* target tactil minimo (44px) sin agrandar la tarjeta visual */
+  min-height: var(--dolan-tap-min, 44px);
+}
+
+/* Consulta (<768px): tarjetas mas compactas, targets comodos para pulgar */
+@media (max-width: 767.98px) {
+  .o_dolan_home_grid {
+    padding: 20px 12px 32px;
+  }
+  .o_dolan_home_grid_inner {
+    gap: 18px 10px;
+    max-width: 100%;
+  }
+  .o_dolan_home_grid .o_dolan_home_app {
+    width: 104px;
+  }
+  .o_dolan_home_grid .icon_wrap {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+/* Tablet (768–1199): objetivos tactiles amplios, aire generoso */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .o_dolan_home_grid {
+    padding: 28px 20px 40px;
+  }
+  .o_dolan_home_grid_inner {
+    gap: 26px 20px;
+  }
+}
+
+/* Desktop (>=1200): densidad controlada, multicolumna */
+@media (min-width: 1200px) {
+  .o_dolan_home_grid_inner {
+    max-width: 1180px;
+  }
+}
