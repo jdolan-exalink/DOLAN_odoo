@@ -222,3 +222,9 @@ S7 (user, verbatim): "quiero que eliminemos la sidebar para lograr una experienc
 - **Reproducible**: bloque `L10N_CHECK_UX_19_TO_20` en `crear_odoo20.sh` (idempotente, validado con diff=0 sobre el copy portado; sintaxis `bash -n` + `shellcheck -S error` 0); corre con cwd `addons` dentro del bloque correcto.
 - **Gotcha**: el log de esos fallos va al **host** (`--logfile=`) y no al contenedor; leer siempre `/tmp/<run>.log`.
 - Risk: item 5 (módulo externo portado e instalado) — instalación + render de vistas + 2 suites de regresión; el wizard de transferencia masiva queda en versión core (nuestros extras, retirados) y 7 tests quedaron fuera de carrera por depender de la API vieja.
+### L61 — Archivos de trabajo (resto EE, implementación propia) (2026-10-31)
+- **`dolan.workpaper`** en `DOLAN_contabilidad` (LGPL, sin código EE): título, rango de fechas, cuenta/contacto, estado (Borrador → En revisión → Aprobado), notas, preparado por / revisado por + fecha, y **adjunto** (`datas` con `attachment=True`).
+- **UI**: lista con badge de estado, formulario con statusbar y botones Marcar en revisión / Aprobar / Volver a borrador (grupo readonly), notebook con Notas y Adjunto. **Menú**: Revisión > **Auditoría** > Archivos de trabajo (misma estructura que la demo EE).
+- **Verificado (odoo shell, rollback)**: alta con adjunto (`libro_iva.pdf`), transiciones draft→review (reviewer+fecha)→approved→draft, adjunto persistido, 2 menús creados (`menu_audit_workpapers` + hijo).
+- **Gotchas Odoo 20**: `fields.Binary` ya no acepta `bytes` en `create` (usa `BinaryValue`; desde el formulario va el base64 normal) y `w.datas` devuelve `BinaryBytes` (no tiene `len()`).
+- Risk: item 3 (módulo propio nuevo dentro de DOLAN_contabilidad, sólo datos propios) — verificado con alta/transiciones reales y rollback; sin afectar datos existentes.
