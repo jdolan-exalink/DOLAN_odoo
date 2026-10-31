@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  static:
+    name: Shellcheck · sintaxis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ShellCheck (sólo errores en scripts)
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q shellcheck
+          scripts=$(git ls-files '*.sh')
+          echo "scripts: $scripts"
+          shellcheck -S error $scripts
+
+      - name: ShellCheck (warnings) del installer principal
+        run: shellcheck -S warning crear_odoo20.sh
+
+      - name: Node — sintaxis de los scripts de QA
+        run: |
+          for f in DOLAN_theme/qa/*.mjs; do node --check "$f"; done
+
+      - name: Python — compilación de módulos DOLAN
+        run: |
+          for m in DOLAN_theme/DOLAN_theme DOLAN_ai DOLAN_contabilidad dolan_dash dolan_ui DOLAN_whatsapp; do
+            find "$m" -name '*.py' -not -path '*/__pycache__/*' -print0 | xargs -0 python3 -m py_compile
+          done
+
+      - name: XML — bien formado de nuestros módulos
+        run: |
+          python3 - <<'PY'
+          import glob, sys, xml.etree.ElementTree as ET
+          bad = []
+          for f in glob.glob("DOLAN_*/**/*.xml", recursive=True) + glob.glob("dolan_*/**/*.xml", recursive=True):
+              if "node_modules" in f or "/qa/" in f: continue
+              try: ET.parse(f)
+              except Exception as e: bad.append(f"{f}: {e}")
+          print("\n".join(bad) or "XML OK")
+          sys.exit(1 if bad else 0)
+          PY
+
+  # Las 8 suites de QA (Playwright) necesitan un stack Odoo vivo: se corren en el
+  # entorno propio con DOLAN_theme/qa/verify_*.mjs (ver odd/tasks/dolan-theme.md).
