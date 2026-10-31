@@ -47,4 +47,14 @@
   <menuitem id="menu_dolan_whatsapp" name="WhatsApp (WAHA)" sequence="30"
             parent="base.menu_administration" action="action_dolan_whatsapp_message"
             groups="base.group_system"/>
+
+  <record id="ir_cron_dolan_waha_retry" model="ir.cron">
+    <field name="name">DOLAN WhatsApp: reintentos de envio</field>
+    <field name="model_id" ref="model_dolan_whatsapp_message"/>
+    <field name="state">code</field>
+    <field name="code">model._cron_retry_pending()</field>
+    <field name="interval_number">5</field>
+    <field name="interval_type">minutes</field>
+    <field name="active" eval="True"/>
+  </record>
 </odoo>

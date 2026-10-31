@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 
 import requests
 
@@ -26,10 +27,13 @@ class DolanWhatsappMessage(models.Model):
     chat_id = fields.Char(string="Chat ID", index=True)
     status = fields.Selection(
         [("pending", "Pendiente"), ("sent", "Enviado"), ("received", "Recibido"),
-         ("error", "Error")],
+         ("retry", "Reintentando"), ("error", "Error")],
         string="Estado", default="pending", required=True)
     error = fields.Char(string="Error")
     external_id = fields.Char(string="ID WAHA", index=True)
+    attempts = fields.Integer(string="Intentos", default=0)
+    next_attempt = fields.Datetime(string="Proximo intento")
+    delivery_state = fields.Char(string="Entrega")
 
     # ------------------------------------------------------------------
     # Configuracion (ir.config_parameter)
@@ -100,12 +104,65 @@ class DolanWhatsappMessage(models.Model):
                 raise UserError(_("WAHA devolvio un error: %s") % detail)
             ext = data.get("id") or (data.get("_data") or {}).get("id") or False
             rec.write({"status": "sent", "external_id": ext})
-        except UserError:
-            raise
+        except UserError as exc:
+            rec._schedule_retry(str(exc)[:200])
+            return rec
         except Exception as exc:  # noqa: BLE001
             _logger.exception("WAHA sendText")
-            rec.write({"status": "error", "error": str(exc)[:200]})
-            raise UserError(_("No se pudo contactar a WAHA en %s: %s") % (cfg["url"], exc)) from exc
+            rec._schedule_retry(str(exc)[:200])
+            return rec
+        return rec
+
+    def _schedule_retry(self, error, delay=60):
+        for rec in self:
+            attempts = rec.attempts + 1
+            if attempts >= 5:
+                rec.write({"status": "error", "error": error, "attempts": attempts,
+                           "next_attempt": False})
+            else:
+                rec.write({"status": "retry", "error": error, "attempts": attempts,
+                           "next_attempt": fields.Datetime.now() + timedelta(seconds=delay * attempts)})
+        return True
+
+    @api.model
+    def _cron_retry_pending(self):
+        now = fields.Datetime.now()
+        pend = self.search([("status", "=", "retry"), ("next_attempt", "<=", now),
+                            ("attempts", "<", 5)], limit=50)
+        for rec in pend:
+            if not rec.partner_id:
+                rec.write({"status": "error", "error": "Sin contacto asociado"})
+                continue
+            cfg = self._waha_config()
+            headers = {"Content-Type": "application/json"}
+            if cfg["api_key"]:
+                headers["X-Api-Key"] = cfg["api_key"]
+            try:
+                resp = requests.post(cfg["url"] + "/api/sendText",
+                                     json={"session": cfg["session"], "chatId": rec.chat_id,
+                                           "text": rec.body},
+                                     headers=headers, timeout=30)
+                data = resp.json() if "json" in resp.headers.get("content-type", "") else {}
+                if resp.status_code >= 400 or data.get("error"):
+                    rec._schedule_retry(data.get("error") or ("HTTP %s" % resp.status_code))
+                    continue
+                rec.write({"status": "sent", "error": False,
+                           "external_id": data.get("id") or (data.get("_data") or {}).get("id") or rec.external_id})
+            except Exception as exc:  # noqa: BLE001
+                _logger.warning("WAHA retry: %s", exc)
+                rec._schedule_retry(str(exc)[:200])
+        return True
+
+    @api.model
+    def _update_delivery(self, payload):
+        p = payload.get("payload") or {}
+        ext = p.get("id") or p.get("messageId") or payload.get("id")
+        state = p.get("ack") or p.get("state") or p.get("status") or payload.get("event") or ""
+        if not ext:
+            return self.browse()
+        rec = self.sudo().search([("external_id", "=", str(ext))], limit=1)
+        if rec:
+            rec.sudo().write({"delivery_state": str(state)[:40]})
         return rec
 
     # ------------------------------------------------------------------
