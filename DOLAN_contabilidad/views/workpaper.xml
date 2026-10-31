@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_dolan_workpaper_list" model="ir.ui.view">
+    <field name="name">dolan.workpaper.list</field>
+    <field name="model">dolan.workpaper</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="title"/>
+        <field name="date_from"/>
+        <field name="date_to"/>
+        <field name="account_id" optional="show"/>
+        <field name="partner_id" optional="show"/>
+        <field name="state" widget="badge"
+                decoration-success="state == 'approved'"
+                decoration-warning="state == 'review'"/>
+        <field name="user_id" optional="show"/>
+        <field name="reviewer_id" optional="show"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_dolan_workpaper_form" model="ir.ui.view">
+    <field name="name">dolan.workpaper.form</field>
+    <field name="model">dolan.workpaper</field>
+    <field name="arch" type="xml">
+      <form string="Archivo de trabajo">
+        <header>
+          <field name="state" widget="statusbar" statusbar_visible="draft,review,approved"/>
+          <button name="action_review" string="Marcar en revision" type="object"
+                  class="btn btn-secondary" invisible="state != 'draft'"
+                  groups="account.group_account_readonly"/>
+          <button name="action_approve" string="Aprobar" type="object" class="btn btn-primary"
+                  invisible="state != 'review'" groups="account.group_account_readonly"/>
+          <button name="action_draft" string="Volver a borrador" type="object"
+                  class="btn btn-secondary" invisible="state == 'draft'"/>
+        </header>
+        <sheet>
+          <group>
+            <field name="title"/>
+            <field name="date_from"/>
+            <field name="date_to"/>
+            <field name="account_id"/>
+            <field name="partner_id"/>
+          </group>
+          <group>
+            <field name="user_id"/>
+            <field name="reviewer_id"/>
+            <field name="review_date"/>
+          </group>
+          <notebook>
+            <page string="Notas">
+              <field name="notes" nolabel="1" placeholder="Conclusiones, hallazgos, vinculos..."/>
+            </page>
+            <page string="Adjunto">
+              <field name="datas_filename" invisible="not datas_filename"/>
+              <field name="datas" filename="datas_filename"/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_dolan_workpaper" model="ir.actions.act_window">
+    <field name="name">Archivos de trabajo</field>
+    <field name="res_model">dolan.workpaper</field>
+    <field name="view_mode">list,form</field>
+    <field name="context">{'search_default_state_draft': 1}</field>
+  </record>
+
+  <!-- subseccion Auditoria bajo Revisión (igual que la demo EE) -->
+  <record id="menu_audit_workpapers" model="ir.ui.menu">
+    <field name="name" eval="{'en_US': 'Auditing', 'es_AR': 'Auditoría'}"/>
+    <field name="parent_id" ref="account.account_audit_menu"/>
+    <field name="sequence">30</field>
+  </record>
+  <record id="menu_audit_workpapers_items" model="ir.ui.menu">
+    <field name="name" eval="{'en_US': 'Workpapers', 'es_AR': 'Archivos de trabajo'}"/>
+    <field name="parent_id" ref="menu_audit_workpapers"/>
+    <field name="action" ref="action_dolan_workpaper"/>
+    <field name="sequence">10</field>
+  </record>
+</odoo>
