@@ -86,6 +86,7 @@ class DolanDash(models.TransientModel):
             terc = checks.filtered(
                 lambda c: (c.payment_method_line_id.payment_method_id.code or "") != "own_checks")
             prop = checks - terc
+            rech = checks.filtered("dolan_rejected") if "dolan_rejected" in checks._fields else checks.browse()
 
         data = {
             "efectivo": {
@@ -141,7 +142,9 @@ class DolanDash(models.TransientModel):
                 "key": "cheques", "label": "Cheques de terceros",
                 "valor": len(terc) if terc is not False else 0,
                 "hint": ("$ " + ar(sum(terc.mapped("amount"))) + " · propios "
-                         + str(len(prop))) if terc is not False else "módulo de cheques no instalado",
+                         + str(len(prop)) + (" · " + str(len(rech)) + " rechazados"
+                            if "dolan_rejected" in self.env["l10n_latam.check"]._fields else "")
+                         ) if terc is not False else "módulo de cheques no instalado",
                 "tag": "bg-secondary-subtle text-secondary",
             },
         }
@@ -246,8 +249,22 @@ class DolanDash(models.TransientModel):
                     "estado": CHECK_ESTADOS.get(c.issue_state, c.issue_state or "—"),
                     "monto": ar(c.amount or 0),
                 })
+        rech = []
+        if "l10n_latam.check" in self.env and "dolan_rejected" in self.env["l10n_latam.check"]._fields:
+            for c in self.env["l10n_latam.check"].search([
+                    ("company_id", "=", co.id), ("dolan_rejected", "=", True)],
+                    order="payment_date desc, id desc", limit=10):
+                code = c.payment_method_line_id.payment_method_id.code or ""
+                fecha = c.payment_date or (c.create_date.date() if c.create_date else hoy)
+                rech.append({
+                    "num": c.name or "—",
+                    "tercero": "Propio" if code == "own_checks" else "Terceros",
+                    "fecha": fecha.strftime("%d/%m/%Y"),
+                    "estado": "Rechazado",
+                    "monto": ar(c.amount or 0),
+                })
         return {"por_pagar": pend, "pagadas": pag, "facturas": fact,
-                "nc": nc, "remitos": rem, "cheques": che}
+                "nc": nc, "remitos": rem, "cheques": che, "cheques_rechazados": rech}
 
     @api.model
     def serie(self, nombre):
