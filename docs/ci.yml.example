@@ -1,4 +1,10 @@
-name: CI
+# CI de DOLAN — para activarlo:
+#   1) gh auth refresh -s workflow   (el token actual no tiene el scope)
+#   2) copiar este archivo a .github/workflows/ci.yml
+#      (git add .github/workflows/ci.yml && git push)
+#   Las 8 suites Playwright necesitan un stack Odoo vivo y se corren en el
+#   entorno propio: DOLAN_theme/qa/verify_*.mjs (ver odd/tasks/dolan-theme.md).
+#
 
 on:
   pull_request:
