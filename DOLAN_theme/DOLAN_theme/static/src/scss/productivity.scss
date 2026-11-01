@@ -1,0 +1,93 @@
+/* =========================================================================
+   PRD 04 · F4 — Lists, forms and detail views (own CSS, additive).
+   Density: body.o_dolan_compact (toggled by the dolan_density service).
+   ========================================================================= */
+
+/* --- Normal density (default): comfortable rows, persistent header --- */
+.o_list_view .o_list_table thead th {
+  background: var(--o-list-header-bg, #f8fafc);
+}
+.o_list_view .o_list_table tbody tr td {
+  line-height: 1.35;
+}
+
+/* --- Compact density: more rows per screen, still touchable on desktop --- */
+body.o_dolan_compact .o_list_view .o_list_table tbody tr td {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  line-height: 1.2;
+}
+body.o_dolan_compact .o_list_view .o_list_table thead th {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+body.o_dolan_compact .o_list_view .o_group_by_row {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* --- Forms: clear hierarchy, progressive sections, less noise --- */
+.o_form_view .o_form_sheet_bg .o_form_sheet {
+  border-radius: var(--dolan-radius-lg, 16px);
+  box-shadow: var(--dolan-shadow-1, none);
+}
+.o_form_view .o_notebook > .nav-tabs > .nav-item > .nav-link {
+  border-radius: var(--dolan-radius-sm, 6px) var(--dolan-radius-sm, 6px) 0 0;
+}
+.o_form_view .o_field_widget:focus-visible,
+.o_form_view input:focus-visible,
+.o_form_view select:focus-visible,
+.o_form_view textarea:focus-visible {
+  outline: 2px solid var(--dolan-info, #0176b3);
+  outline-offset: 1px;
+}
+
+/* Validation: immediate but not invasive (info tone, no red alarm) */
+.o_form_view .o_field_invalid {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--dolan-warn, #d97706) 45%, transparent);
+}
+
+/* Detail header: identity/status on top, actions clearly differentiated */
+.o_form_view .o_control_panel .o_control_panel_clearer {
+  border-radius: var(--dolan-radius-sm, 6px);
+}
+
+/* --- Mobile / tablet (content-based breakpoints, F1): sequential forms,
+       cards instead of wide tables, 44px primary actions --- */
+@media (max-width: 767.98px) {
+  .o_form_view .o_group.o_inner_group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dolan-space-3, 12px);
+  }
+  .o_form_view .o_group.o_inner_group .o_td_label {
+    padding-bottom: 2px;
+  }
+  .o_form_view .o_form_sheet {
+    padding: 14px;
+    border-radius: var(--dolan-radius-md, 10px);
+  }
+  .o_form_view .o_form_buttons,
+  .o_form_view .o_cp_buttons {
+    display: flex;
+    gap: 8px;
+  }
+  .o_form_view .o_form_buttons button,
+  .o_form_view .o_cp_buttons button {
+    min-height: var(--dolan-tap-min, 44px);
+  }
+  /* Rows become readable summaries: hide low-priority cells */
+  .o_list_view .o_list_table tbody tr td[data-name] {
+    max-width: 46vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* States visible but discrete: badge-style chips for state fields */
+.o_list_view .o_data_row .badge {
+  font-weight: 600;
+  border-radius: var(--dolan-radius-pill, 999px);
+  padding: 2px 8px;
+}

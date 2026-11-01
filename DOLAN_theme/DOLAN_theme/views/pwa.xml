@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="pwa_layout" inherit_id="web.layout">
+    <xpath expr="//head" position="inside">
+      <link rel="manifest" href="/dolan_theme/manifest.webmanifest"/>
+      <meta name="theme-color" content="#4338ca"/>
+      <meta name="mobile-web-app-capable" content="yes"/>
+      <meta name="apple-mobile-web-app-capable" content="yes"/>
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    </xpath>
+  </template>
+</odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+  <t t-name="DOLAN_theme.NotificationBell">
+    <button class="o_dolan_bell o_nav_entry" t-on-click="this.open"
+            title="Centro de notificaciones" aria-label="Centro de notificaciones">
+      <i class="oi" data-icon="bell"/>
+      <span t-if="this.pending() > 0" class="o_dolan_bell_badge" t-out="this.pending()"/>
+    </button>
+  </t>
+
+  <t t-name="DOLAN_theme.NotificationCenter">
+    <Dialog t-props="{ title: 'Centro de notificaciones', size: 'lg', footer: false }">
+    <div class="o_dolan_nc">
+      <div class="o_dolan_nc_head">
+        <strong>Centro de notificaciones</strong>
+        <button class="btn btn-link" t-on-click="() => this.reload()">Actualizar</button>
+      </div>
+      <div t-if="this.loading()" class="o_dolan_nc_empty">Cargando...</div>
+      <div t-elif="!this.items.length" class="o_dolan_nc_empty">
+        Sin notificaciones pendientes.
+      </div>
+      <div t-foreach="this.items()" t-as="n" t-key="n.id" class="o_dolan_nc_item"
+           t-att-data-kind="n.kind">
+        <span class="kind" t-out="this.kindLabel(n.kind)"/>
+        <div class="txt">
+          <div class="ttl" t-out="n.name"/>
+          <div class="sub" t-out="n.body"/>
+          <div class="meta" t-out="n.create_date"/>
+        </div>
+        <div class="acts">
+          <button t-if="n.res_model &amp;&amp; n.res_id" t-on-click="() => this.openItem(n)"
+                  title="Abrir objeto" aria-label="Abrir objeto"><i class="oi" data-icon="external-link"/></button>
+          <button t-on-click="() => this.snooze(n)" title="Posponer 1h"
+                  aria-label="Posponer una hora"><i class="oi" data-icon="clock"/></button>
+          <button t-on-click="() => this.markRead(n)" title="Marcar leido"
+                  aria-label="Marcar como leido"><i class="oi" data-icon="check"/></button>
+        </div>
+      </div>
+    </div>
+    </Dialog>
+  </t>
+</templates>
