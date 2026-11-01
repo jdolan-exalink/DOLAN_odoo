@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+  <t t-name="DOLAN_theme.GlobalSearch">
+    <Dialog t-props="{ title: 'Busqueda global', size: 'lg', footer: false }">
+      <div class="o_dolan_gs" t-on-click.stop="() => {}">
+        <div class="o_dolan_gs_input">
+          <i class="oi" data-icon="search"/>
+          <input t-on-input="this.onInput" t-on-keydown="this.onKey"
+                 placeholder="Buscar contactos, productos, facturas, pedidos, remitos...  (g luego b)"
+                 aria-label="Busqueda global"/>
+          <span t-if="this.searching()" class="o_dolan_gs_hint">Buscando...</span>
+        </div>
+        <div class="o_dolan_gs_list" role="listbox">
+          <div t-if="!this.rows().length" class="o_dolan_gs_empty">
+            Escribi 2 letras para buscar, o usa favoritos y recientes.
+          </div>
+          <div t-foreach="this.rows()" t-as="row" t-key="row.model + '_' + row.id"
+               class="o_dolan_gs_row"
+               t-att-class="row_index === this.sel() ? 'sel' : ''"
+               t-on-click="() => this.open(row)">
+            <span class="chip" t-out="row.label"/>
+            <span class="ttl" t-out="row.title"/>
+            <button class="fav" t-on-click="(ev) => this.toggleFav(ev, row)"
+                    t-att-title="row.fav ? 'Quitar de favoritos' : 'Marcar favorito'"
+                    t-att-aria-label="row.fav ? 'Quitar de favoritos' : 'Marcar favorito'">
+              <i t-if="row.fav || row.recent" class="oi" data-icon="star"/>
+              <i t-else="" class="oi" data-icon="star-outline"/>
+            </button>
+          </div>
+        </div>
+        <div class="o_dolan_gs_foot">
+          <span>↑↓ mover</span><span>Enter abrir</span><span>Esc cerrar</span>
+        </div>
+      </div>
+    </Dialog>
+  </t>
+</templates>

@@ -3,6 +3,37 @@
   <t t-name="DOLAN_theme.HomeGrid">
     <div class="o_dolan_home_grid">
       <div class="o_dolan_home_grid_inner">
+        <div t-if="this.ctx.role_label" class="o_dolan_home_role">
+          <div class="role_line">
+            <span class="role_chip" t-out="this.ctx.role_label"/>
+            <button class="gs_button" t-on-click="this.openSearch" title="Buscar (g luego b)"
+                    aria-label="Busqueda global">
+              <i class="oi" data-icon="search"/> Buscar
+            </button>
+          </div>
+          <div t-if="this.ctx.kpis.length" class="kpis_row">
+            <div t-foreach="this.ctx.kpis" t-as="kpi" t-key="kpi.label" class="o_dolan_kpi">
+              <span class="kv" t-out="kpi.value"/>
+              <span class="kl" t-out="kpi.label"/>
+            </div>
+          </div>
+          <div t-if="this.ctx.alerts.length || this.ctx.tasks.length" class="alerts_row">
+            <div t-foreach="this.ctx.alerts" t-as="a" t-key="a.label"
+                 class="o_dolan_alert" t-att-data-tone="a.tone">
+              <i class="oi" t-att-data-icon="this.alertIcon(a.tone)"/>
+              <span t-out="a.label"/>
+            </div>
+            <div t-foreach="this.ctx.tasks.slice(0, 3)" t-as="t" t-key="t.label + t.id"
+                 class="o_dolan_alert" data-tone="accion">
+              <i class="oi" data-icon="clock"/>
+              <span t-out="t.label"/>
+            </div>
+          </div>
+          <div t-if="this.ctx.quick_actions.length" class="quick_row">
+            <button t-foreach="this.ctx.quick_actions" t-as="q" t-key="q.xmlid"
+                    class="o_dolan_quick" t-on-click="() => this.goQuick(q)" t-out="q.label"/>
+          </div>
+        </div>
         <a t-foreach="this.apps" t-as="app" t-key="app.id"
            class="o_dolan_home_app" t-att-href="this.href(app)">
           <div class="icon_wrap">
